@@ -30,12 +30,12 @@ function createFigure(works) {
 }
 
 // function de récupération des données de l'API catégory
-async function fetchCategory (){
-    const reponse = await fetch("http://localhost:5678/api/categories");
-    const category =  await reponse.json();
+async function fetchCategory() {
+  const reponse = await fetch("http://localhost:5678/api/categories");
+  const category = await reponse.json();
 
-    // test de foncitonnement
-    console.log(category);
+  // test de foncitonnement
+  console.log(category);
 }
 
 // fonction d'initialisation
@@ -43,7 +43,7 @@ async function init() {
   // récupère les données API stockées works
   const works = await fetchWorks();
   // Test de fonctionnement
-//   console.log(works);
+  //   console.log(works);
 
   await fetchCategory();
 
