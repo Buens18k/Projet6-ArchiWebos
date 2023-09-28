@@ -8,6 +8,15 @@ async function fetchWorks() {
   //   console.log(works);
 }
 
+// function de récupération des données de l'API catégory
+async function fetchCategory() {
+  const reponse = await fetch("http://localhost:5678/api/categories");
+  return await reponse.json();
+
+  // test de fonctionnement
+  // console.log(category);
+}
+
 function createFigure(works) {
   // Récupère la div gallery
   const galleryDiv = document.querySelector(".gallery");
@@ -28,39 +37,65 @@ function createFigure(works) {
     // console.log(work);
   });
 }
+// fonction qui filtre par catégories
+function categoryFilter(works) {
+  const categoriesTous = works;
+  console.log("Tous", categoriesTous);
 
-// function de récupération des données de l'API catégory
-async function fetchCategory() {
-  const reponse = await fetch("http://localhost:5678/api/categories");
-  return await reponse.json();
+  const categories1 = works.filter((work) => {
+    return work.CategoryId === 1;
+  });
+  console.log("Nombre de catégories 1 :", categories1);
 
-  // test de fonctionnement
-  // console.log(category);
+  const categories2 = works.filter((work) => {
+    return work.categoryId === 2;
+  });
+  console.log("Nombre de Catégories 2 filtrer =",categories2);
+
+  const categories3 = works.filter((work) => {
+    return work.categoryId === 3;
+  })
+  console.log("Nombre de Catégories 3 filtrer =",categories3);
 }
 
+
 // function de création de bouton
-function createButtonFilter(category) {
-  // Récupération de la div filter
-  const filterDiv = document.querySelector(".filter");
-  // console.log(filterDiv)
-  category.forEach((btnCategory) => {
-    const btnFilter = document.createElement("button");
-    btnFilter.classList.add("btn");
-    btnFilter.innerHTML = `${btnCategory.name}`;
-    filterDiv.appendChild(btnFilter);
+// function createButtonFilter(works, category) {
 
-    console.log(btnCategory);
+// const workFilter = works.filter(category.id);
+
+// // test de fonctionnement
+// console.log(works, category);
+// // Récupération de la div filter
+// const filterDiv = document.querySelector(".filter");
+// // console.log(filterDiv)
+
+// // const btnFilter = document.createElement("button");
+// // btnFilter.classList.add("btn");
+// // btnFilter.innerText = "Tous";
+// // filterDiv.appendChild(btnFilter);
+
+// category.forEach((btnCategory) => {
+//   const btnFilter = document.createElement("button");
+//   btnFilter.classList.add("btn");
+//   btnFilter.innerHTML = `${btnCategory.name}`;
+//   filterDiv.appendChild(btnFilter);
+
+//   // test de fonctionnement
+//   console.log(btnCategory);
+
+//   addventListenerButtonFilter(btnFilter);
+// });
+
+// console.log(filterDiv)
+// }
+
+// function event listener sur btnFilter
+function addventListenerButtonFilter(element) {
+  element.addEventListener("click", (event) => {
+    // test de fonctionnement
+    console.log(element);
   });
-
-  // console.log(btnCategory);
-  // const btnFilter = document.createElement("button");
-  // btnFilter.classList.add("btn");
-  // btnFilter.innerText = "Tous";
-
-  // btnFilter.addEventListener("click", (event) => {
-  //   removeStyleBtnSelectedFilter(btnFilter);
-  //   addStyleBtnSelectedFilter(btnFilter);
-  // });
 }
 
 // function qui assigne le style au bouton selectionner
@@ -68,8 +103,7 @@ function addStyleBtnSelectedFilter(element) {
   // element.addEventListener("click", (event) => {
   element.classList.add("btn-selected");
 }
-// );
-// }
+
 // function qui enlève le style au bouton selectionner
 function removeStyleBtnSelectedFilter(element) {
   element.classList.remove("btn-selected");
@@ -77,19 +111,19 @@ function removeStyleBtnSelectedFilter(element) {
 
 // fonction d'initialisation
 async function init() {
-  // récupère les données API stockées works
+  // récupère les données API works
   const works = await fetchWorks();
-  // Test de fonctionnement
-  //   console.log(works);
-
-  // récupère les données API stockées works
+  // récupère les données API categories
   const category = await fetchCategory();
+
   // Test de fonctionnement
-  console.log(category);
+  // console.log(works, category);
 
   // appelle de la fonction qui créer l'élément figure
   createFigure(works);
-  createButtonFilter(category);
+  // createButtonFilter(works, category);
+  // worksFiltre();
+  categoryFilter(works);
 }
 
 // appel de la fonction d'initialisation

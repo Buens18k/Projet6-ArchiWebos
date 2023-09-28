@@ -212,9 +212,8 @@ li:hover {
   gap: 10px;
 }
 .btn {
-  /* max-width: 190px;
-  width: 100%; */
   display: flex;
+  min-width: 100px;
   height: 37px;
   border-radius: 60px;
   text-align: center;
@@ -225,6 +224,7 @@ li:hover {
   line-height: normal;
   padding: 9px;
   align-items: center;
+  justify-content: center;
 }
 .btn-selected {
   border: 1px solid #1d6154;
