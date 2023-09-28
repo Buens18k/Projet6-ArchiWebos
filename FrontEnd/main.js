@@ -37,64 +37,68 @@ function createFigure(works) {
     // console.log(work);
   });
 }
+
 // fonction qui filtre par catégories
 function categoryFilter(works) {
   const categoriesTous = works;
-  console.log("Tous", categoriesTous);
+  // console.log("Tous", categoriesTous);
 
   const categories1 = works.filter((work) => {
-    return work.CategoryId === 1;
+    return work.categoryId === 1;
   });
-  console.log("Nombre de catégories 1 :", categories1);
+  // console.log("Nombre de catégories 1 :", categories1);
 
   const categories2 = works.filter((work) => {
     return work.categoryId === 2;
   });
-  console.log("Nombre de Catégories 2 filtrer =",categories2);
+  // console.log("Nombre de Catégories 2 filtrer =",categories2);
 
   const categories3 = works.filter((work) => {
     return work.categoryId === 3;
-  })
-  console.log("Nombre de Catégories 3 filtrer =",categories3);
+  });
+  // console.log("Nombre de Catégories 3 filtrer =",categories3);
+
+  // stock toutes les catégories filtrer dans une variable et la retourne
+  const allCategoriesFiltrer = [
+    categoriesTous,
+    categories1,
+    categories2,
+    categories3,
+  ];
+  return allCategoriesFiltrer;
 }
 
-
 // function de création de bouton
-// function createButtonFilter(works, category) {
+function createButtonFilter(categoryFetch, allCategoriesFilter) {
+  // Récupération de la div filter
+  const filterDiv = document.querySelector(".filter");
+  // console.log(allCategoriesFilter)
 
-// const workFilter = works.filter(category.id);
+  const buttonTous = document.createElement("button");
+  buttonTous.textContent = `Tous`;
+  buttonTous.classList.add("btn");
+  filterDiv.appendChild(buttonTous);
+  addventListenerButtonFilter(buttonTous)
 
-// // test de fonctionnement
-// console.log(works, category);
-// // Récupération de la div filter
-// const filterDiv = document.querySelector(".filter");
-// // console.log(filterDiv)
-
-// // const btnFilter = document.createElement("button");
-// // btnFilter.classList.add("btn");
-// // btnFilter.innerText = "Tous";
-// // filterDiv.appendChild(btnFilter);
-
-// category.forEach((btnCategory) => {
-//   const btnFilter = document.createElement("button");
-//   btnFilter.classList.add("btn");
-//   btnFilter.innerHTML = `${btnCategory.name}`;
-//   filterDiv.appendChild(btnFilter);
-
-//   // test de fonctionnement
-//   console.log(btnCategory);
-
-//   addventListenerButtonFilter(btnFilter);
-// });
-
-// console.log(filterDiv)
-// }
+  // création élément button pour chaques catégories
+  categoryFetch.forEach((category) => {
+    // création du bouton
+    const button = document.createElement("button");
+    button.classList.add("btn");
+    button.textContent = category.name;
+    filterDiv.appendChild(button);
+    addventListenerButtonFilter(button);
+    // console.log(category)
+  });
+}
 
 // function event listener sur btnFilter
 function addventListenerButtonFilter(element) {
   element.addEventListener("click", (event) => {
     // test de fonctionnement
-    console.log(element);
+    // removeStyleBtnSelectedFilter(element);
+    // addStyleBtnSelectedFilter(element);
+    console.log("j'écoute le ", element);
   });
 }
 
@@ -106,24 +110,36 @@ function addStyleBtnSelectedFilter(element) {
 
 // function qui enlève le style au bouton selectionner
 function removeStyleBtnSelectedFilter(element) {
-  element.classList.remove("btn-selected");
+  const buttonfilter = document.querySelectorAll(".btn");
+  buttonfilter.forEach((element) => {
+    element.classList.remove("btn-selected");
+    console.log(element);
+  });
 }
 
 // fonction d'initialisation
 async function init() {
   // récupère les données API works
-  const works = await fetchWorks();
+  const worksFetch = await fetchWorks();
   // récupère les données API categories
-  const category = await fetchCategory();
-
+  const categoryFetch = await fetchCategory();
   // Test de fonctionnement
   // console.log(works, category);
 
-  // appelle de la fonction qui créer l'élément figure
-  createFigure(works);
-  // createButtonFilter(works, category);
-  // worksFiltre();
-  categoryFilter(works);
+  // **********appelle des fonctions
+
+  // créer l'élément figure
+  createFigure(worksFetch);
+
+  // filtre les catégories
+  categoryFilter(worksFetch);
+
+  // stock les catégories filtrer dans une variables réutilisable
+  const allCategoriesFilter = categoryFilter(worksFetch);
+  // Test de fonctionnement
+  // console.log(allCategoriesFilter);
+
+  createButtonFilter(categoryFetch, allCategoriesFilter);
 }
 
 // appel de la fonction d'initialisation
