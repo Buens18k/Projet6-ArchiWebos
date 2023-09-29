@@ -96,7 +96,7 @@ function createButtonFilter(categoryFetch) {
     // ajoute le bouton filtre à la div filter
     filterDiv.appendChild(btnFilter);
     // test
-    console.log(categoryFetch);
+    // console.log(categoryFetch);
   });
 }
 
