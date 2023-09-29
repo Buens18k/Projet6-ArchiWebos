@@ -1,111 +1,136 @@
-//  fonction de récupération des données API works
+// Variable globale récupérant les travaux de l'API works
+let worksFetch;
+
+// fonction asynchone pour récupérer les données de l'API works
 async function fetchWorks() {
-  // Récupération des données de l'API
+  // Requête pour récupérer les données de l'API works
   const reponse = await fetch("http://localhost:5678/api/works");
-  //  retourne en json
+  // Convertit la réponse en JSON
   return await reponse.json();
   // Test de fonctionnement
   //   console.log(works);
 }
 
-// function de récupération des données de l'API catégory
+// fonction asynchone pour récupérer les données de l'API catégories
 async function fetchCategory() {
+  // Requête pour récupérer les données de l'API catégories
   const reponse = await fetch("http://localhost:5678/api/categories");
+  // Convertit la réponse en JSON
   return await reponse.json();
 
   // test de fonctionnement
   // console.log(category);
 }
 
-// fonction qui génère la div gallery et ces éléments depuis l'API works
+// fonction qui créer les éléments HTML pour chaque figure et les affiches dans la gallery
 function createFigure(works) {
-  // Récupère la div gallery
-  const galleryDiv = document.querySelector(".gallery");
-  // parcours la liste works en stokant tout le contenu réaliser (dans la boucle) dans la variable temporaire work
+  // parcours la liste des données de l'API works
   works.forEach((work) => {
-    // création de l'élément figure
-    const worksFigure = document.createElement("figure");
-    // rajoute l'élément créer dans le html avec :
-    // son élément img et figcaption
-    // en utilisant les données "work" et récupérerant les propriétés "imageUrl, title" de l'API
-    worksFigure.innerHTML = `
-      <img src ="${work.imageUrl}" alt="${work.title}">
-	    <figcaption>${work.title}</figcaption>
-    `;
-    // manipulation du DOM precisant "worksFigure" enfant de "galleryDiv"
-    galleryDiv.appendChild(worksFigure);
-    // test de fonctionnement
-    // console.log(work);
+    // appel de la fonction qui crée une figure pour chaque objets dans les données de l'API works
+    createWork(work);
   });
 }
 
-// fonction qui filtre par catégories
-function categoryFilter(works) {
+// function qui crée un élément "figure" dans la Div "gallery"
+function createWork(work) {
+  // Récupère la div gallery
+  const galleryDiv = document.querySelector(".gallery");
+  // création de l'élément figure
+  const workFigure = document.createElement("figure");
+  // remplit l'élément figure avec les propriétés "imageUrl, title" de l'API
+  workFigure.innerHTML = `
+        <img src ="${work.imageUrl}" alt="${work.title}">
+        <figcaption>${work.title}</figcaption>
+      `;
+  // ajoute l'élément "figure" à la div "gallery"
+  galleryDiv.appendChild(workFigure);
+  // test de fonctionnement
+  // console.log(work);
+}
+
+// fonction pour filtrer les données de l'API works par catégories
+function categoryFilter(works, categoryId) {
+  // stock toutes les catégories dans la variable "categoriesTous"
   const categoriesTous = works;
   // console.log("Tous", categoriesTous);
 
+  // stock toutes les catégorie dans la variable "categories1"
   const categories1 = works.filter((work) => {
     return work.categoryId === 1;
   });
   // console.log("Nombre de catégories 1 :", categories1);
 
+  // stock toutes les catégorie dans la variable "categories2"
   const categories2 = works.filter((work) => {
     return work.categoryId === 2;
   });
   // console.log("Nombre de Catégories 2 filtrer =",categories2);
 
+  // stock toutes les catégorie dans la variable "categories3"
   const categories3 = works.filter((work) => {
     return work.categoryId === 3;
   });
   // console.log("Nombre de Catégories 3 filtrer =",categories3);
 
-  // stock toutes les catégories filtrer dans une variable et la retourne
-  const allCategoriesFiltrer = [
-    categoriesTous,
-    categories1,
-    categories2,
-    categories3,
-  ];
-  // console.log("toutes les catégories", allCategoriesFiltrer);
-
-  // retourne toutes les catégories
-  return allCategoriesFiltrer;
+  // retourne les éléments ayant le même ID de catégorie que celui spécifié
+  return works.filter((work) => work.categoryId === categoryId);
 }
 
-// function de création de bouton
-function createButtonFilter(categoryFetch, allCategoriesFilter) {
-  // test réponse de l'API catégories
-  // console.log(categoryFetch);
-
-  // ajout d'un nouvelle index avec la méthode unshift
+// function qui crée les boutons filtre par catégories
+function createButtonFilter(categoryFetch) {
+  // ajout d'une nouvelle catégories "Tous" en première position dans le tableau des catégories
   categoryFetch.unshift({ id: 0, name: `Tous` });
-  // Test de réponse
-  console.log(categoryFetch);
-
-  // Récupération de la div filter
+  // Récupère la div filter
   const filterDiv = document.querySelector(".filter");
-  // // console.log(allCategoriesFilter)
 
-  // Création d'un bouton pour chaque catégorie avec leurs noms
+  // Parcours chaque éléments des données de l'API catégories
   categoryFetch.forEach((category) => {
-    const btn = document.createElement("button");
-    btn.classList.add("btn");
-    btn.innerHTML = category.name;
-
-    filterDiv.appendChild(btn);
+    // crée un élément button filtre pour chaques catégories
+    const btnFilter = document.createElement("button");
+    // ajoute à chaques buttons filtre la class .btn
+    btnFilter.classList.add("btn");
+    // ajoute le nom de la catégories respective au bouton filtre provenant du tableau "categoryFetch"
+    btnFilter.innerHTML = category.name;
+    // ajoute un écouteur d'évènement
+    addventListenerButtonFilter(worksFetch, category, btnFilter);
+    // ajoute le bouton filtre à la div filter
+    filterDiv.appendChild(btnFilter);
+    // test
+    console.log(categoryFetch);
   });
 }
 
-// function event listener sur btnFilter
-function addventListenerButtonFilter(element) {
+// function pour ajouter un écouteur d'éènement sur les btnFilter
+function addventListenerButtonFilter(works, category, element) {
   element.addEventListener("click", (event) => {
-    // test de fonctionnement
-    removeStyleBtnSelectedFilter(element);
+    // efface le style à tous les boutons
+    removeStyleBtnSelectedFilter();
+    // ajoute le style au bouton sélèctionner
     addStyleBtnSelectedFilter(element);
+    // Récupère la DIV gallery
+    const galleryDiv = document.querySelector(".gallery");
+    // initialise un tableau vide pour les données filtrée par catégories
+    let filterWorks = [];
+    // Structure de controle pour savoir quelle index à été selectionner
+    // Si le bouton "Tous" est cliqué
+    if (category.id === 0) {
+      // affiche toutes les données
+      filterWorks = works;
+      // console.log(filterWorks);
+    } else {
+      // sinon filtre les données en fonction de l'ID de la catégories selectionner
+      filterWorks = categoryFilter(worksFetch, category.id);
+      // controle
+      // console.log(filterWorks);
+    }
+    // effacement de la page html
+    galleryDiv.innerHTML = "";
 
-    // test effacement page
-    // console.log("j'écoute le ", element);
-    // console.log("j'écoute le ", element);
+    // affiche les données filtrer pour la catégorie selectionner
+    createFigure(filterWorks);
+
+    // test de position
+    console.log(`j'écoute le bouton : "${category.name}"`);
   });
 }
 
@@ -116,38 +141,34 @@ function addStyleBtnSelectedFilter(element) {
 }
 
 // function qui enlève le style au bouton selectionner
-function removeStyleBtnSelectedFilter(element) {
+function removeStyleBtnSelectedFilter() {
   const buttonfilter = document.querySelectorAll(".btn");
   buttonfilter.forEach((element) => {
     element.classList.remove("btn-selected");
-    console.log(element);
+    // console.log(element);
   });
 }
 
 // fonction d'initialisation
 async function init() {
-  // récupère les données API works
-  const worksFetch = await fetchWorks();
+  // récupère les données API works et stock dans la variable
+  worksFetch = await fetchWorks();
   // récupère les données API categories
   const categoryFetch = await fetchCategory();
   // Test de fonctionnement
   // console.log(worksFetch, categoryFetch);
 
-  // **********appelle des fonctions
+  // **********appelle la fonction qui
 
   // créer l'élément figure
   createFigure(worksFetch);
 
-  // filtre les catégories
+  // filtre par catégories
   categoryFilter(worksFetch);
 
-  // stock les catégories filtrer dans une variables réutilisable
-  const allCategoriesFilter = categoryFilter(worksFetch);
-  // Test de fonctionnement
-  // console.log(allCategoriesFilter);
-
-  createButtonFilter(categoryFetch, allCategoriesFilter);
+  // crée les boutons filtre
+  createButtonFilter(categoryFetch);
 }
 
-// appel de la fonction d'initialisation
+// appel de la fonction d'initialisation au chargement de la page
 init();
