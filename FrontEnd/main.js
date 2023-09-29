@@ -17,6 +17,7 @@ async function fetchCategory() {
   // console.log(category);
 }
 
+// fonction qui génère la div gallery et ces éléments depuis l'API works
 function createFigure(works) {
   // Récupère la div gallery
   const galleryDiv = document.querySelector(".gallery");
@@ -26,7 +27,7 @@ function createFigure(works) {
     const worksFigure = document.createElement("figure");
     // rajoute l'élément créer dans le html avec :
     // son élément img et figcaption
-    // en utilisant les données "work" et récupérerant les propriétés "imageUrl, title"
+    // en utilisant les données "work" et récupérerant les propriétés "imageUrl, title" de l'API
     worksFigure.innerHTML = `
       <img src ="${work.imageUrl}" alt="${work.title}">
 	    <figcaption>${work.title}</figcaption>
@@ -65,30 +66,33 @@ function categoryFilter(works) {
     categories2,
     categories3,
   ];
+  // console.log("toutes les catégories", allCategoriesFiltrer);
+
+  // retourne toutes les catégories
   return allCategoriesFiltrer;
 }
 
 // function de création de bouton
 function createButtonFilter(categoryFetch, allCategoriesFilter) {
+  // test réponse de l'API catégories
+  // console.log(categoryFetch);
+
+  // ajout d'un nouvelle index avec la méthode unshift
+  categoryFetch.unshift({ id: 0, name: `Tous` });
+  // Test de réponse
+  console.log(categoryFetch);
+
   // Récupération de la div filter
   const filterDiv = document.querySelector(".filter");
-  // console.log(allCategoriesFilter)
+  // // console.log(allCategoriesFilter)
 
-  const buttonTous = document.createElement("button");
-  buttonTous.textContent = `Tous`;
-  buttonTous.classList.add("btn");
-  filterDiv.appendChild(buttonTous);
-  addventListenerButtonFilter(buttonTous)
-
-  // création élément button pour chaques catégories
+  // Création d'un bouton pour chaque catégorie avec leurs noms
   categoryFetch.forEach((category) => {
-    // création du bouton
-    const button = document.createElement("button");
-    button.classList.add("btn");
-    button.textContent = category.name;
-    filterDiv.appendChild(button);
-    addventListenerButtonFilter(button);
-    // console.log(category)
+    const btn = document.createElement("button");
+    btn.classList.add("btn");
+    btn.innerHTML = category.name;
+
+    filterDiv.appendChild(btn);
   });
 }
 
@@ -96,9 +100,12 @@ function createButtonFilter(categoryFetch, allCategoriesFilter) {
 function addventListenerButtonFilter(element) {
   element.addEventListener("click", (event) => {
     // test de fonctionnement
-    // removeStyleBtnSelectedFilter(element);
-    // addStyleBtnSelectedFilter(element);
-    console.log("j'écoute le ", element);
+    removeStyleBtnSelectedFilter(element);
+    addStyleBtnSelectedFilter(element);
+
+    // test effacement page
+    // console.log("j'écoute le ", element);
+    // console.log("j'écoute le ", element);
   });
 }
 
@@ -124,7 +131,7 @@ async function init() {
   // récupère les données API categories
   const categoryFetch = await fetchCategory();
   // Test de fonctionnement
-  // console.log(works, category);
+  // console.log(worksFetch, categoryFetch);
 
   // **********appelle des fonctions
 
