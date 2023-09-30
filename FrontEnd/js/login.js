@@ -4,8 +4,8 @@ const loginDiv = document.querySelector(".login");
 console.log(loginDiv);
 
 // créer un élément contenant le contenue du header
-const headerContent = document.createElement("header");
-headerContent.innerHTML = `
+const headerLogin = document.createElement("header");
+headerLogin.innerHTML = `
     <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
     <nav>
         <ul>
@@ -17,4 +17,9 @@ headerContent.innerHTML = `
     </nav>
 `;
 // ajoute le header dans la div login en tant qu'enfant
-loginDiv.appendChild(headerContent);
+loginDiv.appendChild(headerLogin);
+
+const loginContent = document.createElement("div");
+
+
+loginDiv.appendChild(loginContent);
