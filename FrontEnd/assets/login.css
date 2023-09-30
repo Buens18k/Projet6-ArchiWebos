@@ -2,11 +2,14 @@
   width: 100%;
   height: 100vh;
   background: #fffef8;
+  z-index: 999;
 }
 .login_content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 150px;
+
 }
 .login_title {
   display: flex;
@@ -42,6 +45,7 @@ input {
   flex-shrink: 0;
   background: #1d6154;
   color: #fff;
+  border: none;
 }
 .mp-forget {
   color: #3d3d3d;
