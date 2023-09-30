@@ -13,7 +13,7 @@ function createHeader() {
               <li>projets</li>
               <li>contact</li>
               <li>login</li>
-              <li><img src="../assets/icons/instagram.png" alt="Instagram"></li>
+              <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
           </ul>
       </nav>
   `;
@@ -58,7 +58,7 @@ function init() {
   console.log(loginBody);
 
   createHeader();
-  
+
   loginBody.appendChild(mainLogin);
 
   createFormLogin();
