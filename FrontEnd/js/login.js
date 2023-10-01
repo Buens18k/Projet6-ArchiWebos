@@ -1,12 +1,13 @@
 // récupère le body
 const loginBody = document.body;
-// récupère le header
-const headerLogin = document.createElement("header");
 // récupère le main
 const mainLogin = document.createElement("main");
 
 // Fonction qui créer le header et les éléments
 function createHeader() {
+  // récupère le header
+const headerLogin = document.createElement("header");
+
   // créer un élément contenant le contenue du header
   headerLogin.innerHTML = `
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
@@ -39,10 +40,14 @@ function createFormLogin() {
   `;
   mainLogin.appendChild(loginContent);
 
+  // test de vérification de connection
+
   const form = document.querySelector("form");
   // console.log(form);
-  form.addEventListener("submit", function () {
-    console.log("je valide");
+  form.addEventListener("submit", function (event) {
+    // Désactivation du comportement par défaut du navigateur
+    event.preventDefault();
+    
   });
 }
 
