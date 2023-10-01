@@ -135,6 +135,8 @@ body {
   margin: auto;
   font-family: "Work Sans";
   font-size: 14px;
+  background: #fffef8;
+
 }
 header {
   display: flex;
@@ -212,22 +214,26 @@ li:hover {
   justify-content: center;
   margin: 51px 0px 80px 0px;
   gap: 10px;
+  width: 100%;
 }
 .btn {
-  display: flex;
-  min-width: 100px;
-  height: 37px;
   border-radius: 60px;
   text-align: center;
   font-family: Syne;
-  font-size: 16px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  padding: 9px;
+  /* padding: 9px; */
   align-items: center;
   justify-content: center;
   border: 1px solid #1d6154;
+  color: #1D6154;
+}
+.btn-filter{
+  display: flex;
+  min-width: 10%;
+  height: 37px;
 }
 .btn-selected {
   background: #1d6154;
@@ -289,5 +295,7 @@ input[type="submit"] {
 footer nav ul {
   display: flex;
   justify-content: flex-end;
-  margin: 2em;
+  /* margin: 2em; */
+  background: #FFF;
+  height: 3.75rem;
 }

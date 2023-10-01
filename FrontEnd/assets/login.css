@@ -1,56 +1,44 @@
 @import "../assets/home-page.css";
 
-.login {
-  width: 100%;
-  height: 100vh;
-  background: #fffef8;
-  z-index: 999;
+#login {
+  width: 50%;
+  /* height: 68.5vh; */
+  margin: auto;
+  padding-top: 9.38rem;
+  padding-bottom: 22.19rem;
 }
-.login_content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 150px;
-  height: 1024px;
-}
+
 .login_title {
   display: flex;
+  justify-content: center;
   margin-bottom: 37px;
 }
-form {
+
+#login form {
+  text-align: left;
+  margin-top: 37px;
   display: flex;
   flex-direction: column;
 }
 
-.title-label {
-  color: #3d3d3d;
-  font-family: Work Sans;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  padding-bottom: 6px;
-}
-input {
-  width: 379px;
-  /* width: 100%; */
-  height: 51px;
-  flex-shrink: 0;
-  margin-bottom: 30px;
-  background: #fff;
-  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+#login input {
+  height: 50px;
+  font-size: 1.2em;
   border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-.login-btn {
-  margin: 7px 0px 28px 0px;
-  width: 179px;
-  height: 36px;
-  flex-shrink: 0;
-  background: #1d6154;
-  color: #fff;
-  border: none;
+
+input[type="submit"] {
+  margin: 3rem auto;
 }
+
+#login label {
+  margin: 2em 0 1em 0;
+}
+
 .mp-forget {
+  display: block;
+  margin: auto;
   color: #3d3d3d;
   font-family: Work Sans;
   font-size: 14px;
