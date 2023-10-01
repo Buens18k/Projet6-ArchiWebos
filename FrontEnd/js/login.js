@@ -32,8 +32,8 @@ function createFormLogin() {
     <form action="#" method="post">
       <label for="email">Email</label>
       <input type="text" name="email" id="email" />
-      <label for="mp">Mot de passe</label>
-      <input type="email" name="mp" id="mp" />
+      <label for="password">Mot de passe</label>
+      <input type="email" name="password" id="password" />
       <input type="submit" value="Se connecter" />
       <a class="mp-forget" href=""> Mot de passe oublier</a>
     </form>
@@ -42,12 +42,19 @@ function createFormLogin() {
 
   // test de vérification de connection
 
+  // récupère l'élément formulaire
   const form = document.querySelector("form");
-  // console.log(form);
+  // ajout un écouteur d'évènement sur le formulaire
   form.addEventListener("submit", function (event) {
     // Désactivation du comportement par défaut du navigateur
     event.preventDefault();
+    // récupère la valeur entrée par le user dans "input" de l'ID "email"
+    const email = document.getElementById("email").value;
+    // récupère la valeur entrée par le user dans "input" de l'ID "Mot de passe"
+    const password = document.getElementById("password").value;
+
     
+
   });
 }
 
