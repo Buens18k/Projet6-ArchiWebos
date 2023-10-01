@@ -89,6 +89,7 @@ function createButtonFilter(categoryFetch) {
     const btnFilter = document.createElement("button");
     // ajoute à chaques buttons filtre la class .btn
     btnFilter.classList.add("btn");
+    btnFilter.classList.add("btn-filter");
     // ajoute le nom de la catégories respective au bouton filtre provenant du tableau "categoryFetch"
     btnFilter.innerHTML = category.name;
     // ajoute un écouteur d'évènement

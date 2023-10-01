@@ -13,7 +13,7 @@ function createHeader() {
               <li>projets</li>
               <li>contact</li>
               <li>login</li>
-              <li><img src="../assets/icons/instagram.png" alt="Instagram"></li>
+              <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
           </ul>
       </nav>
   `;
@@ -23,20 +23,19 @@ function createHeader() {
 
 // Fonction qui créer le formulaire + le bouton et le lien MPforget
 function createFormLogin() {
-  const loginContent = document.createElement("div");
-  loginContent.classList.add("login_content");
+  const loginContent = document.createElement("section");
+  loginContent.setAttribute("id", "login");
   loginContent.innerHTML = `
-        <h2 class="login_title">Login</h2>
-        <form action="#">
-        <label class="title-label" for="username"> Email</label>
-        <input type="text" id="username" />
-        <label class="title-label" for="mp"> Mot de Passe</label>
-        <input type="text" id="mp" />
-        </form>
-        <button class="login-btn btn" type="submit">Se connecter</button>
-        <a class="mp-forget" href=""> Mot de passe oublier</a>
-    `;
-
+    <h2 class="login_title">Login</h2>
+    <form action="#" method="post">
+      <label for="email">Email</label>
+      <input type="text" name="email" id="email" />
+      <label for="mp">Mot de passe</label>
+      <input type="email" name="mp" id="mp" />
+      <input type="submit" value="Se connecter" />
+      <a class="mp-forget" href=""> Mot de passe oublier</a>
+    </form>
+  `;
   mainLogin.appendChild(loginContent);
 }
 
@@ -58,7 +57,7 @@ function init() {
   console.log(loginBody);
 
   createHeader();
-  
+
   loginBody.appendChild(mainLogin);
 
   createFormLogin();
