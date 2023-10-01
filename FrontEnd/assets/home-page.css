@@ -177,6 +177,10 @@ nav li {
   padding: 0 10px;
   font-size: 1.2em;
 }
+/* Code ajouter */
+a{
+  text-decoration: none;
+}
 
 li:hover {
   color: #b1663c;
