@@ -52,9 +52,25 @@ function createFormLogin() {
     const email = document.getElementById("email").value;
     // récupère la valeur entrée par le user dans "input" de l'ID "Mot de passe"
     const password = document.getElementById("password").value;
+    // test
+    // console.log(email, password)
 
-    console.log(email, password)
-
+    // fonction fetch pour configurer une requête en appelant l'API 
+    // et l'envoyez avec POST en JSON pour verifier la requête
+    fetch("http://localhost:5678/api/users/login", {
+      // le verbe
+      method:  "POST",
+      // le media type
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // Requête à l'API convertit en JSON
+      body: JSON.stringify({
+        // le corp de la requête ce qu'il faut vérifier
+        email: email,
+        password: password,
+      }),
+    })
 
 
   });
