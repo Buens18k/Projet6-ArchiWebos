@@ -1,6 +1,8 @@
 // récupère le body
 const loginBody = document.body;
+// récupère le header
 const headerLogin = document.createElement("header");
+// récupère le main
 const mainLogin = document.createElement("main");
 
 // Fonction qui créer le header et les éléments
@@ -38,16 +40,15 @@ function createFormLogin() {
   mainLogin.appendChild(loginContent);
 
   const form = document.querySelector("form");
-  console.log(form);
-  form.addEventListener("submit", function(){
-
-  })
+  // console.log(form);
+  form.addEventListener("submit", function () {
+    console.log("je valide");
+  });
 }
 
 // Fonction qui écoute le formulaire de connexion
-function loginListener () {
+function loginListener() {
   // const form = document.querySelector("form");
-
 }
 
 // Fonction qui créer le footer
