@@ -31,9 +31,9 @@ function createFormLogin() {
     <h2 class="login_title">Login</h2>
     <form action="#" method="post">
       <label for="email">Email</label>
-      <input type="text" name="email" id="email" />
+      <input type="email" name="email" id="email" />
       <label for="password">Mot de passe</label>
-      <input type="email" name="password" id="password" />
+      <input type="text" name="password" id="password" />
       <input type="submit" value="Se connecter" />
       <a class="mp-forget" href=""> Mot de passe oublier</a>
     </form>
@@ -53,7 +53,9 @@ function createFormLogin() {
     // récupère la valeur entrée par le user dans "input" de l'ID "Mot de passe"
     const password = document.getElementById("password").value;
 
-    
+    console.log(email, password)
+
+
 
   });
 }
