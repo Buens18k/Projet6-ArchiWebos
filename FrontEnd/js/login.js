@@ -71,6 +71,10 @@ function createFormLogin() {
         password: password,
       }),
     })
+    // Réponse de l'API après vérification par rapport au données dans l'API
+    .then((response) => {
+
+    })
 
 
   });
