@@ -13,7 +13,7 @@ function createHeader() {
               <li>projets</li>
               <li>contact</li>
               <li>login</li>
-              <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+              <li><img src="../assets/icons/instagram.png" alt="Instagram"></li>
           </ul>
       </nav>
   `;
@@ -37,6 +37,18 @@ function createFormLogin() {
     </form>
   `;
   mainLogin.appendChild(loginContent);
+
+  const form = document.querySelector("form");
+  console.log(form);
+  form.addEventListener("submit", function(){
+
+  })
+}
+
+// Fonction qui écoute le formulaire de connexion
+function loginListener () {
+  // const form = document.querySelector("form");
+
 }
 
 // Fonction qui créer le footer
@@ -54,7 +66,7 @@ function createFooter() {
 
 function init() {
   // test
-  console.log(loginBody);
+  // console.log(loginBody);
 
   createHeader();
 
