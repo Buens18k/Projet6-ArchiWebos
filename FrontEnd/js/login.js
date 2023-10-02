@@ -6,7 +6,7 @@ const mainLogin = document.createElement("main");
 // Fonction qui créer le header et les éléments
 function createHeader() {
   // récupère le header
-const headerLogin = document.createElement("header");
+  const headerLogin = document.createElement("header");
 
   // créer un élément contenant le contenue du header
   headerLogin.innerHTML = `
@@ -44,53 +44,59 @@ function createFormLogin() {
 
   // récupère l'élément formulaire
   const form = document.querySelector("form");
-  // ajout un écouteur d'évènement sur le formulaire
+  // ajout un écouteur d'évènement sur le formulaire pour intercepter la soumission
   form.addEventListener("submit", function (event) {
     // Désactivation du comportement par défaut du navigateur
     event.preventDefault();
-    // récupère la valeur entrée par le user dans "input" de l'ID "email"
+    // récupère les valeurs saisie par le user pour l'email et le mot de passe
     const email = document.getElementById("email").value;
-    // récupère la valeur entrée par le user dans "input" de l'ID "Mot de passe"
     const password = document.getElementById("password").value;
     // test
     // console.log(email, password)
 
-    // fonction fetch pour configurer une requête en appelant l'API 
-    // et l'envoyez avec POST en JSON pour verifier la requête
+    // effectue une requête POST vers l'API POST users/login
     fetch("http://localhost:5678/api/users/login", {
-      // le verbe
-      method:  "POST",
-      // le media type
+      // spécifie la méthode de la requête (POST)
+      method: "POST",
+      // indique le type de media du corps de la requête (JSON)
       headers: {
         "Content-Type": "application/json",
       },
-      // Requête à l'API convertit en JSON
+      // convertit les données en JSON et les envoie dans le corps de la requête
       body: JSON.stringify({
-        // le corp de la requête ce qu'il faut vérifier
         email: email,
         password: password,
       }),
     })
-    // Réponse de l'API après vérification par rapport au données dans l'API est stock dans la variable response
-    .then(async (response) => {
-      // Interroge l'API si c'est ok (code 200)
-      if(response.ok) {
+      // traite la réponse de l'API après vérification des données d'authentification
+      .then(async (response) => {
+        // vérifie si la réponse de l'API est OK (code 200)
+        if (response.ok) {
+          // controle
+          console.log(response);
+          // redirige vers la page index.html
+          window.location.href = "../index.html";
+        } else {
+          // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
+          const errorData = await response.json();
+          // controle
+          console.error(errorData);
+          // lance une erreur avec le message d'erreur de l'API
+          throw new Error(errorData.message);
+        }
+      })
+      // Gestion des erreurs d'authentification : 
+      // crée un élément de paragraphe pour afficher le message d'erreur de l'API
+      .catch((error) => {
+        // création de l'élément qui va afficher le message d"erreur
+        const errorMessage = document.createElement("p");
+        // ajoute à lélément le message utiliser dans l'API
+        errorMessage.textContent = error.message;
+        // rattache le message au DOM du formulaire
+        form.appendChild(errorMessage);
         // controle
-        console.log(response);
-        // retourne la réponse en transformer en JSON
-        return response.json();
-      } else {
-        // Sinon si c'est pas ok 
-        // récupération du message d'erreur de l'API transformer en JSON
-        const errorData = await response.json();
-        // controle 
-        console.error(errorData);
-        // récupère le message d'erreur de l'API
-        throw new Error(errorData.message);
-      }
-
-    })
-
+        console.log("Erreur message API", errorMessage);
+      });
   });
 }
 
