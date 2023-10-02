@@ -138,7 +138,7 @@ body {
   background: #fffef8;
 }
 /* Code ajouter pour la barre Mode Edition */
-.bar-mode-edition{
+.bar-mode-edition {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -146,17 +146,15 @@ body {
   height: 3.6875rem;
   background: #000;
   gap: 0.71rem;
-
 }
-.mode-edition{
-  color: #FFF;
+.mode-edition {
+  color: #fff;
   text-align: center;
   font-family: Work Sans;
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
-  line-height: normal;  
-
+  line-height: normal;
 }
 
 header {
@@ -199,7 +197,7 @@ nav li {
   font-size: 1.2em;
 }
 /* Code ajouter */
-a{
+a {
   text-decoration: none;
 }
 
@@ -234,6 +232,23 @@ li:hover {
   margin-bottom: 1em;
 }
 /* Code rajouter */
+#portfolio h2.modify-h2 {
+  margin-top: 8.69rem;
+  margin-bottom: 5.75rem;
+}
+.edit-svg {
+  margin-left: 1.94rem;
+}
+.link-modifier {
+  color: #000;
+  text-align: center;
+  font-family: Work Sans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-left: 0.65rem;
+}
 .filter {
   display: flex;
   justify-content: center;
@@ -253,9 +268,9 @@ li:hover {
   align-items: center;
   justify-content: center;
   border: 1px solid #1d6154;
-  color: #1D6154;
+  color: #1d6154;
 }
-.btn-filter{
+.btn-filter {
   display: flex;
   min-width: 10%;
   height: 37px;
@@ -321,6 +336,6 @@ footer nav ul {
   display: flex;
   justify-content: flex-end;
   /* margin: 2em; */
-  background: #FFF;
+  background: #fff;
   height: 3.75rem;
 }
