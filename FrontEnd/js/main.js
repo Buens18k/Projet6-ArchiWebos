@@ -196,6 +196,14 @@ function disappearBntFilterDisplay (){
 
 }
 
+// function qui supprime le token lors de la fermeture de la page
+function logOutListener(){
+  window.addEventListener(`beforeunload`, (event) =>{
+    // supprime le token du local Storage lors de la fermeture de la page
+    localStorage.removeItem('token');
+  })
+}
+
 // fonction d'initialisation
 async function init() {
   // récupère les données API works et stock dans la variable
@@ -218,6 +226,9 @@ async function init() {
 
   // test après être authentifier
   checkAuthentification();
+
+  // 
+  logOutListener()
 }
 
 // appel de la fonction d'initialisation au chargement de la page
