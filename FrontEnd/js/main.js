@@ -98,6 +98,9 @@ function createButtonFilter(categoryFetch) {
     filterDiv.appendChild(btnFilter);
     // test
     // console.log(categoryFetch);
+
+    // appelle de la fonction qui fait disparaitre les boutons lorsque le user est connecter
+    disappearBntFilterDisplay ()
   });
 }
 
@@ -150,6 +153,8 @@ function removeStyleBtnSelectedFilter() {
   });
 }
 
+// function check l'authentification si true(grâce au token récupérer dans le localStorage)
+// alors on créer la barre Mode édition
 function checkAuthentification() {
   // récupère le token dans le localStorage
   const token = localStorage.getItem(`token`);
@@ -173,6 +178,22 @@ function checkAuthentification() {
     // je place la barModeEdition avant le header
     document.body.insertBefore(barModeEdition, header);
   }
+}
+
+// function check l'autification si oui ont fait disparaitre les btnFilters
+function disappearBntFilterDisplay (){
+  // récupère le token
+  const token = localStorage.getItem('token');
+  // récupère la div filter
+  const filterDiv = document.querySelector('.filter');
+
+  // vérifie si le user est authentifier
+  if(token){
+    filterDiv.style.display = 'none';
+  }else{
+    filterDiv.style.display = 'flex';
+  }
+
 }
 
 // fonction d'initialisation
