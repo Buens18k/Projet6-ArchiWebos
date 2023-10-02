@@ -169,8 +169,9 @@ function checkAuthentification() {
     `;
 
     // récupère le header
-    const header = document.querySelector('header');
-    document.body.insertBefore(barModeEdition, header)
+    const header = document.querySelector("header");
+    // je place la barModeEdition avant le header
+    document.body.insertBefore(barModeEdition, header);
   }
 }
 
