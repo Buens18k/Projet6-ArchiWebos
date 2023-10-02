@@ -71,11 +71,25 @@ function createFormLogin() {
         password: password,
       }),
     })
-    // Réponse de l'API après vérification par rapport au données dans l'API
-    .then((response) => {
+    // Réponse de l'API après vérification par rapport au données dans l'API est stock dans la variable response
+    .then(async (response) => {
+      // Interroge l'API si c'est ok (code 200)
+      if(response.ok) {
+        // controle
+        console.log(response);
+        // retourne la réponse en transformer en JSON
+        return response.json();
+      } else {
+        // Sinon si c'est pas ok 
+        // récupération du message d'erreur de l'API transformer en JSON
+        const errorData = await response.json();
+        // controle 
+        console.error(errorData);
+        // récupère le message d'erreur de l'API
+        throw new Error(errorData.message);
+      }
 
     })
-
 
   });
 }
