@@ -136,8 +136,29 @@ body {
   font-family: "Work Sans";
   font-size: 14px;
   background: #fffef8;
+}
+/* Code ajouter pour la barre Mode Edition */
+.bar-mode-edition{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 3.6875rem;
+  background: #000;
+  gap: 0.71rem;
 
 }
+.mode-edition{
+  color: #FFF;
+  text-align: center;
+  font-family: Work Sans;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;  
+
+}
+
 header {
   display: flex;
   justify-content: space-between;
