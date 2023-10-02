@@ -90,6 +90,18 @@ function createFormLogin() {
       }
 
     })
+    // Création de l'objet en cas d'erreur pour l'afficher
+    .catch((error) => {
+      // création de l'élément qui va afficher le message d"erreur
+      const errorMessage = document.createElement("p");
+      // passe le message utliser dans l'API
+      errorMessage.textContent = error.message;
+      // rattache le message au DOM du formulaire
+      form.appendChild(errorMessage);
+      console.log("Erreur message API", errorMessage);
+
+    })
+
 
   });
 }
