@@ -3,7 +3,7 @@
    License: none (public domain)
 */
 
-/* @import './login.css'; */
+@import 'modal.css';
 
 html,
 body,
