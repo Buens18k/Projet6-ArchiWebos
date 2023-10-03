@@ -79,35 +79,8 @@ function manageSubmissionForm(event) {
     }),
   })
     // traite la réponse de l'API après vérification des données d'authentification
-    .then(async (response) => {
-      // vérifie si la réponse de l'API est OK (code 200)
-      if (response.ok) {
-        // controle
-        console.log(response);
-
-        // créer une variable pour stoker les données convertit en JSON
-        const data = await response.json();
-        // enregistre le token dans le localStorage
-        localStorage.setItem(`token`, data.token);
-        /************
-         * controle du token enregistrer voir directement dans la console du navigateur
-         * Appli/ Stockage local
-         * Clé token
-         * Valeur porvenant de l'API: ey .......
-         * it's ok ?
-         * **********/
-
-        // redirige vers la page index.html
-        window.location.href = "../index.html";
-      } else {
-        // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
-        const errorData = await response.json();
-        // controle
-        console.error(errorData);
-        // lance une erreur avec le message d'erreur de l'API
-        throw new Error(errorData.message);
-      }
-    })
+    .then(manageResponseAPI) 
+    
     // Gestion des erreurs d'authentification :
     // crée un élément de paragraphe pour afficher le message d'erreur de l'API
     .catch((error) => {
@@ -122,9 +95,36 @@ function manageSubmissionForm(event) {
     });
 }
 
-// Fonction qui écoute le formulaire de connexion
-function loginListener() {
-  // const form = document.querySelector("form");
+// fonction qui traite la réponse de l'API 
+// en parametre la réponse de l'API
+async function manageResponseAPI(response){
+  if (response.ok) {
+    // controle
+    console.log(response);
+
+    // créer une variable pour stoker les données convertit en JSON
+    const data = await response.json();
+    // enregistre le token dans le localStorage
+    localStorage.setItem(`token`, data.token);
+    /************
+     * controle du token enregistrer voir directement dans la console du navigateur
+     * Appli/ Stockage local
+     * Clé token
+     * Valeur porvenant de l'API: ey .......
+     * it's ok ?
+     * **********/
+
+    // redirige vers la page index.html
+    window.location.href = "../index.html";
+  } else {
+    // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
+    const errorData = await response.json();
+    // controle
+    console.error(errorData);
+    // lance une erreur avec le message d'erreur de l'API
+    throw new Error(errorData.message);
+  }
+
 }
 
 // Fonction qui créer le footer
