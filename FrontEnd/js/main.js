@@ -261,9 +261,10 @@ async function init() {
   // test après être authentifier
   checkAuthentification();
 
+  //  créer le svg et l'ancre si authentifier
   addSvgAncre();
 
-  // supprime le token du localStorage à la fermeture de la page
+  // supprime le token du localStorage à la fermeture de la page si authentifier
   logOutListener();
 }
 

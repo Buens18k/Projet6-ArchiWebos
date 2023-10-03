@@ -79,25 +79,15 @@ function manageSubmissionForm(event) {
     }),
   })
     // traite la réponse de l'API après vérification des données d'authentification
-    .then(manageResponseAPI) 
-    
+    .then(manageResponseAPI)
+
     // Gestion des erreurs d'authentification :
-    // crée un élément de paragraphe pour afficher le message d'erreur de l'API
-    .catch((error) => {
-      // création de l'élément qui va afficher le message d"erreur
-      const errorMessage = document.createElement("p");
-      // ajoute à lélément le message utiliser dans l'API
-      errorMessage.textContent = error.message;
-      // rattache le message au DOM du formulaire
-      form.appendChild(errorMessage);
-      // controle
-      console.log("Erreur message API", errorMessage);
-    });
+    .catch(handleError);
 }
 
-// fonction qui traite la réponse de l'API 
-// en parametre la réponse de l'API
-async function manageResponseAPI(response){
+// fonction asynchrone qui traite la réponse de l'API
+// en parametre la réponse qui doit être traiter
+async function manageResponseAPI(response) {
   if (response.ok) {
     // controle
     console.log(response);
@@ -111,10 +101,9 @@ async function manageResponseAPI(response){
      * Appli/ Stockage local
      * Clé token
      * Valeur porvenant de l'API: ey .......
-     * it's ok ?
      * **********/
 
-    // redirige vers la page index.html
+    // redirige vers la page index.html Mode Edition
     window.location.href = "../index.html";
   } else {
     // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
@@ -124,7 +113,22 @@ async function manageResponseAPI(response){
     // lance une erreur avec le message d'erreur de l'API
     throw new Error(errorData.message);
   }
+}
 
+// fonction pour traiter les erreurs de l'API
+// en paramètre l'erreur qui sera traiter et afficher
+function handleError(error) {
+  // création de l'élément qui va afficher le message d"erreur
+  const errorMessage = document.createElement("p");
+  // ajoute à lélément le message utiliser dans l'API
+  errorMessage.textContent = error.message;
+
+  // récupère l'élément "form"
+  const form = document.querySelector("form");
+  // rattache le message au DOM du formulaire
+  form.appendChild(errorMessage);
+  // controle
+  console.log("Erreur message API", errorMessage);
 }
 
 // Fonction qui créer le footer
