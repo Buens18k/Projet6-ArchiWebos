@@ -228,26 +228,49 @@ function addSvgAncre() {
     h2Title.appendChild(editSvg);
     h2Title.appendChild(editLinkModify);
     addEventListenerModal();
-
   }
 }
 
 // fonction ajoute un gestionnaire d'écoute évenement à l'ancre "Modifier"
 function addEventListenerModal() {
-  
   const linkModify = document.querySelector(".link-modifier");
   console.log(linkModify);
 
   if (linkModify) {
+    // vairalbel qui permet de savoir quel modal est ouvert
+    let modal = null;
+    // ajout du gestionnaire d'écoute à l'évenement "click"
     linkModify.addEventListener("click", (event) => {
       event.preventDefault();
       // récupérer le modal
-      const modal = document.getElementById("modal1");
-      modal.style.display = "flex";
-      console.log("j'entend le click");
+      const target = document.getElementById("modal1");
+      target.setAttribute("aria-modal", "true");
+
+      // ajoute le style pour être visible
+      target.style.display = "flex";
+      // sauvegarde la boite modal
+      modal = target;
+      // controle
+      console.log("le modal1 est activé et enregistrer", modal);
+      // ajout d'un gestionnaire d'écoute au modal
+      // et appel la fonction qui ferme le modal
+      modal.addEventListener("click", closeModal);
     });
-  } 
-  
+  }
+}
+
+// function qui ferme le modal
+function closeModal(event) {
+  event.preventDefault();
+  // récupérer le modal
+  const target = document.getElementById("modal1");
+
+  // ajoute le style pour être visible
+  target.style.display = "none";
+  // sauvegarde la boite modal
+  // modal = target;
+  // controle
+  console.log("le modal1 est desactivé", target);
 }
 
 // fonction qui créer le modale
@@ -262,8 +285,9 @@ function createModal() {
   const asideModal = document.createElement("aside");
   asideModal.setAttribute("id", "modal1");
   asideModal.classList.add("modal");
-  asideModal.setAttribute("aria-hidden", "true");
   asideModal.setAttribute("role", "dialog");
+  asideModal.setAttribute("aria-modal", "false");
+  asideModal.setAttribute("aria-hidden", "true");
   asideModal.setAttribute("aria-labelledby", "titlemodal");
   // rattache l'élément aside au body
   body.appendChild(asideModal);
