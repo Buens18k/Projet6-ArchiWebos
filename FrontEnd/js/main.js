@@ -104,7 +104,7 @@ function createButtonFilter(categoryFetch) {
   });
 }
 
-// function pour ajouter un écouteur d'éènement sur les btnFilter
+// function pour ajouter un écouteur d'évenement sur les btnFilter
 function addventListenerButtonFilter(works, category, element) {
   element.addEventListener("click", (event) => {
     // efface le style à tous les boutons
@@ -217,17 +217,95 @@ function addSvgAncre() {
 
     // Créer l'ancre modifier
     const editLinkModify = document.createElement("a");
-    editLinkModify.setAttribute("href", "#");
+    editLinkModify.setAttribute("href", "#modal1");
     editLinkModify.innerText = "modifier";
     editLinkModify.classList.add("link-modifier");
-
+    // ajout d'un gestionnaire d'écoute évenement lors du click sur l'élément
     // récupère le titre H2 de lasection portfolio
     const h2Title = document.querySelector("#portfolio h2");
     h2Title.classList.add("modify-h2");
     // ajoute a côté du h2
     h2Title.appendChild(editSvg);
     h2Title.appendChild(editLinkModify);
+    addEventListenerModal();
   }
+}
+
+// fonction ajoute un gestionnaire d'écoute évenement à l'ancre "Modifier"
+function addEventListenerModal() {
+  const linkModify = document.querySelector(".link-modifier");
+  console.log(linkModify);
+
+  if (linkModify) {
+    // vairalbel qui permet de savoir quel modal est ouvert
+    let modal = null;
+    // ajout du gestionnaire d'écoute à l'évenement "click"
+    linkModify.addEventListener("click", (event) => {
+      event.preventDefault();
+      // récupérer le modal
+      const target = document.getElementById("modal1");
+      target.setAttribute("aria-modal", "true");
+
+      // ajoute le style pour être visible
+      target.style.display = "flex";
+      // sauvegarde la boite modal
+      modal = target;
+      // controle
+      console.log("le modal1 est activé et enregistrer", modal);
+      // ajout d'un gestionnaire d'écoute au modal
+      // et appel la fonction qui ferme le modal
+      modal.addEventListener("click", closeModal);
+    });
+  }
+}
+
+// function qui ferme le modal
+function closeModal(event) {
+  event.preventDefault();
+  // récupérer le modal
+  const target = document.getElementById("modal1");
+
+  // ajoute le style pour être visible
+  target.style.display = "none";
+  // sauvegarde la boite modal
+  // modal = target;
+  // controle
+  console.log("le modal1 est desactivé", target);
+}
+
+// fonction qui créer le modale
+function createModal() {
+  // récupère le body
+  const body = document.body;
+
+  // récupère l'ancre modifier
+  const token = localStorage.getItem(`token`);
+
+  // créer le container du modal
+  const asideModal = document.createElement("aside");
+  asideModal.setAttribute("id", "modal1");
+  asideModal.classList.add("modal");
+  asideModal.setAttribute("role", "dialog");
+  asideModal.setAttribute("aria-modal", "false");
+  asideModal.setAttribute("aria-hidden", "true");
+  asideModal.setAttribute("aria-labelledby", "titlemodal");
+  // rattache l'élément aside au body
+  body.appendChild(asideModal);
+
+  // créer la div du modal
+  const modalWrapper = document.createElement("div");
+  modalWrapper.classList.add("modal-wrapper");
+
+  // rattache au container modal
+  asideModal.appendChild(modalWrapper);
+
+  const titlemodal = document.createElement("h2");
+  titlemodal.setAttribute("id", "titlemodal");
+  titlemodal.innerHTML = `Galerie photo`;
+
+  modalWrapper.appendChild(titlemodal);
+  // controle
+  console.log("création du modal");
 }
 
 // function qui supprime le token lors de la fermeture de la page
@@ -264,8 +342,10 @@ async function init() {
   //  créer le svg et l'ancre si authentifier
   addSvgAncre();
 
+  createModal();
+
   // supprime le token du localStorage à la fermeture de la page si authentifier
-  logOutListener();
+  // logOutListener();
 }
 
 // appel de la fonction d'initialisation au chargement de la page
