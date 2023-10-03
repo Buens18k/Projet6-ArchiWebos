@@ -5,7 +5,7 @@ const mainLogin = document.createElement("main");
 
 // Fonction qui créer le header et les éléments
 function createHeader() {
-  // récupère le header
+  // créer le header
   const headerLogin = document.createElement("header");
 
   // créer un élément contenant le contenue du header
@@ -40,82 +40,95 @@ function createFormLogin() {
   `;
   mainLogin.appendChild(loginContent);
 
-  // test de vérification de connection
-
-  // récupère l'élément formulaire
-  const form = document.querySelector("form");
-  // ajout un écouteur d'évènement sur le formulaire pour intercepter la soumission
-  form.addEventListener("submit", function (event) {
-    // Désactivation du comportement par défaut du navigateur
-    event.preventDefault();
-    // récupère les valeurs saisie par le user pour l'email et le mot de passe
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    // test
-    // console.log(email, password)
-
-    // effectue une requête POST vers l'API POST users/login
-    fetch("http://localhost:5678/api/users/login", {
-      // spécifie la méthode de la requête (POST)
-      method: "POST",
-      // indique le type de media du corps de la requête (JSON)
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // convertit les données en JSON et les envoie dans le corps de la requête
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
-      // traite la réponse de l'API après vérification des données d'authentification
-      .then(async (response) => {
-        // vérifie si la réponse de l'API est OK (code 200)
-        if (response.ok) {
-          // controle
-          console.log(response);
-
-          // créer une variable pour stoker les données convertit en JSON
-          const data = await response.json();
-          // enregistre le token dans le localStorage
-          localStorage.setItem(`token`, data.token);
-          /************
-           * controle du token enregistrer voir directement dans la console du navigateur
-           * Appli/ Stockage local
-           * Clé token
-           * Valeur porvenant de l'API: ey .......
-           * it's ok ?
-           * **********/
-
-          // redirige vers la page index.html
-          window.location.href = "../index.html";
-        } else {
-          // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
-          const errorData = await response.json();
-          // controle
-          console.error(errorData);
-          // lance une erreur avec le message d'erreur de l'API
-          throw new Error(errorData.message);
-        }
-      })
-      // Gestion des erreurs d'authentification :
-      // crée un élément de paragraphe pour afficher le message d'erreur de l'API
-      .catch((error) => {
-        // création de l'élément qui va afficher le message d"erreur
-        const errorMessage = document.createElement("p");
-        // ajoute à lélément le message utiliser dans l'API
-        errorMessage.textContent = error.message;
-        // rattache le message au DOM du formulaire
-        form.appendChild(errorMessage);
-        // controle
-        console.log("Erreur message API", errorMessage);
-      });
-  });
+  // appelle de la fonction qui ajoute un écouteur d'évenenment au formulaire
+  addFormEventListener();
 }
 
-// Fonction qui écoute le formulaire de connexion
-function loginListener() {
-  // const form = document.querySelector("form");
+// fonction qui ajoute un écouteur d'évenement au formulaire
+function addFormEventListener() {
+  // récupère l'élément formulaire
+  const form = document.querySelector("form");
+
+  // ajout un écouteur d'évènement sur le formulaire
+  // et fait appel à la fonction qui va gérer la soumission du formulaire
+  form.addEventListener("submit", manageSubmissionForm);
+}
+
+// fonction qui va gérer la soumission du formulaire en lui passant en paramètre l'évènement
+function manageSubmissionForm(event) {
+  // Désactivation du comportement par défaut du navigateur
+  event.preventDefault();
+  // récupère les valeurs saisie par le user pour l'email et le mot de passe
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  // test
+  // console.log(email, password)
+
+  // effectue une requête POST vers l'API POST users/login
+  fetch("http://localhost:5678/api/users/login", {
+    // spécifie la méthode de la requête (POST)
+    method: "POST",
+    // indique le type de media du corps de la requête (JSON)
+    headers: {
+      "Content-Type": "application/json",
+    },
+    // convertit les données en JSON et les envoie dans le corps de la requête
+    body: JSON.stringify({
+      email: email,
+      password: password,
+    }),
+  })
+    // traite la réponse de l'API après vérification des données d'authentification
+    .then(manageResponseAPI)
+
+    // Gestion des erreurs d'authentification :
+    .catch(handleError);
+}
+
+// fonction asynchrone qui traite la réponse de l'API
+// en parametre la réponse qui doit être traiter
+async function manageResponseAPI(response) {
+  if (response.ok) {
+    // controle
+    console.log(response);
+
+    // créer une variable pour stoker les données convertit en JSON
+    const data = await response.json();
+    // enregistre le token dans le localStorage
+    localStorage.setItem(`token`, data.token);
+    /************
+     * controle du token enregistrer voir directement dans la console du navigateur
+     * Appli/ Stockage local
+     * Clé token
+     * Valeur porvenant de l'API: ey .......
+     * **********/
+
+    // redirige vers la page index.html Mode Edition
+    window.location.href = "../index.html";
+  } else {
+    // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
+    const errorData = await response.json();
+    // controle
+    console.error(errorData);
+    // lance une erreur avec le message d'erreur de l'API
+    throw new Error(errorData.message);
+  }
+}
+
+// fonction pour traiter les erreurs de l'API
+// en paramètre l'erreur qui sera traiter et afficher
+function handleError(error) {
+  // création de l'élément qui va afficher le message d"erreur
+  const errorMessage = document.createElement("p");
+  // ajoute à lélément le message utiliser dans l'API
+  errorMessage.textContent = error.message;
+
+  // récupère l'élément "form"
+  const form = document.querySelector("form");
+  // rattache le message au DOM du formulaire
+  form.appendChild(errorMessage);
+  // controle
+  console.log("Erreur message API", errorMessage);
 }
 
 // Fonction qui créer le footer
