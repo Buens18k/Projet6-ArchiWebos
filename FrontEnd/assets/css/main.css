@@ -131,11 +131,14 @@ table {
 }
 /** end reset css**/
 body {
+  display: grid;
+  min-height: 100vh;
   max-width: 1140px;
   margin: auto;
   font-family: "Work Sans";
   font-size: 14px;
   background: #fffef8;
+  align-items: flex-start;
 }
 /* Code ajouter pour la barre Mode Edition */
 .bar-mode-edition {
@@ -331,6 +334,9 @@ input[type="submit"] {
   text-align: center;
   border-radius: 60px;
 }
+footer{
+  align-self: flex-end;
+}
 
 footer nav ul {
   display: flex;
@@ -338,4 +344,5 @@ footer nav ul {
   /* margin: 2em; */
   background: #fff;
   height: 3.75rem;
+  
 }
