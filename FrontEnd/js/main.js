@@ -286,7 +286,7 @@ function createModal1Element() {
       <svg class ="close-modal1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M17.6546 8.05106C18.1235 7.58214 18.1235 6.82061 17.6546 6.35169C17.1856 5.88277 16.4241 5.88277 15.9552 6.35169L12.005 10.3056L8.05106 6.35544C7.58214 5.88652 6.82061 5.88652 6.35169 6.35544C5.88277 6.82436 5.88277 7.58589 6.35169 8.05481L10.3056 12.005L6.35544 15.9589C5.88652 16.4279 5.88652 17.1894 6.35544 17.6583C6.82436 18.1272 7.58589 18.1272 8.05481 17.6583L12.005 13.7044L15.9589 17.6546C16.4279 18.1235 17.1894 18.1235 17.6583 17.6546C18.1272 17.1856 18.1272 16.4241 17.6583 15.9552L13.7044 12.005L17.6546 8.05106Z" fill="black"/>
       </svg>
-      <div class ="cta-img-modal1"></div>
+      <div class ="cta-img-svg"></div>
       <button class = "btn add-photo-modal1"> Ajouter une photo </button>
     </div>
   `;
@@ -326,20 +326,40 @@ function addEventListenerModal1() {
   }
 }
 
-// fonction pour afficher les images dans le modal
-function displayImageInModal(){
+// fonction pour afficher les images et le svg dans le modal
+function displayImageInModal() {
   // récupère la div figure-modal1
-  const imagesModal1Div = document.querySelector(".cta-img-modal1");
+  const imagesModal1Div = document.querySelector(".cta-img-svg");
+
   console.log(imagesModal1Div);
   // parcourir les données de l'API works
-  worksFetch.forEach(work =>{
+  // pour chaque élément de l'API
+  worksFetch.forEach((work) => {
+    // créer un container pour recevoir l'image et le svg
+    const container = document.createElement("div");
+    container.classList.add("cta-img-svg_content");
+    // créer un élément img
     const imgModal1 = document.createElement("img");
+    // ajoute une class pour le style
     imgModal1.classList.add("image-modal1");
+    // définie la source de l'image en récupèrant l'URL de l'image dans l'API works
     imgModal1.src = work.imageUrl;
 
-    imagesModal1Div.appendChild(imgModal1);
-  })
-  
+    // créer l'élément SVG
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", "9");
+    svg.setAttribute("height", "11");
+    svg.setAttribute("viewBox", "0 0 9 11");
+    svg.setAttribute("fill", "none");
+    svg.innerHTML = `
+      <path d="M2.71607 0.35558C2.82455 0.136607 3.04754 0 3.29063 0H5.70938C5.95246 0 6.17545 0.136607 6.28393 0.35558L6.42857 0.642857H8.35714C8.71272 0.642857 9 0.930134 9 1.28571C9 1.64129 8.71272 1.92857 8.35714 1.92857H0.642857C0.287277 1.92857 0 1.64129 0 1.28571C0 0.930134 0.287277 0.642857 0.642857 0.642857H2.57143L2.71607 0.35558ZM0.642857 2.57143H8.35714V9C8.35714 9.70915 7.78058 10.2857 7.07143 10.2857H1.92857C1.21942 10.2857 0.642857 9.70915 0.642857 9V2.57143ZM2.57143 3.85714C2.39464 3.85714 2.25 4.00179 2.25 4.17857V8.67857C2.25 8.85536 2.39464 9 2.57143 9C2.74821 9 2.89286 8.85536 2.89286 8.67857V4.17857C2.89286 4.00179 2.74821 3.85714 2.57143 3.85714ZM4.5 3.85714C4.32321 3.85714 4.17857 4.00179 4.17857 4.17857V8.67857C4.17857 8.85536 4.32321 9 4.5 9C4.67679 9 4.82143 8.85536 4.82143 8.67857V4.17857C4.82143 4.00179 4.67679 3.85714 4.5 3.85714ZM6.42857 3.85714C6.25179 3.85714 6.10714 4.00179 6.10714 4.17857V8.67857C6.10714 8.85536 6.25179 9 6.42857 9C6.60536 9 6.75 8.85536 6.75 8.67857V4.17857C6.75 4.00179 6.60536 3.85714 6.42857 3.85714Z" fill="white"/>
+    `;
+    svg.classList.add("svg-modal1");
+    // image sera l'enfant de la div "imagesModal1Div"
+    container.appendChild(imgModal1);
+    container.appendChild(svg);
+    imagesModal1Div.appendChild(container);
+  });
 }
 
 // fonction d'initialisation
@@ -365,9 +385,7 @@ async function init() {
   // création du modale1
   createModal1();
   // ajouter les images dans la div figure-modal1 du modal1
-  displayImageInModal()
-
-
+  displayImageInModal();
 }
 
 // appel de la fonction d'initialisation au chargement de la page
