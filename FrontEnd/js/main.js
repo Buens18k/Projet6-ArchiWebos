@@ -327,10 +327,6 @@ function addEventListenerModal1() {
       modal = target;
       // controle
       // console.log("le modal1 est activé et enregistrer", modal);
-
-      // ajout d'un gestionnaire d'écoute au modal
-      // et appel la fonction qui ferme le modal
-      // modal.addEventListener("click", closeModal1);
     });
   }
 }
@@ -347,6 +343,9 @@ function displayImageInModal() {
     // créer un container pour recevoir l'image et le svg
     const container = document.createElement("div");
     container.classList.add("cta-img-svg_content");
+    // Ajout d'un ID unique à chaque containeur
+    container.dataset.id = work.id;
+    console.log(container.dataset.id);
     // créer un élément img
     const imgModal1 = document.createElement("img");
     // ajoute une class pour le style
