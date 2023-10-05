@@ -286,7 +286,7 @@ function createModal1Element() {
       <svg class ="close-modal1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M17.6546 8.05106C18.1235 7.58214 18.1235 6.82061 17.6546 6.35169C17.1856 5.88277 16.4241 5.88277 15.9552 6.35169L12.005 10.3056L8.05106 6.35544C7.58214 5.88652 6.82061 5.88652 6.35169 6.35544C5.88277 6.82436 5.88277 7.58589 6.35169 8.05481L10.3056 12.005L6.35544 15.9589C5.88652 16.4279 5.88652 17.1894 6.35544 17.6583C6.82436 18.1272 7.58589 18.1272 8.05481 17.6583L12.005 13.7044L15.9589 17.6546C16.4279 18.1235 17.1894 18.1235 17.6583 17.6546C18.1272 17.1856 18.1272 16.4241 17.6583 15.9552L13.7044 12.005L17.6546 8.05106Z" fill="black"/>
       </svg>
-      <div class ="figure-modal1"></div>
+      <div class ="cta-img-modal1"></div>
       <button class = "btn add-photo-modal1"> Ajouter une photo </button>
     </div>
   `;
@@ -300,7 +300,7 @@ function createModal1Element() {
 function addEventListenerModal1() {
   // récupère le boutton "modifier"
   const btnModify = document.querySelector(".link-modifier");
-  console.log(btnModify);
+  // console.log(btnModify);
 
   if (btnModify) {
     // varialble qui permet de savoir quel modal est ouvert
@@ -317,13 +317,29 @@ function addEventListenerModal1() {
       // sauvegarde la boite modal
       modal = target;
       // controle
-      console.log("le modal1 est activé et enregistrer", modal);
+      // console.log("le modal1 est activé et enregistrer", modal);
 
       // ajout d'un gestionnaire d'écoute au modal
       // et appel la fonction qui ferme le modal
       // modal.addEventListener("click", closeModal1);
     });
   }
+}
+
+// fonction pour afficher les images dans le modal
+function displayImageInModal(){
+  // récupère la div figure-modal1
+  const imagesModal1Div = document.querySelector(".cta-img-modal1");
+  console.log(imagesModal1Div);
+  // parcourir les données de l'API works
+  worksFetch.forEach(work =>{
+    const imgModal1 = document.createElement("img");
+    imgModal1.classList.add("image-modal1");
+    imgModal1.src = work.imageUrl;
+
+    imagesModal1Div.appendChild(imgModal1);
+  })
+  
 }
 
 // fonction d'initialisation
@@ -339,18 +355,19 @@ async function init() {
 
   // créer l'élément figure
   createFigure(worksFetch);
-
   // filtre par catégories
   categoryFilter(worksFetch);
-
   // crée les boutons filtre
   createButtonFilter(categoryFetch);
-
   // test après être authentifier
   checkAuthentification();
 
   // création du modale1
   createModal1();
+  // ajouter les images dans la div figure-modal1 du modal1
+  displayImageInModal()
+
+
 }
 
 // appel de la fonction d'initialisation au chargement de la page
