@@ -3,7 +3,7 @@
    License: none (public domain)
 */
 
-@import 'modal.css';
+@import "modal.css";
 
 html,
 body,
@@ -251,6 +251,8 @@ li:hover {
   font-weight: 400;
   line-height: normal;
   margin-left: 0.65rem;
+  border-style: none;
+  background: #fff;
 }
 .filter {
   display: flex;
@@ -334,7 +336,7 @@ input[type="submit"] {
   text-align: center;
   border-radius: 60px;
 }
-footer{
+footer {
   align-self: flex-end;
 }
 
@@ -344,5 +346,4 @@ footer nav ul {
   /* margin: 2em; */
   background: #fff;
   height: 3.75rem;
-  
 }
