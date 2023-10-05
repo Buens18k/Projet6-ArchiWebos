@@ -98,9 +98,6 @@ function createButtonFilter(categoryFetch) {
     filterDiv.appendChild(btnFilter);
     // test
     // console.log(categoryFetch);
-
-    // appelle de la fonction qui fait disparaitre les boutons lorsque le user est connecter
-    disappearBntFilterDisplay();
   });
 }
 
@@ -165,6 +162,10 @@ function checkAuthentification() {
   if (token) {
     // appel de la fonction qui ajoute la barre Mode Edition
     barModeEdition();
+    // appel de la fonction qui fait disparaitre les boutons
+    disappearBntFilterDisplay();
+    // appel de la fonction qui ajoute une ancre et le bouton modifier
+    addSvgAncre();
     // appel de la fonction qui redirige vers la home page non modifier "home-page"
     // et qui supprime le token du LocalStorage pour déconnecter
     logoutUser();
@@ -189,6 +190,44 @@ function barModeEdition() {
   document.body.insertBefore(barModeEdition, header);
 }
 
+// function check l'autification si oui ont fait disparaitre les btnFilters
+function disappearBntFilterDisplay() {
+  // récupère la div filter
+  const filterDiv = document.querySelector(".filter");
+  // désactive les boutons
+  filterDiv.style.display = "none";
+}
+
+// function ajoute le svg + le boutton modifier
+function addSvgAncre() {
+  // Créer le SVG
+  const editSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  editSvg.setAttribute("width", "16");
+  editSvg.setAttribute("height", "16");
+  editSvg.setAttribute("viewBox", "0 0 16 16");
+  editSvg.setAttribute("fill", "none");
+  editSvg.innerHTML = `
+      <path d="M13.5229 1.68576L13.8939 2.05679C14.1821 2.34503 14.1821 2.81113 13.8939 3.0963L13.0016 3.99169L11.5879 2.57808L12.4803 1.68576C12.7685 1.39751 13.2346 1.39751 13.5198 1.68576H13.5229ZM6.43332 7.73578L10.5484 3.61759L11.9621 5.03121L7.84387 9.14633C7.75494 9.23525 7.64455 9.29964 7.52496 9.33337L5.73111 9.84546L6.2432 8.05162C6.27693 7.93203 6.34133 7.82164 6.43025 7.73271L6.43332 7.73578ZM11.4408 0.646245L5.39074 6.6932C5.12397 6.95998 4.93078 7.28808 4.82959 7.64685L3.9526 10.7133C3.879 10.9708 3.94953 11.2468 4.13965 11.4369C4.32977 11.627 4.60574 11.6976 4.86332 11.624L7.92973 10.747C8.29156 10.6427 8.61967 10.4495 8.88338 10.1858L14.9334 4.13888C15.7951 3.27722 15.7951 1.87894 14.9334 1.01728L14.5624 0.646245C13.7007 -0.215415 12.3024 -0.215415 11.4408 0.646245ZM2.69844 1.84214C1.20816 1.84214 0 3.05031 0 4.54058V12.8812C0 14.3715 1.20816 15.5796 2.69844 15.5796H11.0391C12.5293 15.5796 13.7375 14.3715 13.7375 12.8812V9.44683C13.7375 9.039 13.4094 8.71089 13.0016 8.71089C12.5937 8.71089 12.2656 9.039 12.2656 9.44683V12.8812C12.2656 13.5589 11.7167 14.1078 11.0391 14.1078H2.69844C2.02076 14.1078 1.47188 13.5589 1.47188 12.8812V4.54058C1.47188 3.86291 2.02076 3.31402 2.69844 3.31402H6.13281C6.54065 3.31402 6.86875 2.98591 6.86875 2.57808C6.86875 2.17025 6.54065 1.84214 6.13281 1.84214H2.69844Z" fill="black"/>    
+    `;
+  editSvg.classList.add("edit-svg");
+
+  // Créer le boutton modifier
+  const editLinkModify = document.createElement("button");
+  editLinkModify.setAttribute("href", "#modal1");
+  editLinkModify.innerText = "modifier";
+  editLinkModify.classList.add("link-modifier");
+  // ajout d'un gestionnaire d'écoute évenement lors du click sur l'élément
+  // récupère le titre H2 de lasection portfolio
+  const h2Title = document.querySelector("#portfolio h2");
+  h2Title.classList.add("modify-h2");
+  // ajoute a côté du h2
+  h2Title.appendChild(editSvg);
+  h2Title.appendChild(editLinkModify);
+
+  // appel de la fonction qui ajoute un gestionnaire d'évènement au click sur le boutton pour ouvrir le modal1
+  addEventListenerModal1();
+}
+
 // function qui déconnecte en cliquant sur logout
 function logoutUser() {
   // récupère l'ancre login
@@ -197,74 +236,77 @@ function logoutUser() {
   linkLogin.textContent = "logout";
   // modifie le href de l'ancre pour
   linkLogin.href = "./index.html";
+  // ajoute un gestionnaire d'évenement
   linkLogin.addEventListener("click", (event) => {
     // suprime le token
     localStorage.removeItem("token");
+    // controle
+    console.log("Supprime le token");
   });
-  console.log(linkLogin);
+  // controle du lien logout
+  // console.log(linkLogin);
 }
 
-// function check l'autification si oui ont fait disparaitre les btnFilters
-function disappearBntFilterDisplay() {
-  // récupère le token
-  const token = localStorage.getItem("token");
-  // récupère la div filter
-  const filterDiv = document.querySelector(".filter");
+// fonction qui créer la fenêtre contenant le modale1
+function createModal1() {
+  // récupère le body
+  const body = document.body;
+  // Créer le modal et ce qu'il va contenir en appelant la fonction qui nous retourne l'élément et ce qu'il contiendras
+  const asideModal = createModal1Element();
 
-  // vérifie si le user est authentifier
-  if (token) {
-    filterDiv.style.display = "none";
-  } else {
-    filterDiv.style.display = "flex";
-  }
+  // rattache l'élément aside au body
+  body.appendChild(asideModal);
+  // // controle
+  // // console.log("création du modal");
+
+  // ferme le modal1 avec le svg
+  // récupère le svg en question
+  const closeBtn = document.querySelector(".close-modal1");
+  // ajoute un gestionnaire d'évenement au svg
+  closeBtn.addEventListener("click", () => {
+    // puis ont ferme le modale
+    asideModal.style.display = "none";
+  });
+}
+// Créer le Modal1 et ces éléments et retourne l'élément ainsi ce qu'il contient
+function createModal1Element() {
+  // créer le container du modal
+  const asideModal = document.createElement("aside");
+  asideModal.setAttribute("id", "modal1");
+  asideModal.classList.add("modal");
+  asideModal.setAttribute("role", "dialog");
+  asideModal.setAttribute("aria-modal", "false");
+  asideModal.setAttribute("aria-hidden", "true");
+  asideModal.setAttribute("aria-labelledby", "titlemodal");
+
+  // stocké dans cette variable ce que va contenir la fenêtre du modal
+  const modalContent = `
+    <div class="modal-wrapper">
+      <h2 id="titlemodal">Galerie photo</h2>
+      <svg class ="close-modal1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M17.6546 8.05106C18.1235 7.58214 18.1235 6.82061 17.6546 6.35169C17.1856 5.88277 16.4241 5.88277 15.9552 6.35169L12.005 10.3056L8.05106 6.35544C7.58214 5.88652 6.82061 5.88652 6.35169 6.35544C5.88277 6.82436 5.88277 7.58589 6.35169 8.05481L10.3056 12.005L6.35544 15.9589C5.88652 16.4279 5.88652 17.1894 6.35544 17.6583C6.82436 18.1272 7.58589 18.1272 8.05481 17.6583L12.005 13.7044L15.9589 17.6546C16.4279 18.1235 17.1894 18.1235 17.6583 17.6546C18.1272 17.1856 18.1272 16.4241 17.6583 15.9552L13.7044 12.005L17.6546 8.05106Z" fill="black"/>
+      </svg>
+      <div class ="figure-modal1"></div>
+      <button class = "btn add-photo-modal1"> Ajouter une photo </button>
+    </div>
+  `;
+  // ajoute dans le html ce que contient cette variable
+  asideModal.innerHTML = modalContent;
+  // retourne l'élément créer "le modal1" et ce qu'il contient
+  return asideModal;
 }
 
-// function ajoute le svg + l'ancre modifier
-function addSvgAncre() {
-  // récupère le token
-  const token = localStorage.getItem("token");
+// fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
+function addEventListenerModal1() {
+  // récupère le boutton "modifier"
+  const btnModify = document.querySelector(".link-modifier");
+  console.log(btnModify);
 
-  if (token) {
-    // Créer le SVG
-    const editSvg = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
-    editSvg.setAttribute("width", "16");
-    editSvg.setAttribute("height", "16");
-    editSvg.setAttribute("viewBox", "0 0 16 16");
-    editSvg.setAttribute("fill", "none");
-    editSvg.innerHTML = `
-      <path d="M13.5229 1.68576L13.8939 2.05679C14.1821 2.34503 14.1821 2.81113 13.8939 3.0963L13.0016 3.99169L11.5879 2.57808L12.4803 1.68576C12.7685 1.39751 13.2346 1.39751 13.5198 1.68576H13.5229ZM6.43332 7.73578L10.5484 3.61759L11.9621 5.03121L7.84387 9.14633C7.75494 9.23525 7.64455 9.29964 7.52496 9.33337L5.73111 9.84546L6.2432 8.05162C6.27693 7.93203 6.34133 7.82164 6.43025 7.73271L6.43332 7.73578ZM11.4408 0.646245L5.39074 6.6932C5.12397 6.95998 4.93078 7.28808 4.82959 7.64685L3.9526 10.7133C3.879 10.9708 3.94953 11.2468 4.13965 11.4369C4.32977 11.627 4.60574 11.6976 4.86332 11.624L7.92973 10.747C8.29156 10.6427 8.61967 10.4495 8.88338 10.1858L14.9334 4.13888C15.7951 3.27722 15.7951 1.87894 14.9334 1.01728L14.5624 0.646245C13.7007 -0.215415 12.3024 -0.215415 11.4408 0.646245ZM2.69844 1.84214C1.20816 1.84214 0 3.05031 0 4.54058V12.8812C0 14.3715 1.20816 15.5796 2.69844 15.5796H11.0391C12.5293 15.5796 13.7375 14.3715 13.7375 12.8812V9.44683C13.7375 9.039 13.4094 8.71089 13.0016 8.71089C12.5937 8.71089 12.2656 9.039 12.2656 9.44683V12.8812C12.2656 13.5589 11.7167 14.1078 11.0391 14.1078H2.69844C2.02076 14.1078 1.47188 13.5589 1.47188 12.8812V4.54058C1.47188 3.86291 2.02076 3.31402 2.69844 3.31402H6.13281C6.54065 3.31402 6.86875 2.98591 6.86875 2.57808C6.86875 2.17025 6.54065 1.84214 6.13281 1.84214H2.69844Z" fill="black"/>    
-    `;
-    editSvg.classList.add("edit-svg");
-
-    // Créer l'ancre modifier
-    const editLinkModify = document.createElement("a");
-    editLinkModify.setAttribute("href", "#modal1");
-    editLinkModify.innerText = "modifier";
-    editLinkModify.classList.add("link-modifier");
-    // ajout d'un gestionnaire d'écoute évenement lors du click sur l'élément
-    // récupère le titre H2 de lasection portfolio
-    const h2Title = document.querySelector("#portfolio h2");
-    h2Title.classList.add("modify-h2");
-    // ajoute a côté du h2
-    h2Title.appendChild(editSvg);
-    h2Title.appendChild(editLinkModify);
-    addEventListenerModal();
-  }
-}
-
-// fonction ajoute un gestionnaire d'écoute évenement à l'ancre "Modifier"
-function addEventListenerModal() {
-  const linkModify = document.querySelector(".link-modifier");
-  // console.log(linkModify);
-
-  if (linkModify) {
-    // vairalbel qui permet de savoir quel modal est ouvert
+  if (btnModify) {
+    // varialble qui permet de savoir quel modal est ouvert
     let modal = null;
-    // ajout du gestionnaire d'écoute à l'évenement "click"
-    linkModify.addEventListener("click", (event) => {
+    // ajout un gestionnaire d'écoute à l'évenement au "click"
+    btnModify.addEventListener("click", (event) => {
       event.preventDefault();
       // récupérer le modal
       const target = document.getElementById("modal1");
@@ -276,66 +318,12 @@ function addEventListenerModal() {
       modal = target;
       // controle
       console.log("le modal1 est activé et enregistrer", modal);
+
       // ajout d'un gestionnaire d'écoute au modal
       // et appel la fonction qui ferme le modal
-      modal.addEventListener("click", closeModal);
+      // modal.addEventListener("click", closeModal1);
     });
   }
-}
-
-// function qui ferme le modal
-function closeModal(event) {
-  event.preventDefault();
-  // récupérer le modal
-  const target = document.getElementById("modal1");
-
-  // ajoute le style pour être visible
-  target.style.display = "none";
-  // sauvegarde la boite modal
-  // modal = target;
-  // controle
-  console.log("le modal1 est desactivé", target);
-}
-
-// fonction qui créer le modale
-function createModal() {
-  // récupère le body
-  const body = document.body;
-
-  // récupère l'ancre modifier
-  const token = localStorage.getItem(`token`);
-
-  // créer le container du modal
-  const asideModal = document.createElement("aside");
-  asideModal.setAttribute("id", "modal1");
-  asideModal.classList.add("modal");
-  asideModal.setAttribute("role", "dialog");
-  asideModal.setAttribute("aria-modal", "false");
-  asideModal.setAttribute("aria-hidden", "true");
-  asideModal.setAttribute("aria-labelledby", "titlemodal");
-
-  asideModal.innerHTML = `
-  <div class="modal-wrapper">
-    <h2 id="titlemodal">Galerie photo</h2>
-    <svg class ="close-modal1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M17.6546 8.05106C18.1235 7.58214 18.1235 6.82061 17.6546 6.35169C17.1856 5.88277 16.4241 5.88277 15.9552 6.35169L12.005 10.3056L8.05106 6.35544C7.58214 5.88652 6.82061 5.88652 6.35169 6.35544C5.88277 6.82436 5.88277 7.58589 6.35169 8.05481L10.3056 12.005L6.35544 15.9589C5.88652 16.4279 5.88652 17.1894 6.35544 17.6583C6.82436 18.1272 7.58589 18.1272 8.05481 17.6583L12.005 13.7044L15.9589 17.6546C16.4279 18.1235 17.1894 18.1235 17.6583 17.6546C18.1272 17.1856 18.1272 16.4241 17.6583 15.9552L13.7044 12.005L17.6546 8.05106Z" fill="black"/>
-    </svg>
-    <div class ="figure-modal1"></div>
-    <button class = "btn add-photo-modal1"> Ajouter une photo </button>
-  </div>
-  `;
-  // rattache l'élément aside au body
-  body.appendChild(asideModal);
-  // controle
-  // console.log("création du modal");
-}
-
-// function qui supprime le token lors de la fermeture de la page
-function logOutListener() {
-  window.addEventListener(`beforeunload`, (event) => {
-    // supprime le token du local Storage lors de la fermeture de la page
-    localStorage.removeItem("token");
-  });
 }
 
 // fonction d'initialisation
@@ -361,13 +349,8 @@ async function init() {
   // test après être authentifier
   checkAuthentification();
 
-  //  créer le svg et l'ancre si authentifier
-  addSvgAncre();
-
-  createModal();
-
-  // supprime le token du localStorage à la fermeture de la page si authentifier
-  // logOutListener();
+  // création du modale1
+  createModal1();
 }
 
 // appel de la fonction d'initialisation au chargement de la page

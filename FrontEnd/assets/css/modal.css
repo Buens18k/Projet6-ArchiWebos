@@ -19,7 +19,7 @@
   border-radius: 0.625rem;
   background: #fff;
 
-  padding: 2.81rem;
+  padding: 2rem;
   gap: 3rem;
 
   overflow: auto;
@@ -36,6 +36,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  margin-top: 1.75rem;
 }
 .figure-modal1{
   display: grid;
@@ -46,8 +47,8 @@
 
 .close-modal1 {
   position: absolute;
-  right: 400px;
-  top: 130px;
+  right: 2rem;
+  top: 2rem;
 }
 .modal-wrapper .add-photo-modal1 {
   width: 14.8125rem;
@@ -55,4 +56,5 @@
   flex-shrink: 0;
   background: #1D6154;
   color: #FFF;
+  margin-bottom: 0.81rem;
 }
