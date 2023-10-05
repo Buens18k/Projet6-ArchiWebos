@@ -20,8 +20,6 @@
   background: #fff;
 
   padding: 2rem 2rem 3rem 2rem;
-  /* gap: 3rem; */
-
   overflow: auto;
 }
 .modal-wrapper h2 {
@@ -57,12 +55,9 @@
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(5, 18.5%);
-  /* grid-auto-rows: 165px; */
-  /* grid-gap: 0.50rem; */
   grid-column-gap: 0.50rem;
   grid-row-gap: 2rem;
   padding: 46px 0px 67.3px 0px;
-  /* height: 100%; */
   border-bottom: 2px solid;
   width: 80%;
 
@@ -71,5 +66,4 @@
   min-width: 4.91419rem;
   max-height: 8.74156rem;
   width: 100%;
-  /* height: auto; */
 }
