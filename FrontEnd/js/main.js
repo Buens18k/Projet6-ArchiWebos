@@ -223,35 +223,9 @@ function addSvgAncre() {
   // ajoute a côté du h2
   h2Title.appendChild(editSvg);
   h2Title.appendChild(editLinkModify);
-  addEventListenerModal();
-}
 
-// fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier"
-function addEventListenerModal() {
-  const linkModify = document.querySelector(".link-modifier");
-  // console.log(linkModify);
-
-  if (linkModify) {
-    // vairalbel qui permet de savoir quel modal est ouvert
-    let modal = null;
-    // ajout du gestionnaire d'écoute à l'évenement "click"
-    linkModify.addEventListener("click", (event) => {
-      event.preventDefault();
-      // récupérer le modal
-      const target = document.getElementById("modal1");
-      target.setAttribute("aria-modal", "true");
-
-      // ajoute le style pour être visible
-      target.style.display = "flex";
-      // sauvegarde la boite modal
-      modal = target;
-      // controle
-      console.log("le modal1 est activé et enregistrer", modal);
-      // ajout d'un gestionnaire d'écoute au modal
-      // et appel la fonction qui ferme le modal
-      modal.addEventListener("click", closeModal);
-    });
-  }
+  // appel de la fonction qui ajoute un gestionnaire d'évènement au click sur le boutton pour ouvrir le modal1
+  addEventListenerModal1();
 }
 
 // function qui déconnecte en cliquant sur logout
@@ -273,23 +247,29 @@ function logoutUser() {
   // console.log(linkLogin);
 }
 
-// function qui ferme le modal
-function closeModal(event) {
-  event.preventDefault();
-  // récupérer le modal
-  const target = document.getElementById("modal1");
-  // ajoute le style pour être visible
-  target.style.display = "none";
-  // controle
-  console.log("le modal1 est desactivé", target);
-}
-
 // fonction qui créer la fenêtre contenant le modale1
-function createModal() {
+function createModal1() {
   // récupère le body
   const body = document.body;
-  // récupère l'ancre modifier
-  const token = localStorage.getItem(`token`);
+  // Créer le modal et ce qu'il va contenir en appelant la fonction qui nous retourne l'élément et ce qu'il contiendras
+  const asideModal = createModal1Element();
+
+  // rattache l'élément aside au body
+  body.appendChild(asideModal);
+  // // controle
+  // // console.log("création du modal");
+
+  // ferme le modal1 avec le svg
+  // récupère le svg en question
+  const closeBtn = document.querySelector(".close-modal1");
+  // ajoute un gestionnaire d'évenement au svg
+  closeBtn.addEventListener("click", () => {
+    // puis ont ferme le modale
+    asideModal.style.display = "none";
+  });
+}
+// Créer le Modal1 et ces éléments et retourne l'élément ainsi ce qu'il contient
+function createModal1Element() {
   // créer le container du modal
   const asideModal = document.createElement("aside");
   asideModal.setAttribute("id", "modal1");
@@ -298,21 +278,52 @@ function createModal() {
   asideModal.setAttribute("aria-modal", "false");
   asideModal.setAttribute("aria-hidden", "true");
   asideModal.setAttribute("aria-labelledby", "titlemodal");
-  // ajoute dans le html ce que va contenir la fenêtre du modal
-  asideModal.innerHTML = `
-  <div class="modal-wrapper">
-    <h2 id="titlemodal">Galerie photo</h2>
-    <svg class ="close-modal1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M17.6546 8.05106C18.1235 7.58214 18.1235 6.82061 17.6546 6.35169C17.1856 5.88277 16.4241 5.88277 15.9552 6.35169L12.005 10.3056L8.05106 6.35544C7.58214 5.88652 6.82061 5.88652 6.35169 6.35544C5.88277 6.82436 5.88277 7.58589 6.35169 8.05481L10.3056 12.005L6.35544 15.9589C5.88652 16.4279 5.88652 17.1894 6.35544 17.6583C6.82436 18.1272 7.58589 18.1272 8.05481 17.6583L12.005 13.7044L15.9589 17.6546C16.4279 18.1235 17.1894 18.1235 17.6583 17.6546C18.1272 17.1856 18.1272 16.4241 17.6583 15.9552L13.7044 12.005L17.6546 8.05106Z" fill="black"/>
-    </svg>
-    <div class ="figure-modal1"></div>
-    <button class = "btn add-photo-modal1"> Ajouter une photo </button>
-  </div>
+
+  // stocké dans cette variable ce que va contenir la fenêtre du modal
+  const modalContent = `
+    <div class="modal-wrapper">
+      <h2 id="titlemodal">Galerie photo</h2>
+      <svg class ="close-modal1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M17.6546 8.05106C18.1235 7.58214 18.1235 6.82061 17.6546 6.35169C17.1856 5.88277 16.4241 5.88277 15.9552 6.35169L12.005 10.3056L8.05106 6.35544C7.58214 5.88652 6.82061 5.88652 6.35169 6.35544C5.88277 6.82436 5.88277 7.58589 6.35169 8.05481L10.3056 12.005L6.35544 15.9589C5.88652 16.4279 5.88652 17.1894 6.35544 17.6583C6.82436 18.1272 7.58589 18.1272 8.05481 17.6583L12.005 13.7044L15.9589 17.6546C16.4279 18.1235 17.1894 18.1235 17.6583 17.6546C18.1272 17.1856 18.1272 16.4241 17.6583 15.9552L13.7044 12.005L17.6546 8.05106Z" fill="black"/>
+      </svg>
+      <div class ="figure-modal1"></div>
+      <button class = "btn add-photo-modal1"> Ajouter une photo </button>
+    </div>
   `;
-  // rattache l'élément aside au body
-  body.appendChild(asideModal);
-  // controle
-  // console.log("création du modal");
+  // ajoute dans le html ce que contient cette variable
+  asideModal.innerHTML = modalContent;
+  // retourne l'élément créer "le modal1" et ce qu'il contient
+  return asideModal;
+}
+
+// fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
+function addEventListenerModal1() {
+  // récupère le boutton "modifier"
+  const btnModify = document.querySelector(".link-modifier");
+  console.log(btnModify);
+
+  if (btnModify) {
+    // varialble qui permet de savoir quel modal est ouvert
+    let modal = null;
+    // ajout un gestionnaire d'écoute à l'évenement au "click"
+    btnModify.addEventListener("click", (event) => {
+      event.preventDefault();
+      // récupérer le modal
+      const target = document.getElementById("modal1");
+      target.setAttribute("aria-modal", "true");
+
+      // ajoute le style pour être visible
+      target.style.display = "flex";
+      // sauvegarde la boite modal
+      modal = target;
+      // controle
+      console.log("le modal1 est activé et enregistrer", modal);
+
+      // ajout d'un gestionnaire d'écoute au modal
+      // et appel la fonction qui ferme le modal
+      // modal.addEventListener("click", closeModal1);
+    });
+  }
 }
 
 // fonction d'initialisation
@@ -339,7 +350,7 @@ async function init() {
   checkAuthentification();
 
   // création du modale1
-  createModal();
+  createModal1();
 }
 
 // appel de la fonction d'initialisation au chargement de la page
