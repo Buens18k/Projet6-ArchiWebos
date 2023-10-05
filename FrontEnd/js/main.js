@@ -251,13 +251,22 @@ function logoutUser() {
 function createModal1() {
   // récupère le body
   const body = document.body;
-  // Créer le modal et ce qu'il va contenir en appelant la fonction qui nous retourne l'élément et ce qu'il contiendras
+  // Créer le modal et ce qu'il va contenir en appelant la fonction qui nous retourne l'élément en question et ce qu'il contiendras
   const asideModal = createModal1Element();
 
   // rattache l'élément aside au body
   body.appendChild(asideModal);
-  // // controle
-  // // console.log("création du modal");
+  // controle
+  // console.log("création du modal");
+
+  // ferme le modal lorsque l'utilisateur click à l'extèrieur du contenu du modal
+  asideModal.addEventListener("click", (event) => {
+    // Si le click de la souris est entendu sur le parent (et non les enfants) donc la partie grisé alors
+    if (event.target === asideModal) {
+      // masque le modal en changeant le style de display à "none"
+      asideModal.style.display = "none";
+    }
+  });
 
   // ferme le modal1 avec le svg
   // récupère le svg en question

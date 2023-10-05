@@ -19,7 +19,7 @@
   border-radius: 0.625rem;
   background: #fff;
 
-  padding: 2rem 2rem 3rem 2rem;
+  padding: 2rem 2rem 1.81rem 2rem;
   overflow: auto;
 }
 .modal-wrapper h2 {
@@ -48,13 +48,13 @@
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(5, 18.5%);
-  grid-column-gap: 0.50rem;
+  grid-column-gap: 0.5rem;
   grid-row-gap: 2rem;
   padding: 46px 0px 67.3px 0px;
   border-bottom: 2px solid;
   width: 75%;
 }
-.cta-img-svg_content{
+.cta-img-svg_content {
   position: relative;
 }
 
@@ -63,7 +63,7 @@
   max-height: 8.74156rem;
   width: 100%;
 }
-.modal-wrapper .svg-modal1{
+.modal-wrapper .svg-modal1 {
   position: absolute;
   background: #000;
   top: 7px;
