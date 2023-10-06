@@ -402,8 +402,8 @@ async function handleDeleteImage(event) {
             /***********
              * - ajoute le token au header
              * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
-             ***********  */ 
-            Authorization: `Bearer ${token}`, 
+             ***********  */
+            Authorization: `Bearer ${token}`,
           },
         }
       );
