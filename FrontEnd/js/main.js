@@ -336,7 +336,7 @@ function displayImageInModal() {
   // récupère la div figure-modal1
   const imagesModal1Div = document.querySelector(".cta-img-svg");
 
-  console.log(imagesModal1Div);
+  // console.log(imagesModal1Div);
   // parcourir les données de l'API works
   // pour chaque élément de l'API
   worksFetch.forEach((work) => {
@@ -345,7 +345,7 @@ function displayImageInModal() {
     container.classList.add("cta-img-svg_content");
     // Ajout d'un ID unique à chaque containeur
     container.dataset.id = work.id;
-    console.log(container.dataset.id);
+    // console.log("ajout id sur container",container.dataset.id);
     // créer un élément img
     const imgModal1 = document.createElement("img");
     // ajoute une class pour le style
@@ -363,10 +363,78 @@ function displayImageInModal() {
       <path d="M2.71607 0.35558C2.82455 0.136607 3.04754 0 3.29063 0H5.70938C5.95246 0 6.17545 0.136607 6.28393 0.35558L6.42857 0.642857H8.35714C8.71272 0.642857 9 0.930134 9 1.28571C9 1.64129 8.71272 1.92857 8.35714 1.92857H0.642857C0.287277 1.92857 0 1.64129 0 1.28571C0 0.930134 0.287277 0.642857 0.642857 0.642857H2.57143L2.71607 0.35558ZM0.642857 2.57143H8.35714V9C8.35714 9.70915 7.78058 10.2857 7.07143 10.2857H1.92857C1.21942 10.2857 0.642857 9.70915 0.642857 9V2.57143ZM2.57143 3.85714C2.39464 3.85714 2.25 4.00179 2.25 4.17857V8.67857C2.25 8.85536 2.39464 9 2.57143 9C2.74821 9 2.89286 8.85536 2.89286 8.67857V4.17857C2.89286 4.00179 2.74821 3.85714 2.57143 3.85714ZM4.5 3.85714C4.32321 3.85714 4.17857 4.00179 4.17857 4.17857V8.67857C4.17857 8.85536 4.32321 9 4.5 9C4.67679 9 4.82143 8.85536 4.82143 8.67857V4.17857C4.82143 4.00179 4.67679 3.85714 4.5 3.85714ZM6.42857 3.85714C6.25179 3.85714 6.10714 4.00179 6.10714 4.17857V8.67857C6.10714 8.85536 6.25179 9 6.42857 9C6.60536 9 6.75 8.85536 6.75 8.67857V4.17857C6.75 4.00179 6.60536 3.85714 6.42857 3.85714Z" fill="white"/>
     `;
     svg.classList.add("svg-modal1");
-    // image sera l'enfant de la div "imagesModal1Div"
+    // ajout d'un id a chaque svg
+    svg.dataset.id = work.id;
+    // console.log("ajout id du svg",svg.dataset.id);
+
+    // ajout d'un gestionnaire d'évenement au click sur le svg (corbeille)
+    // et appel la fonction qui exécuteras la suppression au click
+    svg.addEventListener("click", handleDeleteImage);
+
+    // image et le svg enfant du container et le container enfant de la div "imagesModal1Div"
     container.appendChild(imgModal1);
     container.appendChild(svg);
     imagesModal1Div.appendChild(container);
+  });
+}
+
+// fonction supprime l'image
+async function handleDeleteImage(event) {
+  // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
+  const imageId = event.currentTarget.dataset.id;
+  console.log("je supprime le svg", imageId);
+  // récupère le token dans le Local Storage
+  const token = localStorage.getItem("token");
+
+  // si le token est dans le local storage
+  if (token) {
+    // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
+    try {
+      // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
+      const response = await fetch(
+        `http://localhost:5678/api/works/${imageId}`,
+        {
+          // utilise la méthode DELETE pour la suppression
+          method: "DELETE",
+          // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+          headers: {
+            "Content-Type": `application/json`, //type de contenu en JSON
+            /***********
+             * - ajoute le token au header
+             * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
+             ***********  */ 
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+      // gestion de la réponse provenant de l'API
+      if (response.ok) {
+        // controle
+        console.log("image supprimée ok !!!");
+
+        // supprime le container et le svg
+        const containerImgSvg = event.currentTarget.parentNode;
+        containerImgSvg.remove();
+      } else {
+        console.log("la suppression à echouer");
+      }
+    } catch (error) {
+      console.log("erreur lors de la suppression de l'image", error);
+    }
+  }
+}
+
+// fonction pour gérer la deconnexion de l'utilisateur lorsque la page ce ferme
+function disconnectClosingWindow() {
+  window.addEventListener("unload", (event) => {
+    // récupère le token dans le localStorage
+    const token = localStorage.getItem("token");
+
+    // Vérifier si le token est présent
+    if (token) {
+      // supprime le token du locale Storage
+      localStorage.removeItem("token");
+    }
   });
 }
 
@@ -394,6 +462,9 @@ async function init() {
   createModal1();
   // ajouter les images dans la div figure-modal1 du modal1
   displayImageInModal();
+
+  // déconnecte lors de la fermeture de la page du navigateur
+  // disconnectClosingWindow();
 }
 
 // appel de la fonction d'initialisation au chargement de la page
