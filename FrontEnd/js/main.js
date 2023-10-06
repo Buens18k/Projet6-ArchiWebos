@@ -383,45 +383,68 @@ async function handleDeleteImage(event) {
   // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
   const imageId = event.currentTarget.dataset.id;
   console.log("je supprime le svg", imageId);
-  // récupère le token dans le Local Storage
-  const token = localStorage.getItem("token");
 
-  // si le token est dans le local storage
-  if (token) {
-    // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
-    try {
-      // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
-      const response = await fetch(
-        `http://localhost:5678/api/works/${imageId}`,
-        {
-          // utilise la méthode DELETE pour la suppression
-          method: "DELETE",
-          // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
-          headers: {
-            "Content-Type": `application/json`, //type de contenu en JSON
-            /***********
-             * - ajoute le token au header
-             * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
-             ***********  */
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // gestion de la réponse provenant de l'API
-      if (response.ok) {
-        // controle
-        console.log("image supprimée ok !!!");
+  // simulation de suppression
+  const response = { status: 200, message: "Image supprimer" };
 
-        // supprime le container et le svg
-        const containerImgSvg = event.currentTarget.parentNode;
-        containerImgSvg.remove();
-      } else {
-        console.log("la suppression à echouer");
-      }
-    } catch (error) {
-      console.log("erreur lors de la suppression de l'image", error);
-    }
+  // gérer la réponse de la simulation
+  if (response.status === 200) {
+    console.log(response.message);
+    const ctaImgSvg = event.currentTarget.parentNode;
+    ctaImgSvg.remove();
+  } else {
+    console.log("la suppression de l'image à echoué");
   }
+
+  // if (
+  //   imageId !== undefined &&
+  //   Number.isInteger(parseInt(imageId)) &&
+  //   parseInt(imageId) > 0
+  // ) {
+  //   // récupère le token dans le Local Storage
+  //   const token = localStorage.getItem("token");
+
+  //   // si le token est dans le local storage
+  //   if (token && token.trim() !== "") {
+  //     // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
+  //     try {
+  //       // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
+  //       const response = await fetch(
+  //         `http://localhost:5678/api/works/${imageId}`,
+  //         {
+  //           // utilise la méthode DELETE pour la suppression
+  //           method: "DELETE",
+  //           // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+  //           headers: {
+  //             "Content-Type": `application/json`, //type de contenu en JSON
+  //             /***********
+  //              * - ajoute le token au header
+  //              * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
+  //              ***********  */
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       // gestion de la réponse provenant de l'API
+  //       if (response.ok) {
+  //         // controle
+  //         console.log("image supprimée ok !!!");
+
+  //         // supprime le container et le svg
+  //         const containerImgSvg = event.currentTarget.parentNode;
+  //         containerImgSvg.remove();
+  //       } else {
+  //         console.log("la suppression à echouer");
+  //       }
+  //     } catch (error) {
+  //       console.log("erreur lors de la suppression de l'image", error);
+  //     }
+  //   } else {
+  //     console.log("token d'authentification invalide");
+  //   }
+  // } else {
+  //   console.log("l'ID de l'image invalide");
+  // }
 }
 
 // fonction pour gérer la deconnexion de l'utilisateur lorsque la page ce ferme
