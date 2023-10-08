@@ -454,7 +454,7 @@ function setupAddPhotoEventListeners() {
   const btnAddPhoto = document.querySelector(".add-photo-modal1");
   // console.log(btnAddPhoto);
 
-  // ajoute le gestionnaire d'écoute
+  // ajoute le gestionnaire d'écoute sur le bouton "Ajouter une photo"
   btnAddPhoto.addEventListener("click", (event) => {
     console.log("j'écoute le bouton 'Ajouter une photo'");
     // appel de la fonction qui sauvegarde l'état initial dans une variable
@@ -475,13 +475,14 @@ function setupAddPhotoEventListeners() {
   });
 }
 
+// déclare une variable globale
 let savedState;
-
 // fonction qui sauvegarde l'etat initiale du modal
 function saveInitialModal1() {
   console.log(
     "titre du modal 'DELETE' + bouton 'Ajoute une photo', sont sauvegarder"
   );
+  // définition de la variable globale qui contient les éléments initial du modal DELETE
   savedState = {
     // stock les éléments initiaux du modal dans une variables
     inialTitleModal1: document.getElementById("titlemodal").innerHTML,
