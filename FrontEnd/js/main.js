@@ -470,6 +470,9 @@ function setupAddPhotoEventListeners() {
     // appel de la fonction qui ajoute le svg Back
     addModalSvgBack();
 
+    // appel de la fonction qui ajoute les élément pour ajouter une photo
+    addFormModalAddPhoto();
+
     // effectuer un retour sur le modal DELETE
     backModalDelete();
   });
@@ -524,6 +527,19 @@ function addModalSvgBack() {
       </svg>
     `
   );
+}
+
+// fonction qui ajout le formulaire pour ajouter une photo
+function addFormModalAddPhoto() {
+  console.log("fonction qui ajoute le formulaire pour ajouter une photo");
+
+  // récupère la div contenant les images et le svg corbeille
+  const formAddPhoto = document.querySelector(".cta-img-svg");
+  console.log(formAddPhoto);
+  formAddPhoto.style.display = "none";
+  formAddPhoto.innerHTML = `
+    
+  `
 }
 
 // fonction qui réinitialise le modal DELETE au click sur le SVG Back
@@ -599,8 +615,6 @@ async function init() {
   // ajouter une image grâce au bouton "Ajouter une image"
   // addImage();
   setupAddPhotoEventListeners();
-  // // effectuer un retour sur le modal DELETE
-  // backModalDelete();
 
   // déconnecte lors de la fermeture de la page du navigateur
   // disconnectClosingWindow();

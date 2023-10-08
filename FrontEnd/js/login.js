@@ -1,14 +1,10 @@
-// récupère le body
-const loginBody = document.body;
-// récupère le main
-const mainLogin = document.createElement("main");
-
-// Fonction qui créer le header et les éléments
+// Fonction qui créer les éléments du header
 function createHeader() {
-  // créer le header
-  const headerLogin = document.createElement("header");
+  // récupère le header
+  const headerLogin = document.querySelector("header");
+  // console.log(headerLogin);
 
-  // créer un élément contenant le contenue du header
+  // ajooute les élément au header
   headerLogin.innerHTML = `
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
       <nav>
@@ -19,42 +15,20 @@ function createHeader() {
            <li><img src="../assets/icons/instagram.png" alt="Instagram" /></li>          </ul>
       </nav>
   `;
-  // ajoute le header dans la div login en tant qu'enfant
-  loginBody.appendChild(headerLogin);
-}
-
-// Fonction qui créer le formulaire + le bouton et le lien MPforget
-function createFormLogin() {
-  const loginContent = document.createElement("section");
-  loginContent.setAttribute("id", "login");
-  loginContent.innerHTML = `
-    <h2 class="login_title">Login</h2>
-    <form action="#" method="post">
-      <label for="email">Email</label>
-      <input type="email" name="email" id="email" required/>
-      <label for="password">Mot de passe</label>
-      <input type="text" name="password" id="password" required/>
-      <input type="submit" value="Se connecter" />
-      <a class="mp-forget" href=""> Mot de passe oublier</a>
-    </form>
-  `;
-  mainLogin.appendChild(loginContent);
-
-  // appelle de la fonction qui ajoute un écouteur d'évenenment au formulaire
-  addFormEventListener();
 }
 
 // fonction qui ajoute un écouteur d'évenement au formulaire
 function addFormEventListener() {
   // récupère l'élément formulaire
   const form = document.querySelector("form");
+  console.log(form);
 
-  // ajout un écouteur d'évènement sur le formulaire
+  // ajout un écouteur d'évènement au formulaire
   // et fait appel à la fonction qui va gérer la soumission du formulaire
   form.addEventListener("submit", manageSubmissionForm);
 }
 
-// fonction qui va gérer la soumission du formulaire en lui passant en paramètre l'évènement
+// // fonction qui va gérer la soumission du formulaire en lui passant en paramètre l'évènement
 function manageSubmissionForm(event) {
   // Désactivation du comportement par défaut du navigateur
   event.preventDefault();
@@ -133,7 +107,9 @@ function handleError(error) {
 
 // Fonction qui créer le footer
 function createFooter() {
-  const footerLogin = document.createElement("footer");
+  // récupère le body
+  const loginBody = document.body;
+  const footerLogin = document.querySelector("footer");
   footerLogin.innerHTML = `
         <nav>
         <ul>
@@ -145,14 +121,10 @@ function createFooter() {
 }
 
 function init() {
-  // test
-  // console.log(loginBody);
-
   createHeader();
 
-  loginBody.appendChild(mainLogin);
+  addFormEventListener();
 
-  createFormLogin();
   createFooter();
 }
 
