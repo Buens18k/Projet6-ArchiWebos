@@ -448,64 +448,114 @@ async function handleDeleteImage(event) {
   }
 }
 
-// fonction qui ajoute une photo en clikant sur le bouton "Ajouter une photo"
-function addImage() {
-  // stock les éléments initiaux du modal dans des variables global
-  const inialTitleModal1 = document.getElementById("titlemodal").innerHTML;
-  // console.log(`ont stoke dans une variables le titre du modal1: ${inialTitleModal1}`);
-
+// fonction qui écoute le bouton "Ajouter une photo" et charge le nouveau modal ADD photo
+function setupAddPhotoEventListeners() {
+  // récupère le bouton "Ajouter une photo"
   const btnAddPhoto = document.querySelector(".add-photo-modal1");
   // console.log(btnAddPhoto);
 
-  // écoute le bouton ajouter une photo
+  // ajoute le gestionnaire d'écoute sur le bouton "Ajouter une photo"
   btnAddPhoto.addEventListener("click", (event) => {
-    // controle
-    console.log("j'entend le bouton ajouter une photo et met a jour le modal");
-    // récupère le titre h2 du modal
-    const titleModal2 = document.getElementById("titlemodal");
-    // console.log(titleModal2);
-    // modifie son texte
-    titleModal2.innerHTML = "Ajout photo";
+    console.log("j'écoute le bouton 'Ajouter une photo'");
+    // appel de la fonction qui sauvegarde l'état initial dans une variable
+    const savedState = saveInitialModal1();
+    console.log(savedState);
 
-    // récupère la div modal wrapper
-    const modalWrraperDiv = document.querySelector(".modal-wrapper");
-    // console.log(modalWrraperDiv);
-    // ajoute au début de ce qu'il contient ce SVG (back)
-    modalWrraperDiv.insertAdjacentHTML(
-      "afterbegin",
-      `
+    // appel de la fonction qui va changer le titre
+    changeModalTitle();
+
+    // appel de la fonction qui change le bouton
+    styleBtnValider();
+
+    // appel de la fonction qui ajoute le svg Back
+    addModalSvgBack();
+
+    // effectuer un retour sur le modal DELETE
+    backModalDelete();
+  });
+}
+
+// déclare une variable globale
+let savedState;
+// fonction qui sauvegarde l'etat initiale du modal
+function saveInitialModal1() {
+  console.log(
+    "titre du modal 'DELETE' + bouton 'Ajoute une photo', sont sauvegarder"
+  );
+  // définition de la variable globale qui contient les éléments initial du modal DELETE
+  savedState = {
+    // stock les éléments initiaux du modal dans une variables
+    inialTitleModal1: document.getElementById("titlemodal").innerHTML,
+    initialBtnAddPhoto: document.querySelector(".add-photo-modal1").innerHTML,
+  };
+}
+
+// fonction qui change le titre du modal DELETE pour le modal ADD Photo
+function changeModalTitle() {
+  // récupère le titre h2 du modal
+  const titleModal2 = document.getElementById("titlemodal");
+  // modifie son texte
+  titleModal2.innerHTML = "Ajout photo";
+  console.log(titleModal2);
+}
+
+// fonction qui change le style du bouton "Ajouter une photo"
+function styleBtnValider() {
+  // récupère le bouton add photo
+  const btnValider = document.querySelector(".add-photo-modal1");
+  btnValider.classList.add("btn-gray");
+  btnValider.innerHTML = "Valider";
+  console.log(
+    `bouton 'Ajouter une photo' Modifier par le mot : "${btnValider.textContent}"`
+  );
+}
+
+// fonction qui ajoute le SVG Back au modal ADD Photo
+function addModalSvgBack() {
+  // récupère la div modal wrapper
+  const modalWrraperDiv = document.querySelector(".modal-wrapper");
+  // console.log(modalWrraperDiv);
+  // ajoute au début de ce que contient la div modal-wrapper
+  modalWrraperDiv.insertAdjacentHTML(
+    "afterbegin",
+    `
       <svg class ="back-delete" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
         <path d="M0.439478 8.94458C-0.146493 9.53055 -0.146493 10.4822 0.439478 11.0681L7.9399 18.5686C8.52587 19.1545 9.47748 19.1545 10.0635 18.5686C10.6494 17.9826 10.6494 17.031 10.0635 16.445L5.11786 11.5041H19.4999C20.3297 11.5041 21 10.8338 21 10.004C21 9.17428 20.3297 8.50393 19.4999 8.50393H5.12255L10.0588 3.56303C10.6447 2.97706 10.6447 2.02545 10.0588 1.43948C9.47279 0.853507 8.52118 0.853507 7.93521 1.43948L0.43479 8.9399L0.439478 8.94458Z" fill="black"/>
       </svg>
-      `
-    );
+    `
+  );
+}
 
-    // change le bouton du nouveau modal
-    const initialBtnAddPhoto = document.querySelector(".add-photo-modal1").innerHTML;
-    console.log(initialBtnAddPhoto);
-    // récupère le bouton add photo
-    const btnValider = document.querySelector(".add-photo-modal1");
-    btnValider.innerHTML = "Valider";
+// fonction qui réinitialise le modal DELETE au click sur le SVG Back
+function backModalDelete() {
+  console.log("fonction backModalDelete activer");
+  // récupère le svg back
+  const svgBack = document.querySelector(".back-delete");
+  console.log(svgBack);
+  svgBack.addEventListener("click", (event) => {
+    console.log("j'écoute le svg back");
 
-
-
-    
-
-    // lors du clic sur le svg back, ont réinitialise le modal de ce qui à été sauvegarder dans des variables
-    // récupérer le svg back
-    const btnSvgBack = document.querySelector(".back-delete");
-    // console.log("on à récupérer le btnSvgBack");
-    // ajoute un gestionnaire d'évenement au btn Back
-    btnSvgBack.addEventListener("click", (event)=>{
-      console.log("j'écoute le svgBack et je réinitialise");
-      // réinitialise le titre 
-      document.getElementById("titlemodal").innerHTML = inialTitleModal1;
-      // désactive le svg back
-      btnSvgBack.style.display ="none";
-      // réinitialise le btn
-      document.querySelector(".add-photo-modal1").innerHTML = initialBtnAddPhoto;
-    })
+    // appèl de la fonction qui reset
+    resetModalDelete(savedState);
   });
+}
+
+// fonction qui reset
+function resetModalDelete(savedState) {
+  // controle
+  console.log("fonction reset modal DELETE activer");
+
+  // réinitialise le titre du modal
+  document.getElementById("titlemodal").innerHTML = savedState.inialTitleModal1;
+
+  // réinitialise le bouton "Ajouter une photo"
+  const btnAddPhoto = document.querySelector(".add-photo-modal1");
+  btnAddPhoto.innerHTML = savedState.initialBtnAddPhoto;
+  btnAddPhoto.classList.remove("btn-gray");
+
+  // fait disparaitre le SVG back
+  const svgBack = document.querySelector(".back-delete");
+  svgBack.style.display = "none";
 }
 
 // fonction pour gérer la deconnexion de l'utilisateur lorsque la page ce ferme
@@ -547,7 +597,10 @@ async function init() {
   // ajouter les images dans la div figure-modal1 du modal1
   displayImageInModal();
   // ajouter une image grâce au bouton "Ajouter une image"
-  addImage();
+  // addImage();
+  setupAddPhotoEventListeners();
+  // // effectuer un retour sur le modal DELETE
+  // backModalDelete();
 
   // déconnecte lors de la fermeture de la page du navigateur
   // disconnectClosingWindow();
