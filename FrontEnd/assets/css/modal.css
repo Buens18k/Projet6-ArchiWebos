@@ -42,6 +42,11 @@
   right: 2rem;
   top: 2rem;
 }
+.back-delete{
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+}
 
 .cta-img-svg {
   display: grid;
@@ -78,4 +83,7 @@
   background: #1d6154;
   color: #fff;
   margin-top: 40px;
+}
+.modal-wrapper .btn-gray{
+  background: #A7A7A7;
 }

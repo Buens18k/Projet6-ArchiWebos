@@ -383,45 +383,129 @@ async function handleDeleteImage(event) {
   // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
   const imageId = event.currentTarget.dataset.id;
   console.log("je supprime le svg", imageId);
-  // récupère le token dans le Local Storage
-  const token = localStorage.getItem("token");
 
-  // si le token est dans le local storage
-  if (token) {
-    // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
-    try {
-      // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
-      const response = await fetch(
-        `http://localhost:5678/api/works/${imageId}`,
-        {
-          // utilise la méthode DELETE pour la suppression
-          method: "DELETE",
-          // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
-          headers: {
-            "Content-Type": `application/json`, //type de contenu en JSON
-            /***********
-             * - ajoute le token au header
-             * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
-             ***********  */
-            Authorization: `Bearer ${token}`,
-          },
+  // simulation de suppression
+  const response = { status: 200, message: "Image supprimer" };
+
+  // // gérer la réponse de la simulation
+  // if (response.status === 200) {
+  //   console.log(response.message);
+  //   const ctaImgSvg = event.currentTarget.parentNode;
+  //   ctaImgSvg.remove();
+  // } else {
+  //   console.log("la suppression de l'image à echoué");
+  // }
+
+  //Verifie si l'ID de l'image existe bien dans la base de donnée
+  if (
+    imageId !== undefined &&
+    Number.isInteger(parseInt(imageId)) &&
+    parseInt(imageId) > 0
+  ) {
+    // récupère le token dans le Local Storage
+    const token = localStorage.getItem("token");
+
+    // si le token est dans le local storage
+    if (token && token.trim() !== "") {
+      // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
+      try {
+        // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
+        const response = await fetch(
+          `http://localhost:5678/api/works/${imageId}`,
+          {
+            // utilise la méthode DELETE pour la suppression
+            method: "DELETE",
+            // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+            headers: {
+              "Content-Type": `application/json`, //type de contenu en JSON
+              /***********
+               * - ajoute le token au header
+               * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
+               ***********  */
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        // gestion de la réponse provenant de l'API
+        if (response.ok) {
+          // controle
+          console.log("image supprimée ok !!!");
+
+          // supprime le container et le svg
+          const containerImgSvg = event.currentTarget.parentNode;
+          containerImgSvg.remove();
+        } else {
+          console.log("la suppression à echouer");
         }
-      );
-      // gestion de la réponse provenant de l'API
-      if (response.ok) {
-        // controle
-        console.log("image supprimée ok !!!");
-
-        // supprime le container et le svg
-        const containerImgSvg = event.currentTarget.parentNode;
-        containerImgSvg.remove();
-      } else {
-        console.log("la suppression à echouer");
+      } catch (error) {
+        console.log("erreur lors de la suppression de l'image", error);
       }
-    } catch (error) {
-      console.log("erreur lors de la suppression de l'image", error);
+    } else {
+      console.log("token d'authentification invalide");
     }
+  } else {
+    console.log("l'ID de l'image invalide");
   }
+}
+
+// fonction qui ajoute une photo en clikant sur le bouton "Ajouter une photo"
+function addImage() {
+  // stock les éléments initiaux du modal dans des variables global
+  const inialTitleModal1 = document.getElementById("titlemodal").innerHTML;
+  // console.log(`ont stoke dans une variables le titre du modal1: ${inialTitleModal1}`);
+
+  const btnAddPhoto = document.querySelector(".add-photo-modal1");
+  // console.log(btnAddPhoto);
+
+  // écoute le bouton ajouter une photo
+  btnAddPhoto.addEventListener("click", (event) => {
+    // controle
+    console.log("j'entend le bouton ajouter une photo et met a jour le modal");
+    // récupère le titre h2 du modal
+    const titleModal2 = document.getElementById("titlemodal");
+    // console.log(titleModal2);
+    // modifie son texte
+    titleModal2.innerHTML = "Ajout photo";
+
+    // récupère la div modal wrapper
+    const modalWrraperDiv = document.querySelector(".modal-wrapper");
+    // console.log(modalWrraperDiv);
+    // ajoute au début de ce qu'il contient ce SVG (back)
+    modalWrraperDiv.insertAdjacentHTML(
+      "afterbegin",
+      `
+      <svg class ="back-delete" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+        <path d="M0.439478 8.94458C-0.146493 9.53055 -0.146493 10.4822 0.439478 11.0681L7.9399 18.5686C8.52587 19.1545 9.47748 19.1545 10.0635 18.5686C10.6494 17.9826 10.6494 17.031 10.0635 16.445L5.11786 11.5041H19.4999C20.3297 11.5041 21 10.8338 21 10.004C21 9.17428 20.3297 8.50393 19.4999 8.50393H5.12255L10.0588 3.56303C10.6447 2.97706 10.6447 2.02545 10.0588 1.43948C9.47279 0.853507 8.52118 0.853507 7.93521 1.43948L0.43479 8.9399L0.439478 8.94458Z" fill="black"/>
+      </svg>
+      `
+    );
+
+    // change le bouton du nouveau modal
+    const initialBtnAddPhoto = document.querySelector(".add-photo-modal1").innerHTML;
+    console.log(initialBtnAddPhoto);
+    // récupère le bouton add photo
+    const btnValider = document.querySelector(".add-photo-modal1");
+    btnValider.innerHTML = "Valider";
+
+
+
+    
+
+    // lors du clic sur le svg back, ont réinitialise le modal de ce qui à été sauvegarder dans des variables
+    // récupérer le svg back
+    const btnSvgBack = document.querySelector(".back-delete");
+    // console.log("on à récupérer le btnSvgBack");
+    // ajoute un gestionnaire d'évenement au btn Back
+    btnSvgBack.addEventListener("click", (event)=>{
+      console.log("j'écoute le svgBack et je réinitialise");
+      // réinitialise le titre 
+      document.getElementById("titlemodal").innerHTML = inialTitleModal1;
+      // désactive le svg back
+      btnSvgBack.style.display ="none";
+      // réinitialise le btn
+      document.querySelector(".add-photo-modal1").innerHTML = initialBtnAddPhoto;
+    })
+  });
 }
 
 // fonction pour gérer la deconnexion de l'utilisateur lorsque la page ce ferme
@@ -445,7 +529,7 @@ async function init() {
   // récupère les données API categories
   const categoryFetch = await fetchCategory();
   // Test de fonctionnement
-  // console.log(worksFetch, categoryFetch);
+  console.log(worksFetch, categoryFetch);
 
   // **********appelle la fonction qui
 
@@ -462,6 +546,8 @@ async function init() {
   createModal1();
   // ajouter les images dans la div figure-modal1 du modal1
   displayImageInModal();
+  // ajouter une image grâce au bouton "Ajouter une image"
+  addImage();
 
   // déconnecte lors de la fermeture de la page du navigateur
   // disconnectClosingWindow();
