@@ -1,5 +1,7 @@
 // Variable globale récupérant les travaux de l'API works
 let worksFetch;
+// variable qui permet de savoir quel modal est ouvert
+let modal;
 
 // fonction asynchone pour récupérer les données de l'API works
 async function fetchWorks() {
@@ -247,8 +249,6 @@ function logoutUser() {
   // console.log(linkLogin);
 }
 
-// variable qui permet de savoir quel modal est ouvert
-let modal;
 // fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
 function addEventListenerModalDelete() {
   // récupère le boutton "modifier"
@@ -413,6 +413,28 @@ function btnAddPhotoListener() {
   });
 }
 
+// fonction qui ajoute un gestionnaire d'évenement au SVG back
+function svgBackListener() {
+  // récupère le svg back
+  const svgBack = document.querySelector(".back-delete");
+  // console.log(svgBack);
+  svgBack.addEventListener("click", (event) => {
+    console.log("j'écoute le svg Back");
+    // récupère la div
+    // récupère la div Modal Delete
+    const modalDelete = document.querySelector(".modal-wrapper");
+    console.log("ont rend invisible la div : ", modalDelete);
+    // ont fait disparaitre la div
+    modalDelete.style.display = "flex";
+
+    // récupère la div Modal qui va ajouter une phot
+    const modalAddPhoto = document.querySelector(".modal_add-photo");
+    console.log("Ont rend visible la div : ", modalAddPhoto);
+    // ont fait apparaître le modal Add photo
+    modalAddPhoto.style.display = "none";
+  });
+}
+
 // fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
 function closeModalOnOutsideClik() {
   // ferme le modal lorsque l'utilisateur click à l'extèrieur du contenu du modal
@@ -489,6 +511,8 @@ async function init() {
 
   // écoute le bouton "Ajouter une photo"
   btnAddPhotoListener();
+  // écoute le SVG Back
+  svgBackListener();
 
   // ferme le modal lors du clik sur la partie grisé
   closeModalOnOutsideClik();
