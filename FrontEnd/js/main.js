@@ -198,7 +198,7 @@ function disappearBntFilterDisplay() {
   filterDiv.style.display = "none";
 }
 
-// function ajoute le svg + le boutton modifier
+// function ajoute le svg + le boutton modifier si login
 function addSvgAncre() {
   // Créer le SVG
   const editSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -247,7 +247,7 @@ function logoutUser() {
   // console.log(linkLogin);
 }
 
-// varialble qui permet de savoir quel modal est ouvert
+// variable qui permet de savoir quel modal est ouvert
 let modal;
 // fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
 function addEventListenerModalDelete() {
@@ -256,41 +256,25 @@ function addEventListenerModalDelete() {
   // console.log(btnModify);
 
   if (btnModify) {
-
     // ajout un gestionnaire d'écoute à l'évenement au "click"
     btnModify.addEventListener("click", (event) => {
       event.preventDefault();
       // récupérer le modal
-      const target = document.getElementById("modal1");
-      target.setAttribute("aria-modal", "true");
+      const asideModalDelete = document.getElementById("modal1");
+      asideModalDelete.setAttribute("aria-modal", "true");
 
-      // ajoute le style pour être visible
-      target.style.display = "flex";
+      // ajoute le style pour rendre visible le modal DELETE
+      asideModalDelete.style.display = "flex";
       // sauvegarde la boite modal
-      modal = target;
+      modal = asideModalDelete;
       // controle
-      // console.log("le modal Delete est activé et enregistrer", modal);
+      console.log("aside modal Delete est activé et enregistrer", modal);
     });
   }
 }
 
-// fonction qui ferme la fenêtre (aside) contenant le Modale Delete
-function createModalDelete() {
-  // récupère le aside modal
-  const asideModalDelete = document.querySelector(".modal-wrapper");
-  // console.log(asideModalDelete);
-  // asideModalDelete.innerHTML = `      
-  //   <h2 id="titlemodal">Galerie photo</h2>
-  //   <svg class ="close-modal1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  //     <path d="M17.6546 8.05106C18.1235 7.58214 18.1235 6.82061 17.6546 6.35169C17.1856 5.88277 16.4241 5.88277 15.9552 6.35169L12.005 10.3056L8.05106 6.35544C7.58214 5.88652 6.82061 5.88652 6.35169 6.35544C5.88277 6.82436 5.88277 7.58589 6.35169 8.05481L10.3056 12.005L6.35544 15.9589C5.88652 16.4279 5.88652 17.1894 6.35544 17.6583C6.82436 18.1272 7.58589 18.1272 8.05481 17.6583L12.005 13.7044L15.9589 17.6546C16.4279 18.1235 17.1894 18.1235 17.6583 17.6546C18.1272 17.1856 18.1272 16.4241 17.6583 15.9552L13.7044 12.005L17.6546 8.05106Z" fill="black"/>
-  //   </svg>
-  //   <div class ="cta-img-svg"></div>
-  //   <button id = "titlemodal2" class = "btn add-photo-modal1"> Ajouter une photo </button>
-  // `;
-
-  modal = asideModalDelete;
-  // console.log("Enregistre dans la variable global le modal = ", modal);
-
+// fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
+function closeModalOnOutsideClik() {
   // ferme le modal lorsque l'utilisateur click à l'extèrieur du contenu du modal
   const aside = document.querySelector(".modal");
   aside.addEventListener("click", (event) => {
@@ -299,30 +283,32 @@ function createModalDelete() {
       // masque le modal en changeant le style de display à "none"
       aside.style.display = "none";
       modal = "null";
-      console.log("modal DELETE fermer");
+      console.log("entendu clic sur la partie grisé fermeture du modal");
     }
   });
+}
 
-  // ferme le modal1 avec le svg
+// fonction qui ferme le modal en cliquant sur le svg croix
+function closeModalOnClickSvgCross() {
   // récupère le svg en question
-  const closeBtn = document.querySelector(".close-modal1");
-  // ajoute un gestionnaire d'évenement au svg
-  closeBtn.addEventListener("click", () => {
-    // puis ont ferme le modale
-    aside.style.display = "none";
-    modal = "null";
-    console.log("modal DELETE fermer");
+  const aside = document.querySelector(".modal");
+
+  // récupère le svg en question
+  const closeBtns = document.querySelectorAll(".close-modal");
+  // console.log(closeBtns);
+
+  closeBtns.forEach((closeBtn) => {
+    // ajoute un gestionnaire d'évenement au svg
+    closeBtn.addEventListener("click", () => {
+      // puis ont ferme le modale
+      aside.style.display = "none";
+      modal = "null";
+      console.log("écoute clik sur le SVG cross fermeture du modal");
+    });
   });
 }
 
-// fonction qui initialise le Modal Delete à son état
-function initializeModalDelete(){
-
-  // // appel de la fonction createModalDelete pour initialisé le modal DELETE
-  createModalDelete();
-}
-
-// fonction pour afficher les images et le svg dans le modal
+// fonction pour afficher les images et le svg dans le modal DELETE
 function displayImageInModal() {
   // récupère la div figure-modal1
   const imagesModal1Div = document.querySelector(".cta-img-svg");
@@ -369,7 +355,7 @@ function displayImageInModal() {
   });
 }
 
-// fonction supprime l'image
+// fonction supprime l'image du Modal DELETE
 async function handleDeleteImage(event) {
   // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
   const imageId = event.currentTarget.dataset.id;
@@ -440,28 +426,26 @@ async function handleDeleteImage(event) {
 }
 
 // fonction qui ajoute un gestionnaire d'évenement au bouton "Ajouter une image"
-function btnAddPhotoListener(){
-
+function btnAddPhotoListener() {
   // récupérer le bouton "Ajouter une image"
   const btnAddPhoto = document.querySelector(".add-photo-modal1");
+
   // ajoute le gestionnaire d'écoute au click sur le bouton
   btnAddPhoto.addEventListener("click", (event) => {
     console.log("j'entend le bouton add photo");
 
     // récupère la div Modal Delete
     const modalDelete = document.querySelector(".modal-wrapper");
-    console.log("ont rend invisible la div : ",modalDelete);
-    // ont fait disparaitre la div 
+    console.log("ont rend invisible la div : ", modalDelete);
+    // ont fait disparaitre la div
     modalDelete.style.display = "none";
 
     // récupère la div Modal qui va ajouter une phot
     const modalAddPhoto = document.querySelector(".modal_add-photo");
-    console.log("Ont rend visible la div : ",modalAddPhoto);
+    console.log("Ont rend visible la div : ", modalAddPhoto);
+    // ont fait apparaître le modal Add photo
     modalAddPhoto.style.display = "flex";
-
-
-  })
-
+  });
 }
 
 // fonction pour gérer la deconnexion de l'utilisateur lorsque la page ce ferme
@@ -499,15 +483,17 @@ async function init() {
   checkAuthentification();
 
   // création du modale1
-  createModalDelete();
+  // createModalDelete();
   // ajouter les images dans la div figure-modal1 du modal1
   displayImageInModal();
 
   // écoute le bouton "Ajouter une photo"
   btnAddPhotoListener();
-  // ajouter une image grâce au bouton "Ajouter une image"
-  // addImage();
-  // setupAddPhotoEventListeners();
+
+  // ferme le modal lors du clik sur la partie grisé
+  closeModalOnOutsideClik();
+  // ferme le modal lors du clik sur le SVG cross
+  closeModalOnClickSvgCross();
 
   // déconnecte lors de la fermeture de la page du navigateur
   // disconnectClosingWindow();

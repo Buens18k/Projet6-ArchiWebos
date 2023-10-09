@@ -10,7 +10,6 @@
   background: rgba(0, 0, 0, 0.6);
 }
 .modal-wrapper {
-  /* display: none; */
   display: flex;
   position: relative;
   align-items: center;
@@ -38,7 +37,7 @@
   margin-top: 1.75rem;
 }
 
-.close-modal1 {
+.close-modal {
   position: absolute;
   right: 2rem;
   top: 2rem;
@@ -93,12 +92,10 @@
 
 .modal_add-photo {
   display: none;
-  /* display: flex; */
   position: relative;
   align-items: center;
   flex-direction: column;
   width: 39.375rem;
-  /* max-height: 41.875rem; */
   height: auto;
   border-radius: 0.625rem;
   background: #fff;
@@ -110,7 +107,6 @@
 #add-photo_content {
   display: flex;
   flex-direction: column;
-  /* min-height: 26.31rem; */
   height: auto;
   padding: 2.25rem 0rem 1rem 0rem;
   border-bottom: 1px solid;
@@ -160,8 +156,6 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  /* margin: 0; */
-  /* padding: 0; */
 }
 
 #add-photo_content form label {
