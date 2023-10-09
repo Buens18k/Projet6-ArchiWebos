@@ -273,41 +273,6 @@ function addEventListenerModalDelete() {
   }
 }
 
-// fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
-function closeModalOnOutsideClik() {
-  // ferme le modal lorsque l'utilisateur click à l'extèrieur du contenu du modal
-  const aside = document.querySelector(".modal");
-  aside.addEventListener("click", (event) => {
-    // Si le click de la souris est entendu sur le parent (et non les enfants) donc la partie grisé alors
-    if (event.target === aside) {
-      // masque le modal en changeant le style de display à "none"
-      aside.style.display = "none";
-      modal = "null";
-      console.log("entendu clic sur la partie grisé fermeture du modal");
-    }
-  });
-}
-
-// fonction qui ferme le modal en cliquant sur le svg croix
-function closeModalOnClickSvgCross() {
-  // récupère le svg en question
-  const aside = document.querySelector(".modal");
-
-  // récupère le svg en question
-  const closeBtns = document.querySelectorAll(".close-modal");
-  // console.log(closeBtns);
-
-  closeBtns.forEach((closeBtn) => {
-    // ajoute un gestionnaire d'évenement au svg
-    closeBtn.addEventListener("click", () => {
-      // puis ont ferme le modale
-      aside.style.display = "none";
-      modal = "null";
-      console.log("écoute clik sur le SVG cross fermeture du modal");
-    });
-  });
-}
-
 // fonction pour afficher les images et le svg dans le modal DELETE
 function displayImageInModal() {
   // récupère la div figure-modal1
@@ -445,6 +410,41 @@ function btnAddPhotoListener() {
     console.log("Ont rend visible la div : ", modalAddPhoto);
     // ont fait apparaître le modal Add photo
     modalAddPhoto.style.display = "flex";
+  });
+}
+
+// fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
+function closeModalOnOutsideClik() {
+  // ferme le modal lorsque l'utilisateur click à l'extèrieur du contenu du modal
+  const aside = document.querySelector(".modal");
+  aside.addEventListener("click", (event) => {
+    // Si le click de la souris est entendu sur le parent (et non les enfants) donc la partie grisé alors
+    if (event.target === aside) {
+      // masque le modal en changeant le style de display à "none"
+      aside.style.display = "none";
+      modal = "null";
+      console.log("entendu clic sur la partie grisé fermeture du modal");
+    }
+  });
+}
+
+// fonction qui ferme le modal en cliquant sur le svg croix
+function closeModalOnClickSvgCross() {
+  // récupère le svg en question
+  const aside = document.querySelector(".modal");
+
+  // récupère le svg en question
+  const closeBtns = document.querySelectorAll(".close-modal");
+  // console.log(closeBtns);
+
+  closeBtns.forEach((closeBtn) => {
+    // ajoute un gestionnaire d'évenement au svg
+    closeBtn.addEventListener("click", () => {
+      // puis ont ferme le modale
+      aside.style.display = "none";
+      modal = "null";
+      console.log("écoute clik sur le SVG cross fermeture du modal");
+    });
   });
 }
 
