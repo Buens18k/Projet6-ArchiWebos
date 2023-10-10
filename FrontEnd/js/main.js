@@ -1,28 +1,32 @@
+// api.js
+import { fetchWorks, fetchCategory} from './api.js';
+
+
 // Variable globale récupérant les travaux de l'API works
 let worksFetch;
 // variable qui permet de savoir quel modal est ouvert
 let modal;
 
-// fonction asynchone pour récupérer les données de l'API works
-async function fetchWorks() {
-  // Requête pour récupérer les données de l'API works
-  const reponse = await fetch("http://localhost:5678/api/works");
-  // Convertit la réponse en JSON
-  return await reponse.json();
-  // Test de fonctionnement
-  //   console.log(works);
-}
+// // fonction asynchone pour récupérer les données de l'API works
+// async function fetchWorks() {
+//   // Requête pour récupérer les données de l'API works
+//   const reponse = await fetch("http://localhost:5678/api/works");
+//   // Convertit la réponse en JSON
+//   return await reponse.json();
+//   // Test de fonctionnement
+//   //   console.log(works);
+// }
 
-// fonction asynchone pour récupérer les données de l'API catégories
-async function fetchCategory() {
-  // Requête pour récupérer les données de l'API catégories
-  const reponse = await fetch("http://localhost:5678/api/categories");
-  // Convertit la réponse en JSON
-  return await reponse.json();
+// // fonction asynchone pour récupérer les données de l'API catégories
+// async function fetchCategory() {
+//   // Requête pour récupérer les données de l'API catégories
+//   const reponse = await fetch("http://localhost:5678/api/categories");
+//   // Convertit la réponse en JSON
+//   return await reponse.json();
 
-  // test de fonctionnement
-  // console.log(category);
-}
+//   // test de fonctionnement
+//   // console.log(category);
+// }
 
 // fonction qui créer les éléments HTML pour chaque figure et les affiches dans la gallery
 function createFigure(works) {
@@ -329,65 +333,65 @@ async function handleDeleteImage(event) {
   // simulation de suppression
   const response = { status: 200, message: "Image supprimer" };
 
-  // gérer la réponse de la simulation
-  if (response.status === 200) {
-    console.log(response.message);
-    const ctaImgSvg = event.currentTarget.parentNode;
-    ctaImgSvg.remove();
-  } else {
-    console.log("la suppression de l'image à echoué");
-  }
-
-  //Verifie si l'ID de l'image existe bien dans la base de donnée
-  // if (
-  //   imageId !== undefined &&
-  //   Number.isInteger(parseInt(imageId)) &&
-  //   parseInt(imageId) > 0
-  // ) {
-  //   // récupère le token dans le Local Storage
-  //   const token = localStorage.getItem("token");
-
-  //   // si le token est dans le local storage
-  //   if (token && token.trim() !== "") {
-  //     // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
-  //     try {
-  //       // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
-  //       const response = await fetch(
-  //         `http://localhost:5678/api/works/${imageId}`,
-  //         {
-  //           // utilise la méthode DELETE pour la suppression
-  //           method: "DELETE",
-  //           // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
-  //           headers: {
-  //             "Content-Type": `application/json`, //type de contenu en JSON
-  //             /***********
-  //              * - ajoute le token au header
-  //              * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
-  //              ***********  */
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       // gestion de la réponse provenant de l'API
-  //       if (response.ok) {
-  //         // controle
-  //         console.log("image supprimée ok !!!");
-
-  //         // supprime le container et le svg
-  //         const containerImgSvg = event.currentTarget.parentNode;
-  //         containerImgSvg.remove();
-  //       } else {
-  //         console.log("la suppression à echouer");
-  //       }
-  //     } catch (error) {
-  //       console.log("erreur lors de la suppression de l'image", error);
-  //     }
-  //   } else {
-  //     console.log("token d'authentification invalide");
-  //   }
+  // // gérer la réponse de la simulation
+  // if (response.status === 200) {
+  //   console.log(response.message);
+  //   const ctaImgSvg = event.currentTarget.parentNode;
+  //   ctaImgSvg.remove();
   // } else {
-  //   console.log("l'ID de l'image invalide");
+  //   console.log("la suppression de l'image à echoué");
   // }
+
+  // Verifie si l'ID de l'image existe bien dans la base de donnée
+  if (
+    imageId !== undefined &&
+    Number.isInteger(parseInt(imageId)) &&
+    parseInt(imageId) > 0
+  ) {
+    // récupère le token dans le Local Storage
+    const token = localStorage.getItem("token");
+
+    // si le token est dans le local storage
+    if (token && token.trim() !== "") {
+      // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
+      try {
+        // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
+        const response = await fetch(
+          `http://localhost:5678/api/works/${imageId}`,
+          {
+            // utilise la méthode DELETE pour la suppression
+            method: "DELETE",
+            // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+            headers: {
+              "Content-Type": `application/json`, //type de contenu en JSON
+              /***********
+               * - ajoute le token au header
+               * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
+               ***********  */
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        // gestion de la réponse provenant de l'API
+        if (response.ok) {
+          // controle
+          console.log("image supprimée ok !!!");
+
+          // supprime le container et le svg
+          const containerImgSvg = event.currentTarget.parentNode;
+          containerImgSvg.remove();
+        } else {
+          console.log("la suppression à echouer");
+        }
+      } catch (error) {
+        console.log("erreur lors de la suppression de l'image", error);
+      }
+    } else {
+      console.log("token d'authentification invalide");
+    }
+  } else {
+    console.log("l'ID de l'image invalide");
+  }
 }
 
 // fonction qui ajoute un gestionnaire d'évenement au bouton "Ajouter une image"
