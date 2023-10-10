@@ -268,7 +268,7 @@ function addEventListenerModalDelete() {
       // sauvegarde la boite modal
       modal = asideModalDelete;
       // controle
-      console.log("aside modal Delete est activé et enregistrer", modal);
+      // console.log("aside modal Delete est activé et enregistrer", modal);
     });
   }
 }
@@ -397,17 +397,17 @@ function btnAddPhotoListener() {
 
   // ajoute le gestionnaire d'écoute au click sur le bouton
   btnAddPhoto.addEventListener("click", (event) => {
-    console.log("j'entend le bouton add photo");
+    // console.log("j'entend le bouton add photo");
 
     // récupère la div Modal Delete
     const modalDelete = document.querySelector(".modal-wrapper");
-    console.log("ont rend invisible la div : ", modalDelete);
+    // console.log("ont rend invisible la div : ", modalDelete);
     // ont fait disparaitre la div
     modalDelete.style.display = "none";
 
     // récupère la div Modal qui va ajouter une phot
     const modalAddPhoto = document.querySelector(".modal_add-photo");
-    console.log("Ont rend visible la div : ", modalAddPhoto);
+    // console.log("Ont rend visible la div : ", modalAddPhoto);
     // ont fait apparaître le modal Add photo
     modalAddPhoto.style.display = "flex";
   });
@@ -433,6 +433,23 @@ function svgBackListener() {
     // ont fait apparaître le modal Add photo
     modalAddPhoto.style.display = "none";
   });
+}
+
+// fontion ajout photo lors du clic sur le bouton "+ Ajout Photo"
+function btnAddPhoto() {
+  // récupère le bouton "+ Ajout Photo"
+  const btnAddPhoto = document.getElementById("add-photo_btn");
+
+  btnAddPhoto.addEventListener("click", (event) => {
+    console.log("j'écoute le bouton :",btnAddPhoto);
+
+    // ouvre une boite de dialogue pour selectionner le fichier
+    var input = document.createElement("input");
+    input.type="file";
+    input.accept="image/jpeg, image/png";
+    input.click();
+
+  })
 }
 
 // fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
@@ -513,6 +530,9 @@ async function init() {
   btnAddPhotoListener();
   // écoute le SVG Back
   svgBackListener();
+
+  //  écoute le bouton "+ Ajout photo"
+  btnAddPhoto();
 
   // ferme le modal lors du clik sur la partie grisé
   closeModalOnOutsideClik();

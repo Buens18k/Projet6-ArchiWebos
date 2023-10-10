@@ -123,7 +123,7 @@
   flex-direction: column;
   margin-bottom: 1.87rem;
 }
-#add-photo input {
+#add-photo button {
   width: 10.8125rem;
   height: 2.25rem;
   flex-shrink: 0;
@@ -151,6 +151,10 @@
   margin-bottom: 1.19rem;
 }
 
+#image-content{
+  display: none;
+}
+
 #add-photo_content form {
   display: flex;
   flex-direction: column;
@@ -163,7 +167,19 @@
 }
 
 #add-photo_content form input {
-  width: 26.25rem;
+  padding: 0px 15px;
+  /* width: 26.25rem; */
+  height: 3.1875rem;
+  flex-shrink: 0;
+  background: #fff;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+  border: none;
+  margin-bottom: 1.31rem;
+}
+
+#add-photo_content form select {
+  padding: 0px 15px;
+  /* width: 26.25rem; */
   height: 3.1875rem;
   flex-shrink: 0;
   background: #fff;
