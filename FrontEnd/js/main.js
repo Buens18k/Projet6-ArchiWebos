@@ -1,86 +1,13 @@
 // api.js
-import { fetchWorks, fetchCategory} from './api.js';
+import { fetchWorks, fetchCategory, categoryFilter } from "./api.js";
+// ui.js
+import { createFigure, createWork} from "./ui.js";
 
 
 // Variable globale récupérant les travaux de l'API works
 let worksFetch;
 // variable qui permet de savoir quel modal est ouvert
 let modal;
-
-// // fonction asynchone pour récupérer les données de l'API works
-// async function fetchWorks() {
-//   // Requête pour récupérer les données de l'API works
-//   const reponse = await fetch("http://localhost:5678/api/works");
-//   // Convertit la réponse en JSON
-//   return await reponse.json();
-//   // Test de fonctionnement
-//   //   console.log(works);
-// }
-
-// // fonction asynchone pour récupérer les données de l'API catégories
-// async function fetchCategory() {
-//   // Requête pour récupérer les données de l'API catégories
-//   const reponse = await fetch("http://localhost:5678/api/categories");
-//   // Convertit la réponse en JSON
-//   return await reponse.json();
-
-//   // test de fonctionnement
-//   // console.log(category);
-// }
-
-// fonction qui créer les éléments HTML pour chaque figure et les affiches dans la gallery
-function createFigure(works) {
-  // parcours la liste des données de l'API works
-  works.forEach((work) => {
-    // appel de la fonction qui crée une figure pour chaque objets dans les données de l'API works
-    createWork(work);
-  });
-}
-
-// function qui crée un élément "figure" dans la Div "gallery"
-function createWork(work) {
-  // Récupère la div gallery
-  const galleryDiv = document.querySelector(".gallery");
-  // création de l'élément figure
-  const workFigure = document.createElement("figure");
-  // remplit l'élément figure avec les propriétés "imageUrl, title" de l'API
-  workFigure.innerHTML = `
-        <img src ="${work.imageUrl}" alt="${work.title}">
-        <figcaption>${work.title}</figcaption>
-      `;
-  // ajoute l'élément "figure" à la div "gallery"
-  galleryDiv.appendChild(workFigure);
-  // test de fonctionnement
-  // console.log(work);
-}
-
-// fonction pour filtrer les données de l'API works par catégories
-function categoryFilter(works, categoryId) {
-  // stock toutes les catégories dans la variable "categoriesTous"
-  const categoriesTous = works;
-  // console.log("Tous", categoriesTous);
-
-  // stock toutes les catégorie dans la variable "categories1"
-  const categories1 = works.filter((work) => {
-    return work.categoryId === 1;
-  });
-  // console.log("Nombre de catégories 1 :", categories1);
-
-  // stock toutes les catégorie dans la variable "categories2"
-  const categories2 = works.filter((work) => {
-    return work.categoryId === 2;
-  });
-  // console.log("Nombre de Catégories 2 filtrer =",categories2);
-
-  // stock toutes les catégorie dans la variable "categories3"
-  const categories3 = works.filter((work) => {
-    return work.categoryId === 3;
-  });
-  // console.log("Nombre de Catégories 3 filtrer =",categories3);
-
-  // retourne les éléments ayant le même ID de catégorie que celui spécifié
-  return works.filter((work) => work.categoryId === categoryId);
-}
 
 // function qui crée les boutons filtre par catégories
 function createButtonFilter(categoryFetch) {
@@ -99,7 +26,7 @@ function createButtonFilter(categoryFetch) {
     // ajoute le nom de la catégories respective au bouton filtre provenant du tableau "categoryFetch"
     btnFilter.innerHTML = category.name;
     // ajoute un écouteur d'évènement
-    addventListenerButtonFilter(worksFetch, category, btnFilter);
+    addEventListenerButtonFilter(worksFetch, category, btnFilter);
     // ajoute le bouton filtre à la div filter
     filterDiv.appendChild(btnFilter);
     // test
@@ -108,7 +35,7 @@ function createButtonFilter(categoryFetch) {
 }
 
 // function pour ajouter un écouteur d'évenement sur les btnFilter
-function addventListenerButtonFilter(works, category, element) {
+function addEventListenerButtonFilter(works, category, element) {
   element.addEventListener("click", (event) => {
     // efface le style à tous les boutons
     removeStyleBtnSelectedFilter();
