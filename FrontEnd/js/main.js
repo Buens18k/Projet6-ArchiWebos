@@ -441,15 +441,70 @@ function btnAddPhoto() {
   const btnAddPhoto = document.getElementById("add-photo_btn");
 
   btnAddPhoto.addEventListener("click", (event) => {
-    console.log("j'écoute le bouton :",btnAddPhoto);
+    console.log("j'écoute le bouton :", btnAddPhoto);
 
-    // ouvre une boite de dialogue pour selectionner le fichier
-    var input = document.createElement("input");
-    input.type="file";
-    input.accept="image/jpeg, image/png";
+    // test avec image en dure
+    // handleFileSelect();
+
+    // ouvre une boite de dialogue pour selectionner le fichier photo
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/jpeg, image/png";
     input.click();
+    // ajoute une gestionnaire d'écoute au changement pour verifier le format d'image et la taille
+    input.addEventListener("change", handleFileSelect);
+  });
+}
 
-  })
+// fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
+function handleFileSelect(event) {
+  // récupère le fichier à partir de l'évenement
+  const file = event.target.files[0];
+
+  if (file) {
+    // vérifie le format de la photo
+    if (file.type.match("image/jpeg") || file.type.match("image/png")) {
+      // vérifie la taille 4Mo en octets
+      if (file.size <= 4 * 1024 * 1024) {
+        console.log("photo ok pour format et taille");
+
+        // créer un objet URL à partir du fichier saisie
+        const imgUrl = URL.createObjectURL(file);
+        console.log("imageURL charger avec succès");
+
+        // Crée un élément image
+        const img = document.createElement("img");
+        img.classList.add("img-onload");
+
+        // définie l'URL de l'image en tant que source de l'élément img
+        img.src = imgUrl;
+        console.log("imageUrl définie comme source pour l'élément <img>");
+
+        // affiche l'image dans la div "image-content"
+        const imageContentDiv = document.getElementById("image-content");
+        imageContentDiv.appendChild(img);
+        console.log(
+          "image afficher et positionner dans la Div 'image-content'"
+        );
+
+        // masque la div "add-photo" et affiche la div "img-content"
+        const addPhotoDiv = document.getElementById("add-photo");
+        addPhotoDiv.style.display = "none";
+        imageContentDiv.style.display = "flex";
+        console.log(
+          " Div 'add-photo' désactiver, Activation de la Div 'image-content'"
+        );
+      } else {
+        alert("photo trop grande. Taille maximale 4Mo");
+      }
+    } else {
+      alert(
+        "format de fichier non pris en charge. Veuillez sélectionner une photo au format JPEG ou PNG."
+      );
+    }
+  } else {
+    alert("image pas charger");
+  }
 }
 
 // fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)

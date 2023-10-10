@@ -151,8 +151,23 @@
   margin-bottom: 1.19rem;
 }
 
-#image-content{
+#image-content {
   display: none;
+  width: 26.25rem;
+  min-height: 10.5625rem;
+  flex-shrink: 0;
+  border-radius: 0.1875rem;
+  background: #e8f1f6;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1.87rem;
+}
+
+#image-content .img-onload {
+  width: 8.0625rem;
+  height: 12.0625rem;
+  object-fit: cover;
+  object-position: center;
 }
 
 #add-photo_content form {
