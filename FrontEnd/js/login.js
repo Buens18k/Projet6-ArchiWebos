@@ -1,4 +1,4 @@
-// Fonction qui créer les éléments du header
+// Fonction qui créer les éléments du header Login
 function createHeader() {
   // récupère le header
   const headerLogin = document.querySelector("header");
@@ -92,17 +92,35 @@ async function manageResponseAPI(response) {
 // fonction pour traiter les erreurs de l'API
 // en paramètre l'erreur qui sera traiter et afficher
 function handleError(error) {
+  // récupère le message d'erreur si il existe
+  const existingErrorMessage = document.querySelector("p");
+
+  if (existingErrorMessage) {
+    existingErrorMessage.remove();
+  }
+
   // création de l'élément qui va afficher le message d"erreur
   const errorMessage = document.createElement("p");
-  // ajoute à lélément le message utiliser dans l'API
-  errorMessage.textContent = error.message;
+
+  if (error.message === "user not found") {
+    // ajoute à lélément le message utiliser dans l'API
+    errorMessage.textContent = error.message;
+  } else {
+    errorMessage.textContent =
+      "Email ou Mot de passe Incorrect. Veuillez réessayez";
+  }
 
   // récupère l'élément "form"
-  const form = document.querySelector("form");
+  const loginSection = document.getElementById("login");
   // rattache le message au DOM du formulaire
-  form.appendChild(errorMessage);
+  loginSection.insertBefore(errorMessage, loginSection.querySelector("form"));
   // controle
   console.log("Erreur message API", errorMessage);
+
+  if (errorMessage) {
+    const form = document.querySelector("form");
+    form.style.marginTop ="0";
+  }
 }
 
 // Fonction qui créer le footer
