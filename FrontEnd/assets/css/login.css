@@ -2,10 +2,8 @@
 
 #login {
   width: 50%;
-  /* height: 68.5vh; */
   margin: auto;
   padding-top: 9.38rem;
-  /* padding-bottom: 22.19rem; */
 }
 
 .login_title {
@@ -28,7 +26,7 @@
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#login form p {
+#login p {
   color: red;
 }
 

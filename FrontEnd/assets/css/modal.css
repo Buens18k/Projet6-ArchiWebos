@@ -109,7 +109,6 @@
   flex-direction: column;
   height: auto;
   padding: 2.25rem 0rem 1rem 0rem;
-  border-bottom: 1px solid;
 }
 
 .add-photo {
@@ -123,7 +122,7 @@
   flex-direction: column;
   margin-bottom: 1.87rem;
 }
-#add-photo button {
+#add-photo_content #add-photo input {
   width: 10.8125rem;
   height: 2.25rem;
   flex-shrink: 0;
@@ -153,8 +152,10 @@
 
 #image-content {
   display: none;
-  width: 26.25rem;
+  min-width: 26.25rem;
+  width: 100%;
   min-height: 10.5625rem;
+  height: 100%;
   flex-shrink: 0;
   border-radius: 0.1875rem;
   background: #e8f1f6;
@@ -170,6 +171,16 @@
   object-position: center;
 }
 
+#image-content .hidden-input {
+  opacity: 0;
+  position: absolute;
+  width: 59.8%;
+  height: 28.6%;
+  margin: 0;
+  padding: 0;
+  /* display: none; */
+}
+
 #add-photo_content form {
   display: flex;
   flex-direction: column;
@@ -183,7 +194,6 @@
 
 #add-photo_content form input {
   padding: 0px 15px;
-  /* width: 26.25rem; */
   height: 3.1875rem;
   flex-shrink: 0;
   background: #fff;
@@ -194,7 +204,6 @@
 
 #add-photo_content form select {
   padding: 0px 15px;
-  /* width: 26.25rem; */
   height: 3.1875rem;
   flex-shrink: 0;
   background: #fff;
@@ -203,11 +212,21 @@
   margin-bottom: 1.31rem;
 }
 
-.modal_add-photo .gray {
+.separator {
+  width: 100%;
+  border-top: 0.01px solid #b3b3b3;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#add-photo_content form #valide {
   width: 14.8125rem;
   height: 2.25rem;
   flex-shrink: 0;
   border-radius: 3.75rem;
   background: #a7a7a7;
   border: none;
+  margin: 1rem 5.8rem 0rem;
 }
+
+
