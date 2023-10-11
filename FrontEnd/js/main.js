@@ -29,7 +29,6 @@ import {
 // Variable globale récupérant les travaux de l'API works
 let worksFetch;
 
-
 // // function check l'authentification si true(grâce au token récupérer dans le localStorage)
 // // alors actualise la page Mode Edition
 // function checkAuthentification() {

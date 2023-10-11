@@ -109,7 +109,6 @@
   flex-direction: column;
   height: auto;
   padding: 2.25rem 0rem 1rem 0rem;
-  border-bottom: 1px solid;
 }
 
 .add-photo {
@@ -183,7 +182,6 @@
 
 #add-photo_content form input {
   padding: 0px 15px;
-  /* width: 26.25rem; */
   height: 3.1875rem;
   flex-shrink: 0;
   background: #fff;
@@ -194,7 +192,6 @@
 
 #add-photo_content form select {
   padding: 0px 15px;
-  /* width: 26.25rem; */
   height: 3.1875rem;
   flex-shrink: 0;
   background: #fff;
@@ -203,11 +200,20 @@
   margin-bottom: 1.31rem;
 }
 
-.modal_add-photo .gray {
+.separator{
+  width: 100%;
+  border-top: 0.01px solid #B3B3B3;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#add-photo_content form #valide {
   width: 14.8125rem;
   height: 2.25rem;
   flex-shrink: 0;
   border-radius: 3.75rem;
   background: #a7a7a7;
   border: none;
+  margin: 1rem 5.8rem 0rem;
+
 }
