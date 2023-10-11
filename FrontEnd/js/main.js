@@ -1,90 +1,90 @@
 // api.js
 import { fetchWorks, fetchCategory, categoryFilter } from "./api.js";
 // ui.js
-import { createFigure, createWork} from "./ui.js";
+import { createFigure, createButtonFilter, addEventListenerButtonFilter} from "./ui.js";
 
 
 // Variable globale récupérant les travaux de l'API works
 let worksFetch;
-// variable qui permet de savoir quel modal est ouvert
+// // variable qui permet de savoir quel modal est ouvert
 let modal;
 
-// function qui crée les boutons filtre par catégories
-function createButtonFilter(categoryFetch) {
-  // ajout d'une nouvelle catégories "Tous" en première position dans le tableau des catégories
-  categoryFetch.unshift({ id: 0, name: `Tous` });
-  // Récupère la div filter
-  const filterDiv = document.querySelector(".filter");
+// // function qui crée les boutons filtre par catégories
+// function createButtonFilter(categoryFetch) {
+//   // ajout d'une nouvelle catégories "Tous" en première position dans le tableau des catégories
+//   categoryFetch.unshift({ id: 0, name: `Tous` });
+//   // Récupère la div filter
+//   const filterDiv = document.querySelector(".filter");
 
-  // Parcours chaque éléments des données de l'API catégories
-  categoryFetch.forEach((category) => {
-    // crée un élément button filtre pour chaques catégories
-    const btnFilter = document.createElement("button");
-    // ajoute à chaques buttons filtre la class .btn
-    btnFilter.classList.add("btn");
-    btnFilter.classList.add("btn-filter");
-    // ajoute le nom de la catégories respective au bouton filtre provenant du tableau "categoryFetch"
-    btnFilter.innerHTML = category.name;
-    // ajoute un écouteur d'évènement
-    addEventListenerButtonFilter(worksFetch, category, btnFilter);
-    // ajoute le bouton filtre à la div filter
-    filterDiv.appendChild(btnFilter);
-    // test
-    // console.log(categoryFetch);
-  });
-}
+//   // Parcours chaque éléments des données de l'API catégories
+//   categoryFetch.forEach((category) => {
+//     // crée un élément button filtre pour chaques catégories
+//     const btnFilter = document.createElement("button");
+//     // ajoute à chaques buttons filtre la class .btn
+//     btnFilter.classList.add("btn");
+//     btnFilter.classList.add("btn-filter");
+//     // ajoute le nom de la catégories respective au bouton filtre provenant du tableau "categoryFetch"
+//     btnFilter.innerHTML = category.name;
+//     // ajoute un écouteur d'évènement
+//     addEventListenerButtonFilter(worksFetch, category, btnFilter);
+//     // ajoute le bouton filtre à la div filter
+//     filterDiv.appendChild(btnFilter);
+//     // test
+//     // console.log(categoryFetch);
+//   });
+// }
 
-// function pour ajouter un écouteur d'évenement sur les btnFilter
-function addEventListenerButtonFilter(works, category, element) {
-  element.addEventListener("click", (event) => {
-    // efface le style à tous les boutons
-    removeStyleBtnSelectedFilter();
-    // ajoute le style au bouton sélèctionner
-    addStyleBtnSelectedFilter(element);
-    // Récupère la DIV gallery
-    const galleryDiv = document.querySelector(".gallery");
-    // initialise un tableau vide pour les données filtrée par catégories
-    let filterWorks = [];
-    // Structure de controle pour savoir quelle index à été selectionner
-    // Si le bouton "Tous" est cliqué
-    if (category.id === 0) {
-      // affiche toutes les données
-      filterWorks = works;
-      // console.log(filterWorks);
-    } else {
-      // sinon filtre les données en fonction de l'ID de la catégories selectionner
-      filterWorks = categoryFilter(worksFetch, category.id);
-      // controle
-      // console.log(filterWorks);
-    }
-    // effacement de la page html
-    galleryDiv.innerHTML = "";
+// // function pour ajouter un écouteur d'évenement sur les btnFilter
+// function addEventListenerButtonFilter(works, category, element) {
+//   element.addEventListener("click", (event) => {
+//     // efface le style à tous les boutons
+//     removeStyleBtnSelectedFilter();
+//     // ajoute le style au bouton sélèctionner
+//     addStyleBtnSelectedFilter(element);
+//     // Récupère la DIV gallery
+//     const galleryDiv = document.querySelector(".gallery");
+//     // initialise un tableau vide pour les données filtrée par catégories
+//     let filterWorks = [];
+//     // Structure de controle pour savoir quelle index à été selectionner
+//     // Si le bouton "Tous" est cliqué
+//     if (category.id === 0) {
+//       // affiche toutes les données
+//       filterWorks = works;
+//       // console.log(filterWorks);
+//     } else {
+//       // sinon filtre les données en fonction de l'ID de la catégories selectionner
+//       filterWorks = categoryFilter(worksFetch, category.id);
+//       // controle
+//       // console.log(filterWorks);
+//     }
+//     // effacement de la page html
+//     galleryDiv.innerHTML = "";
 
-    // affiche les données filtrer pour la catégorie selectionner
-    createFigure(filterWorks);
+//     // affiche les données filtrer pour la catégorie selectionner
+//     createFigure(filterWorks);
 
-    // test de position
-    console.log(`j'écoute le bouton : "${category.name}"`);
-  });
-}
+//     // test de position
+//     console.log(`j'écoute le bouton : "${category.name}"`);
+//   });
+// }
 
-// function qui assigne le style au bouton selectionner
-function addStyleBtnSelectedFilter(element) {
-  // element.addEventListener("click", (event) => {
-  element.classList.add("btn-selected");
-}
+// // function qui assigne le style au bouton selectionner
+// function addStyleBtnSelectedFilter(element) {
+//   // element.addEventListener("click", (event) => {
+//   element.classList.add("btn-selected");
+// }
 
-// function qui enlève le style au bouton selectionner
-function removeStyleBtnSelectedFilter() {
-  const buttonfilter = document.querySelectorAll(".btn");
-  buttonfilter.forEach((element) => {
-    element.classList.remove("btn-selected");
-    // console.log(element);
-  });
-}
+// // function qui enlève le style au bouton selectionner
+// function removeStyleBtnSelectedFilter() {
+//   const buttonfilter = document.querySelectorAll(".btn");
+//   buttonfilter.forEach((element) => {
+//     element.classList.remove("btn-selected");
+//     // console.log(element);
+//   });
+// }
 
 // function check l'authentification si true(grâce au token récupérer dans le localStorage)
-// alors on créer la barre Mode édition
+// alors actualise la page Mode Edition
 function checkAuthentification() {
   // récupère le token dans le localStorage
   const token = localStorage.getItem(`token`);
@@ -253,6 +253,7 @@ function displayImageInModal() {
 
 // fonction supprime l'image du Modal DELETE
 async function handleDeleteImage(event) {
+  event.preventDefault();
   // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
   const imageId = event.currentTarget.dataset.id;
   console.log("je supprime le svg", imageId);
@@ -496,19 +497,18 @@ async function init() {
   // Test de fonctionnement
   console.log(worksFetch, categoryFetch);
 
-  // **********appelle la fonction qui
+  // **********appel la fonction qui
 
   // créer l'élément figure
   createFigure(worksFetch);
   // filtre par catégories
   categoryFilter(worksFetch);
   // crée les boutons filtre
-  createButtonFilter(categoryFetch);
+  createButtonFilter(categoryFetch, worksFetch, addEventListenerButtonFilter);
+
   // test après être authentifier
   checkAuthentification();
 
-  // création du modale1
-  // createModalDelete();
   // ajouter les images dans la div figure-modal1 du modal1
   displayImageInModal();
 

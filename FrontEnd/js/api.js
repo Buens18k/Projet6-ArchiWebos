@@ -46,3 +46,5 @@ export function categoryFilter(works, categoryId) {
   // retourne les éléments ayant le même ID de catégorie que celui spécifié
   return works.filter((work) => work.categoryId === categoryId);
 }
+
+
