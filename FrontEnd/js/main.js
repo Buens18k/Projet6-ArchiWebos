@@ -1,159 +1,90 @@
+// api.js
+import { fetchWorks, fetchCategory, categoryFilter } from "./api.js";
+// ui.js
+import { createFigure, createButtonFilter, addEventListenerButtonFilter} from "./ui.js";
+
+
 // Variable globale récupérant les travaux de l'API works
 let worksFetch;
-// variable qui permet de savoir quel modal est ouvert
+// // variable qui permet de savoir quel modal est ouvert
 let modal;
 
-// fonction asynchone pour récupérer les données de l'API works
-async function fetchWorks() {
-  // Requête pour récupérer les données de l'API works
-  const reponse = await fetch("http://localhost:5678/api/works");
-  // Convertit la réponse en JSON
-  return await reponse.json();
-  // Test de fonctionnement
-  //   console.log(works);
-}
+// // function qui crée les boutons filtre par catégories
+// function createButtonFilter(categoryFetch) {
+//   // ajout d'une nouvelle catégories "Tous" en première position dans le tableau des catégories
+//   categoryFetch.unshift({ id: 0, name: `Tous` });
+//   // Récupère la div filter
+//   const filterDiv = document.querySelector(".filter");
 
-// fonction asynchone pour récupérer les données de l'API catégories
-async function fetchCategory() {
-  // Requête pour récupérer les données de l'API catégories
-  const reponse = await fetch("http://localhost:5678/api/categories");
-  // Convertit la réponse en JSON
-  return await reponse.json();
+//   // Parcours chaque éléments des données de l'API catégories
+//   categoryFetch.forEach((category) => {
+//     // crée un élément button filtre pour chaques catégories
+//     const btnFilter = document.createElement("button");
+//     // ajoute à chaques buttons filtre la class .btn
+//     btnFilter.classList.add("btn");
+//     btnFilter.classList.add("btn-filter");
+//     // ajoute le nom de la catégories respective au bouton filtre provenant du tableau "categoryFetch"
+//     btnFilter.innerHTML = category.name;
+//     // ajoute un écouteur d'évènement
+//     addEventListenerButtonFilter(worksFetch, category, btnFilter);
+//     // ajoute le bouton filtre à la div filter
+//     filterDiv.appendChild(btnFilter);
+//     // test
+//     // console.log(categoryFetch);
+//   });
+// }
 
-  // test de fonctionnement
-  // console.log(category);
-}
+// // function pour ajouter un écouteur d'évenement sur les btnFilter
+// function addEventListenerButtonFilter(works, category, element) {
+//   element.addEventListener("click", (event) => {
+//     // efface le style à tous les boutons
+//     removeStyleBtnSelectedFilter();
+//     // ajoute le style au bouton sélèctionner
+//     addStyleBtnSelectedFilter(element);
+//     // Récupère la DIV gallery
+//     const galleryDiv = document.querySelector(".gallery");
+//     // initialise un tableau vide pour les données filtrée par catégories
+//     let filterWorks = [];
+//     // Structure de controle pour savoir quelle index à été selectionner
+//     // Si le bouton "Tous" est cliqué
+//     if (category.id === 0) {
+//       // affiche toutes les données
+//       filterWorks = works;
+//       // console.log(filterWorks);
+//     } else {
+//       // sinon filtre les données en fonction de l'ID de la catégories selectionner
+//       filterWorks = categoryFilter(worksFetch, category.id);
+//       // controle
+//       // console.log(filterWorks);
+//     }
+//     // effacement de la page html
+//     galleryDiv.innerHTML = "";
 
-// fonction qui créer les éléments HTML pour chaque figure et les affiches dans la gallery
-function createFigure(works) {
-  // parcours la liste des données de l'API works
-  works.forEach((work) => {
-    // appel de la fonction qui crée une figure pour chaque objets dans les données de l'API works
-    createWork(work);
-  });
-}
+//     // affiche les données filtrer pour la catégorie selectionner
+//     createFigure(filterWorks);
 
-// function qui crée un élément "figure" dans la Div "gallery"
-function createWork(work) {
-  // Récupère la div gallery
-  const galleryDiv = document.querySelector(".gallery");
-  // création de l'élément figure
-  const workFigure = document.createElement("figure");
-  // remplit l'élément figure avec les propriétés "imageUrl, title" de l'API
-  workFigure.innerHTML = `
-        <img src ="${work.imageUrl}" alt="${work.title}">
-        <figcaption>${work.title}</figcaption>
-      `;
-  // ajoute l'élément "figure" à la div "gallery"
-  galleryDiv.appendChild(workFigure);
-  // test de fonctionnement
-  // console.log(work);
-}
+//     // test de position
+//     console.log(`j'écoute le bouton : "${category.name}"`);
+//   });
+// }
 
-// fonction pour filtrer les données de l'API works par catégories
-function categoryFilter(works, categoryId) {
-  // stock toutes les catégories dans la variable "categoriesTous"
-  const categoriesTous = works;
-  // console.log("Tous", categoriesTous);
+// // function qui assigne le style au bouton selectionner
+// function addStyleBtnSelectedFilter(element) {
+//   // element.addEventListener("click", (event) => {
+//   element.classList.add("btn-selected");
+// }
 
-  // stock toutes les catégorie dans la variable "categories1"
-  const categories1 = works.filter((work) => {
-    return work.categoryId === 1;
-  });
-  // console.log("Nombre de catégories 1 :", categories1);
-
-  // stock toutes les catégorie dans la variable "categories2"
-  const categories2 = works.filter((work) => {
-    return work.categoryId === 2;
-  });
-  // console.log("Nombre de Catégories 2 filtrer =",categories2);
-
-  // stock toutes les catégorie dans la variable "categories3"
-  const categories3 = works.filter((work) => {
-    return work.categoryId === 3;
-  });
-  // console.log("Nombre de Catégories 3 filtrer =",categories3);
-
-  // retourne les éléments ayant le même ID de catégorie que celui spécifié
-  return works.filter((work) => work.categoryId === categoryId);
-}
-
-// function qui crée les boutons filtre par catégories
-function createButtonFilter(categoryFetch) {
-  // ajout d'une nouvelle catégories "Tous" en première position dans le tableau des catégories
-  categoryFetch.unshift({ id: 0, name: `Tous` });
-  // Récupère la div filter
-  const filterDiv = document.querySelector(".filter");
-
-  // Parcours chaque éléments des données de l'API catégories
-  categoryFetch.forEach((category) => {
-    // crée un élément button filtre pour chaques catégories
-    const btnFilter = document.createElement("button");
-    // ajoute à chaques buttons filtre la class .btn
-    btnFilter.classList.add("btn");
-    btnFilter.classList.add("btn-filter");
-    // ajoute le nom de la catégories respective au bouton filtre provenant du tableau "categoryFetch"
-    btnFilter.innerHTML = category.name;
-    // ajoute un écouteur d'évènement
-    addventListenerButtonFilter(worksFetch, category, btnFilter);
-    // ajoute le bouton filtre à la div filter
-    filterDiv.appendChild(btnFilter);
-    // test
-    // console.log(categoryFetch);
-  });
-}
-
-// function pour ajouter un écouteur d'évenement sur les btnFilter
-function addventListenerButtonFilter(works, category, element) {
-  element.addEventListener("click", (event) => {
-    // efface le style à tous les boutons
-    removeStyleBtnSelectedFilter();
-    // ajoute le style au bouton sélèctionner
-    addStyleBtnSelectedFilter(element);
-    // Récupère la DIV gallery
-    const galleryDiv = document.querySelector(".gallery");
-    // initialise un tableau vide pour les données filtrée par catégories
-    let filterWorks = [];
-    // Structure de controle pour savoir quelle index à été selectionner
-    // Si le bouton "Tous" est cliqué
-    if (category.id === 0) {
-      // affiche toutes les données
-      filterWorks = works;
-      // console.log(filterWorks);
-    } else {
-      // sinon filtre les données en fonction de l'ID de la catégories selectionner
-      filterWorks = categoryFilter(worksFetch, category.id);
-      // controle
-      // console.log(filterWorks);
-    }
-    // effacement de la page html
-    galleryDiv.innerHTML = "";
-
-    // affiche les données filtrer pour la catégorie selectionner
-    createFigure(filterWorks);
-
-    // test de position
-    console.log(`j'écoute le bouton : "${category.name}"`);
-  });
-}
-
-// function qui assigne le style au bouton selectionner
-function addStyleBtnSelectedFilter(element) {
-  // element.addEventListener("click", (event) => {
-  element.classList.add("btn-selected");
-}
-
-// function qui enlève le style au bouton selectionner
-function removeStyleBtnSelectedFilter() {
-  const buttonfilter = document.querySelectorAll(".btn");
-  buttonfilter.forEach((element) => {
-    element.classList.remove("btn-selected");
-    // console.log(element);
-  });
-}
+// // function qui enlève le style au bouton selectionner
+// function removeStyleBtnSelectedFilter() {
+//   const buttonfilter = document.querySelectorAll(".btn");
+//   buttonfilter.forEach((element) => {
+//     element.classList.remove("btn-selected");
+//     // console.log(element);
+//   });
+// }
 
 // function check l'authentification si true(grâce au token récupérer dans le localStorage)
-// alors on créer la barre Mode édition
+// alors actualise la page Mode Edition
 function checkAuthentification() {
   // récupère le token dans le localStorage
   const token = localStorage.getItem(`token`);
@@ -322,6 +253,7 @@ function displayImageInModal() {
 
 // fonction supprime l'image du Modal DELETE
 async function handleDeleteImage(event) {
+  event.preventDefault();
   // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
   const imageId = event.currentTarget.dataset.id;
   console.log("je supprime le svg", imageId);
@@ -329,65 +261,65 @@ async function handleDeleteImage(event) {
   // simulation de suppression
   const response = { status: 200, message: "Image supprimer" };
 
-  // gérer la réponse de la simulation
-  if (response.status === 200) {
-    console.log(response.message);
-    const ctaImgSvg = event.currentTarget.parentNode;
-    ctaImgSvg.remove();
-  } else {
-    console.log("la suppression de l'image à echoué");
-  }
-
-  //Verifie si l'ID de l'image existe bien dans la base de donnée
-  // if (
-  //   imageId !== undefined &&
-  //   Number.isInteger(parseInt(imageId)) &&
-  //   parseInt(imageId) > 0
-  // ) {
-  //   // récupère le token dans le Local Storage
-  //   const token = localStorage.getItem("token");
-
-  //   // si le token est dans le local storage
-  //   if (token && token.trim() !== "") {
-  //     // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
-  //     try {
-  //       // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
-  //       const response = await fetch(
-  //         `http://localhost:5678/api/works/${imageId}`,
-  //         {
-  //           // utilise la méthode DELETE pour la suppression
-  //           method: "DELETE",
-  //           // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
-  //           headers: {
-  //             "Content-Type": `application/json`, //type de contenu en JSON
-  //             /***********
-  //              * - ajoute le token au header
-  //              * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
-  //              ***********  */
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       // gestion de la réponse provenant de l'API
-  //       if (response.ok) {
-  //         // controle
-  //         console.log("image supprimée ok !!!");
-
-  //         // supprime le container et le svg
-  //         const containerImgSvg = event.currentTarget.parentNode;
-  //         containerImgSvg.remove();
-  //       } else {
-  //         console.log("la suppression à echouer");
-  //       }
-  //     } catch (error) {
-  //       console.log("erreur lors de la suppression de l'image", error);
-  //     }
-  //   } else {
-  //     console.log("token d'authentification invalide");
-  //   }
+  // // gérer la réponse de la simulation
+  // if (response.status === 200) {
+  //   console.log(response.message);
+  //   const ctaImgSvg = event.currentTarget.parentNode;
+  //   ctaImgSvg.remove();
   // } else {
-  //   console.log("l'ID de l'image invalide");
+  //   console.log("la suppression de l'image à echoué");
   // }
+
+  // Verifie si l'ID de l'image existe bien dans la base de donnée
+  if (
+    imageId !== undefined &&
+    Number.isInteger(parseInt(imageId)) &&
+    parseInt(imageId) > 0
+  ) {
+    // récupère le token dans le Local Storage
+    const token = localStorage.getItem("token");
+
+    // si le token est dans le local storage
+    if (token && token.trim() !== "") {
+      // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
+      try {
+        // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
+        const response = await fetch(
+          `http://localhost:5678/api/works/${imageId}`,
+          {
+            // utilise la méthode DELETE pour la suppression
+            method: "DELETE",
+            // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+            headers: {
+              "Content-Type": `application/json`, //type de contenu en JSON
+              /***********
+               * - ajoute le token au header
+               * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
+               ***********  */
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        // gestion de la réponse provenant de l'API
+        if (response.ok) {
+          // controle
+          console.log("image supprimée ok !!!");
+
+          // supprime le container et le svg
+          const containerImgSvg = event.currentTarget.parentNode;
+          containerImgSvg.remove();
+        } else {
+          console.log("la suppression à echouer");
+        }
+      } catch (error) {
+        console.log("erreur lors de la suppression de l'image", error);
+      }
+    } else {
+      console.log("token d'authentification invalide");
+    }
+  } else {
+    console.log("l'ID de l'image invalide");
+  }
 }
 
 // fonction qui ajoute un gestionnaire d'évenement au bouton "Ajouter une image"
@@ -565,19 +497,18 @@ async function init() {
   // Test de fonctionnement
   console.log(worksFetch, categoryFetch);
 
-  // **********appelle la fonction qui
+  // **********appel la fonction qui
 
   // créer l'élément figure
   createFigure(worksFetch);
   // filtre par catégories
   categoryFilter(worksFetch);
   // crée les boutons filtre
-  createButtonFilter(categoryFetch);
+  createButtonFilter(categoryFetch, worksFetch, addEventListenerButtonFilter);
+
   // test après être authentifier
   checkAuthentification();
 
-  // création du modale1
-  // createModalDelete();
   // ajouter les images dans la div figure-modal1 du modal1
   displayImageInModal();
 
