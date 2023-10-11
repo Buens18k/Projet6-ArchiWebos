@@ -179,9 +179,9 @@ export function svgBackListener() {
   });
 }
 
-// fontion ajout photo lors du clic sur le bouton "+ Ajout Photo"
+// fontion ajout photo lors du clic sur l'input "+ Ajout Photo"
 export function btnAddPhoto() {
-  // récupère le bouton "+ Ajout Photo"
+  // récupère le l'input "+ Ajout Photo"
   const btnAddPhoto = document.getElementById("add-photo_btn");
 
   btnAddPhoto.addEventListener("click", (event) => {
@@ -193,11 +193,33 @@ export function btnAddPhoto() {
     // ouvre une boite de dialogue pour selectionner le fichier photo
     const input = document.createElement("input");
     input.type = "file";
+    input.classList.add("hidden-input");
     input.accept = "image/jpeg, image/png";
     input.click();
     // ajoute une gestionnaire d'écoute au changement pour verifier le format d'image et la taille
     input.addEventListener("change", handleFileSelect);
+
+    const imageContentDiv = document.getElementById("image-content");
+    imageContentDiv.appendChild(input);
   });
+}
+
+// fonction qui vérifie le format de la photo à charger
+function isPhotoValid(file) {
+  return file.type.match("image/jpeg") || file.type.match("image/png");
+}
+
+// fonction qui vérifiela taille de la photo à charger
+function isPhotoSizeValid(file) {
+  return file.size <= 4 * 1024 * 1024;
+}
+
+// fonction qui créer la photo au format URL pour placer dans la balise "<img>"
+function createPhotoElement(url) {
+  const img = document.createElement("img");
+  img.classList.add("img-onload");
+  img.src = url;
+  return img;
 }
 
 // fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
@@ -206,48 +228,48 @@ export function handleFileSelect(event) {
   const file = event.target.files[0];
 
   if (file) {
-    // vérifie le format de la photo
-    if (file.type.match("image/jpeg") || file.type.match("image/png")) {
+    // vérifie le format et la taille de la photo à charger
+    if (isPhotoValid(file) && isPhotoSizeValid(file)) {
       // vérifie la taille 4Mo en octets
-      if (file.size <= 4 * 1024 * 1024) {
-        console.log("photo ok pour format et taille");
+      console.log("photo valider pour format et taille");
 
-        // créer un objet URL à partir du fichier saisie
-        const imgUrl = URL.createObjectURL(file);
-        console.log("imageURL charger avec succès");
+      // créer un objet URL à partir du fichier saisie
+      const imgUrl = URL.createObjectURL(file);
+      console.log("imageURL charger avec succès");
 
-        // Crée un élément image
-        const img = document.createElement("img");
-        img.classList.add("img-onload");
+      // récupère la div qui contient la nouvelle image et l'input "file"
+      const imageContentDiv = document.getElementById("image-content");
 
-        // définie l'URL de l'image en tant que source de l'élément img
-        img.src = imgUrl;
-        console.log("imageUrl définie comme source pour l'élément <img>");
-
-        // affiche l'image dans la div "image-content"
-        const imageContentDiv = document.getElementById("image-content");
-        imageContentDiv.appendChild(img);
-        console.log(
-          "image afficher et positionner dans la Div 'image-content'"
-        );
-
-        // masque la div "add-photo" et affiche la div "img-content"
-        const addPhotoDiv = document.getElementById("add-photo");
-        addPhotoDiv.style.display = "none";
-        imageContentDiv.style.display = "flex";
-        console.log(
-          " Div 'add-photo' désactiver, Activation de la Div 'image-content'"
-        );
-      } else {
-        alert("photo trop grande. Taille maximale 4Mo");
+      // récupère l'ancienne image si elle existe
+      const oldImage = document.querySelector("#image-content img");
+      // Si c'est l'ancienne image
+      if (oldImage) {
+        // supprime l'image de la div
+        imageContentDiv.removeChild(oldImage);
+        console.log("Supprime l'ancienne image charger");
       }
-    } else {
-      alert(
-        "format de fichier non pris en charge. Veuillez sélectionner une photo au format JPEG ou PNG."
+
+      // Créer la photo
+      const img = createPhotoElement(imgUrl);
+      imageContentDiv.appendChild(img);
+      console.log("image afficher et positionner dans la Div 'image-content'");
+
+      // masque la div "add-photo" et affiche la div "img-content"
+      const addPhotoDiv = document.getElementById("add-photo");
+      addPhotoDiv.style.display = "none";
+      imageContentDiv.style.display = "flex";
+      console.log(
+        " Div 'add-photo' désactiver, Activation de la Div 'image-content'"
       );
+    } else if (!isPhotoValid(file)) {
+      alert(
+        "Format de fichier non pris en charge. Veuillez sélectionner une photo au format JPEG ou PNG."
+      );
+    } else {
+      alert("Taille maximale accepter 4Mo.");
     }
   } else {
-    alert("image pas charger");
+    alert("Pas d'image sélectionnée.");
   }
 }
 
