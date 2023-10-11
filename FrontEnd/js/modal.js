@@ -187,20 +187,17 @@ export function btnAddPhoto() {
   btnAddPhoto.addEventListener("click", (event) => {
     console.log("j'écoute le bouton :", btnAddPhoto);
 
-    // test avec image en dure
-    // handleFileSelect();
-
     // ouvre une boite de dialogue pour selectionner le fichier photo
     const input = document.createElement("input");
     input.type = "file";
     input.classList.add("hidden-input");
     input.accept = "image/jpeg, image/png";
-    input.click();
     // ajoute une gestionnaire d'écoute au changement pour verifier le format d'image et la taille
     input.addEventListener("change", handleFileSelect);
-
     const imageContentDiv = document.getElementById("image-content");
     imageContentDiv.appendChild(input);
+    // ouvre la boite de dialogue pour sélectionner le fichier
+    input.click();
   });
 }
 
