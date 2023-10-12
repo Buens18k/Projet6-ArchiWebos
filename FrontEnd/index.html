@@ -71,14 +71,7 @@
         </form>
       </section>
     </main>
-    <aside
-      id="modal1"
-      class="modal"
-      role="dialog"
-      aria-modal="false"
-      aria-hidden="true"
-      aria-labelledby="titlemodal"
-    >
+    <aside id="modal1" class="modal" aria-hidden="true" aria-labelledby="titlemodal">
       <div class="modal-wrapper">
         <h2 id="titlemodal">Galerie photo</h2>
         <svg
@@ -144,7 +137,6 @@
                 />
               </svg>
               <input id="add-photo_btn" type="button" value="+ Ajouter photo">
-              <!-- <button  type="button">+ Ajouter photo</button> -->
               <p>jpg, png : 4mo max</p>
             </div>
             <div id="image-content"></div>
@@ -152,7 +144,7 @@
             <input type="text" name="title" id="title" />
             <label for="category">Catégorie</label>
             <select name="category" id="category">
-              <option value=""></option>
+              <option value="">--Veuillez sélectionner une Catégorie--</option>
               <option value="Objets">Objets</option>
               <option value="Appartements">Appartements</option>
               <option value="Hotels & restaurants">Hotels & restaurants</option>
