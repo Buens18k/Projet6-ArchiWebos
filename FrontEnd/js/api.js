@@ -34,7 +34,8 @@ export function getCategoryId(categoryName){
   const categoryNoms = {
     "Objets": 1,
     "Appartements": 2,
-    "Hotels & restaurants": 3,
+    "Hotels & Restaurants": 3,
+    "Bar & Restaurants": 4,
   };
   return categoryNoms[categoryName] || 0;
 }

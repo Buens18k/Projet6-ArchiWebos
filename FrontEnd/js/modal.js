@@ -310,39 +310,18 @@ export async function getUserIdInLocalStorageFromToken() {
 }
 
 export async function handleValidationButtonClick() {
-  // récupère le titre saisie par l'utlisateur
+  // récupère la valeur du champ saisie par l'utilisateur avec l'ID "title"
   const titleInput = document.getElementById("title").value;
 
-  // récupère la valeur saisie par l'utlisateur dans le champ de l'input Catégories
+  // récupère la valeur du champ saisie par l'utilisateur avec l'ID "category"
   const categoryInput = document.getElementById("category").value;
-  // et ont appel la fonction qui par la valeur saisie dans le champs, retourne l'Id de la catégories auquels il appartient
+  // obtient l'ID de la catégories en utilisant la valeur de la catégorie saisie par l'utilisateur
   const categoryId = getCategoryId(categoryInput);
 
-  // récupère l'ID de l'utilisateur depuis le token en appelant la fonction "getUserIdInLocalStorageFromToken"
+  // obtient le jeton d'utilisateur depuis le stockage local de manière asynchrone
   const userIdToken = await getUserIdInLocalStorageFromToken();
-
-  // récupère l'URL de l'image
-  const imageElement = document.querySelector("#image-content img");
-  let imageBlob = null;
-  if (imageElement) {
-    const imageURL = imageElement.src;
-    const response = await fetch(imageURL);
-    const blob = await response.blob();
-
-    imageBlob = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = function () {
-        // lecture de fichier terminer
-        // utilise reader.result qui contient les données binaires de l'image
-        resolve(new Blob([reader.result], { type: blob.type }));
-      };
-      reader.readAsArrayBuffer(blob);
-    });
-  }
-
-  console.log(titleInput);
-  console.log(imageBlob);
-  console.log(categoryId);
+  // obtient un blob d'image à partir de l'URL de l'image sélectionnée par l'utilisateur
+  const imageBlob = await getImageBlobFromUrl();
 
   // vérifie si tous les champs sont saisie par l'utilisateur
   if (!titleInput || !categoryId || !imageBlob) {
@@ -351,40 +330,98 @@ export async function handleValidationButtonClick() {
     console.log("tout les champs du Formulaire sont rempli");
   }
 
+  // créer un objet FormData en utilisant les données récupérées
+  const formData = createFormData(
+    titleInput,
+    imageBlob,
+    categoryId,
+    userIdToken
+  );
+
+  try {
+    // envoie une requête POST avec les données du formulaire à l'API
+    const response = await sendRequest(formData);
+    // gère la réponse de l'API
+    handleResponse(response);
+  } catch (error) {
+    // gère les erreurs rencontrées lors de la requête
+    handleError(error);
+  }
+}
+
+// fonction asynchrone pour obtenir un blob d'image partir de l'URL de l'image selectionner par l'utilisateur
+async function getImageBlobFromUrl() {
+  // récupère l'URL de l'image à partir de l'élément d'image
+  const imageElement = document.querySelector("#image-content img");
+  // vérifie si l'élément d'image à été trouvé
+  if (imageElement) {
+    // obtient une URL à partir de l'élément d'image
+    const imageURL = imageElement.src;
+    // envoie une requête pour obtenir un blob de l'image à partir de l'URL
+    const response = await fetch(imageURL);
+    // obtient le blob de la réponse de la requête
+    const blob = await response.blob();
+    // crée une nouvelle promesse qui sera résolue avec la valeur retournée
+    return new Promise((resolve) => {
+      // ont crée un nouvel objet qui permet de lire les contenus des fichiers ou des blobs en tant qu'objets de données.
+      const reader = new FileReader();
+      // déclenché quant la lecture de fichier est terminer
+      reader.onloadend = function () {
+        // Crée un nouveau blob à partir des données ArrayBuffer lue par FileReader
+        // les données sont ensuite passées à resolve, ce qui résout la promesse avec le nouveau blob
+        resolve(new Blob([reader.result], { type: blob.type }));
+      };
+      // déclenche la lecture du contenu du blob en tant qu'ArrayBuffer, lorsque la lecture est terminer l'évènement "onloadend" est déclenché
+      reader.readAsArrayBuffer(blob);
+    });
+  }
+  // retourne "null" si auncun élément d'image n'a été trouver
+  return null;
+}
+
+// fonction qui crée un objet FormData à partir des données fournies
+function createFormData(title, imageBlob, categoryId, userId) {
   // créer un objet FormData
   const formData = new FormData();
   // ajoute les champs à l'objet FormData
-  formData.append("title", titleInput);
+  formData.append("title", title);
   formData.append("imageURL", imageBlob);
   formData.append("categoryId", categoryId);
-  formData.append("userId", userIdToken);
-  console.log(userIdToken);
+  formData.append("userId", userId);
+  return formData;
+}
 
-  // vérifie si le userId est disponible
-  if (userIdToken) {
-    // envoie la requête à l'API POST /works avec fetch
-    return fetch("http://localhost:5678/api/works", {
-      method: "POST",
-      body: formData,
-      headers: {
-        accept: "application/json",
-      },
-    }).then((response) => {
-      // Vérifie la réponse
-      if (response.status === 201) {
-        console.log("travail créé avec succès");
-        return response.json();
-      } else if (response.status === 400) {
-        console.error("requête incorrect. Vérifier données.");
-        throw new Error("requête incorrect.");
-      } else if (response.status === 401) {
-        console.error("voun'êtes pas autorisé. veuillez nous contacter");
-      } else {
-        console.error("erreur lors de la création du travail");
-        throw new Error("erreur lors de la création du travail.");
-      }
-    });
+// fonction qui envoie une requête POST à l'API avec l'object FormData et retourne la réponse
+async function sendRequest(formData) {
+  return fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    body: formData,
+    headers: {
+      accept: "application/json",
+    },
+  });
+}
+
+// fonction qui gère la réponse de l'API en fonction du statut de la réponse
+function handleResponse(response) {
+  if (response.status === 201) {
+    console.log("travail créé avec succès");
+    return response.json();
+  } else if (response.status === 400) {
+    console.error("requête incorrect. Vérifier données.");
+    throw new Error("requête incorrect.");
+  } else if (response.status === 401) {
+    console.error("voun'êtes pas autorisé. veuillez nous contacter");
+  } else {
+    console.error("erreur lors de la création du travail");
+    throw new Error("erreur lors de la création du travail.");
   }
+}
+
+// fonction qui gère les erreurs rencontrées lors de la requête et affiche un message
+function handleError(error) {
+  console.error("erreur lors de la création du travail");
+  throw new Error("erreur lors de la création du travail.");
 }
 
 /********* Fermeture du Modal************** */
