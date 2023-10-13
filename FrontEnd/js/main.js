@@ -22,6 +22,9 @@ import {
   svgBackListener,
   btnAddPhoto,
   handleFileSelect,
+  addListenerForm,
+  // getUserIdInLocalStorageFromToken,
+  handleValidationButtonClick,
   closeModalOnOutsideClik,
   closeModalOnClickSvgCross,
 } from "./modal.js";
@@ -471,6 +474,14 @@ async function init() {
   closeModalOnOutsideClik();
   // ferme le modal lors du clik sur le SVG cross
   closeModalOnClickSvgCross();
+
+  addListenerForm();
+
+  // récupère l'ID du token dans le LocalStorage
+  // getUserIdInLocalStorageFromToken();
+  // créer la requête POST vers l'API POST /works
+  // await getUserIdInLocalStorageFromToken();
+  // await createWorkPost();
 
   // déconnecte lors de la fermeture de la page du navigateur
   // disconnectClosingWindow();

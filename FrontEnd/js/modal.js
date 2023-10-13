@@ -1,5 +1,10 @@
+// import { error } from "console";
+import { categoryFilter, getCategoryId } from "./api.js";
+
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
+
+/********* Affiche le "Modal DELETE" ************** */
 
 // fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
 export function addEventListenerModalDelete() {
@@ -72,6 +77,8 @@ export function displayImageInModal(worksFetch) {
   });
 }
 
+/********* Requête pour supprimer une photo du "Modal DELETE" ************** */
+
 // fonction supprime l'image du Modal DELETE
 export async function handleDeleteImage(event) {
   event.preventDefault();
@@ -134,6 +141,8 @@ export async function handleDeleteImage(event) {
   }
 }
 
+/********* Affiche le Modal "Ajoute photo" ou retour sur le "Modal DELETE" ************** */
+
 // fonction qui ajoute un gestionnaire d'évenement au bouton "Ajouter une image"
 export function btnAddPhotoListener() {
   // récupérer le bouton "Ajouter une image"
@@ -149,7 +158,7 @@ export function btnAddPhotoListener() {
     // ont fait disparaitre la div
     modalDelete.style.display = "none";
 
-    // récupère la div Modal qui va ajouter une phot
+    // récupère la div Modal qui va ajouter une photo
     const modalAddPhoto = document.querySelector(".modal_add-photo");
     // console.log("Ont rend visible la div : ", modalAddPhoto);
     // ont fait apparaître le modal Add photo
@@ -171,7 +180,7 @@ export function svgBackListener() {
     // ont fait disparaitre la div
     modalDelete.style.display = "flex";
 
-    // récupère la div Modal qui va ajouter une phot
+    // récupère la div Modal qui va ajouter une photo
     const modalAddPhoto = document.querySelector(".modal_add-photo");
     console.log("Ont rend visible la div : ", modalAddPhoto);
     // ont fait apparaître le modal Add photo
@@ -179,13 +188,15 @@ export function svgBackListener() {
   });
 }
 
+/********* Ajout photo dans le Modal "Ajoute photo" ************** */
+
 // fontion ajout photo lors du clic sur l'input "+ Ajout Photo"
 export function btnAddPhoto() {
   // récupère le l'input "+ Ajout Photo"
   const btnAddPhoto = document.getElementById("add-photo_btn");
 
   btnAddPhoto.addEventListener("click", (event) => {
-    console.log("j'écoute le bouton :", btnAddPhoto);
+    // console.log("j'écoute le bouton :", btnAddPhoto);
 
     // ouvre une boite de dialogue pour selectionner le fichier photo
     const input = document.createElement("input");
@@ -227,12 +238,9 @@ export function handleFileSelect(event) {
   if (file) {
     // vérifie le format et la taille de la photo à charger
     if (isPhotoValid(file) && isPhotoSizeValid(file)) {
-      // vérifie la taille 4Mo en octets
-      console.log("photo valider pour format et taille");
-
-      // créer un objet URL à partir du fichier saisie
-      const imgUrl = URL.createObjectURL(file);
-      console.log("imageURL charger avec succès");
+      // créer une URL de la photo charger
+      const selectImgURL = URL.createObjectURL(file);
+      console.log("URL de la photo charger :", selectImgURL);
 
       // récupère la div qui contient la nouvelle image et l'input "file"
       const imageContentDiv = document.getElementById("image-content");
@@ -247,17 +255,17 @@ export function handleFileSelect(event) {
       }
 
       // Créer la photo
-      const img = createPhotoElement(imgUrl);
+      const img = createPhotoElement(selectImgURL);
       imageContentDiv.appendChild(img);
-      console.log("image afficher et positionner dans la Div 'image-content'");
+      // console.log("image afficher et positionner dans la Div 'image-content'");
 
       // masque la div "add-photo" et affiche la div "img-content"
       const addPhotoDiv = document.getElementById("add-photo");
       addPhotoDiv.style.display = "none";
       imageContentDiv.style.display = "flex";
-      console.log(
-        " Div 'add-photo' désactiver, Activation de la Div 'image-content'"
-      );
+      // console.log(
+      //   " Div 'add-photo' désactiver, Activation de la Div 'image-content'"
+      // );
     } else if (!isPhotoValid(file)) {
       alert(
         "Format de fichier non pris en charge. Veuillez sélectionner une photo au format JPEG ou PNG."
@@ -269,6 +277,117 @@ export function handleFileSelect(event) {
     alert("Pas d'image sélectionnée.");
   }
 }
+
+/********* Envoie Formulaire à l'apûie du bouton "VALIDER" à l'API POST WORK************** */
+
+// ajoute un gestionnaire d'écoute au bouton "Valider"
+export function addListenerForm() {
+  const form = document.querySelector(".add-photo_form");
+  // console.log("j'écoute le :",form);
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    handleValidationButtonClick();
+  });
+}
+
+// fonction pour récupérer l'ID de l'utilisateur dans le LocalStorage à partir du "token"
+export async function getUserIdInLocalStorageFromToken() {
+  // récupère le token
+  const token = localStorage.getItem("token");
+  // vérfie si le token est présent
+  if (token) {
+    // Divise le token en parties (en-tête, payload, signature) et récupère le payload (index1) convertit en JSON
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    // console.log(payload);
+    // renvoie l'userId de l'utilisateur du payload du token
+    return payload.userId;
+  } else {
+    // Sinon si token existe pas ou expiré
+    console.error("le token existe pas ou expiré");
+    return null;
+  }
+}
+
+export async function handleValidationButtonClick() {
+  // récupère le titre saisie par l'utlisateur
+  const titleInput = document.getElementById("title").value;
+
+  // récupère la valeur saisie par l'utlisateur dans le champ de l'input Catégories
+  const categoryInput = document.getElementById("category").value;
+  // et ont appel la fonction qui par la valeur saisie dans le champs, retourne l'Id de la catégories auquels il appartient
+  const categoryId = getCategoryId(categoryInput);
+
+  // récupère l'ID de l'utilisateur depuis le token en appelant la fonction "getUserIdInLocalStorageFromToken"
+  const userIdToken = await getUserIdInLocalStorageFromToken();
+
+  // récupère l'URL de l'image
+  const imageElement = document.querySelector("#image-content img");
+  let imageBlob = null;
+  if (imageElement) {
+    const imageURL = imageElement.src;
+    const response = await fetch(imageURL);
+    const blob = await response.blob();
+
+    imageBlob = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        // lecture de fichier terminer
+        // utilise reader.result qui contient les données binaires de l'image
+        resolve(new Blob([reader.result], { type: blob.type }));
+      };
+      reader.readAsArrayBuffer(blob);
+    });
+  }
+
+  console.log(titleInput);
+  console.log(imageBlob);
+  console.log(categoryId);
+
+  // vérifie si tous les champs sont saisie par l'utilisateur
+  if (!titleInput || !categoryId || !imageBlob) {
+    console.error("Merci de remplir tout les champs du formulaires");
+  } else {
+    console.log("tout les champs du Formulaire sont rempli");
+  }
+
+  // créer un objet FormData
+  const formData = new FormData();
+  // ajoute les champs à l'objet FormData
+  formData.append("title", titleInput);
+  formData.append("imageURL", imageBlob);
+  formData.append("categoryId", categoryId);
+  formData.append("userId", userIdToken);
+  console.log(userIdToken);
+
+  // vérifie si le userId est disponible
+  if (userIdToken) {
+    // envoie la requête à l'API POST /works avec fetch
+    return fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      body: formData,
+      headers: {
+        accept: "application/json",
+      },
+    }).then((response) => {
+      // Vérifie la réponse
+      if (response.status === 201) {
+        console.log("travail créé avec succès");
+        return response.json();
+      } else if (response.status === 400) {
+        console.error("requête incorrect. Vérifier données.");
+        throw new Error("requête incorrect.");
+      } else if (response.status === 401) {
+        console.error("voun'êtes pas autorisé. veuillez nous contacter");
+      } else {
+        console.error("erreur lors de la création du travail");
+        throw new Error("erreur lors de la création du travail.");
+      }
+    });
+  }
+}
+
+/********* Fermeture du Modal************** */
 
 // fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
 export function closeModalOnOutsideClik() {

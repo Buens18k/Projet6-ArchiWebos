@@ -119,7 +119,7 @@ function handleError(error) {
 
   if (errorMessage) {
     const form = document.querySelector("form");
-    form.style.marginTop ="0";
+    form.style.marginTop = "0";
   }
 }
 
