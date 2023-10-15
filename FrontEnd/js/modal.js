@@ -90,11 +90,7 @@ export async function handleDeleteImage(event) {
   const response = { status: 200, message: "Image supprimer" };
 
   // Verifie si l'ID de l'image existe bien dans la base de donnée
-  if (
-    imageId !== undefined &&
-    Number.isInteger(parseInt(imageId)) &&
-    parseInt(imageId) > 0
-  ) {
+  if (imageId !== undefined && Number.isInteger(parseInt(imageId)) && parseInt(imageId) > 0) {
     // récupère le token dans le Local Storage
     const token = localStorage.getItem("token");
 
@@ -103,22 +99,19 @@ export async function handleDeleteImage(event) {
       // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
       try {
         // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
-        const response = await fetch(
-          `http://localhost:5678/api/works/${imageId}`,
-          {
-            // utilise la méthode DELETE pour la suppression
-            method: "DELETE",
-            // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
-            headers: {
-              "Content-Type": `application/json`, //type de contenu en JSON
-              /***********
-               * - ajoute le token au header
-               * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
-               ***********  */
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
+          // utilise la méthode DELETE pour la suppression
+          method: "DELETE",
+          // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+          headers: {
+            "Content-Type": `application/json`, //type de contenu en JSON
+            /***********
+             * - ajoute le token au header
+             * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
+             ***********  */
+            Authorization: `Bearer ${token}`,
+          },
+        });
         // gestion de la réponse provenant de l'API
         if (response.ok) {
           // controle
@@ -188,102 +181,94 @@ export function svgBackListener() {
   });
 }
 
-/********* Ajout photo dans le Modal "Ajoute photo" ************** */
+/********* Ajoute photo dans le Modal avec l'input "+ Ajout photo" ************** */
 
 // fontion ajout photo lors du clic sur l'input "+ Ajout Photo"
 export function btnAddPhoto() {
   // récupère le l'input "+ Ajout Photo"
-  const btnAddPhoto = document.getElementById("add-photo_btn");
+  const file_upload_input = document.getElementById("add-photo_btn");
+  file_upload_input.accept = "image/jpg, image/png";
 
-  btnAddPhoto.addEventListener("click", (event) => {
-    // console.log("j'écoute le bouton :", btnAddPhoto);
-
-    // ouvre une boite de dialogue pour selectionner le fichier photo
-    const input = document.createElement("input");
-    input.type = "file";
-    input.classList.add("hidden-input");
-    input.accept = "image/jpeg, image/png";
-    // ajoute une gestionnaire d'écoute au changement pour verifier le format d'image et la taille
-    input.addEventListener("change", handleFileSelect);
-    const imageContentDiv = document.getElementById("image-content");
-    imageContentDiv.appendChild(input);
-    // ouvre la boite de dialogue pour sélectionner le fichier
-    input.click();
-  });
-}
-
-// fonction qui vérifie le format de la photo à charger
-function isPhotoValid(file) {
-  return file.type.match("image/jpeg") || file.type.match("image/png");
-}
-
-// fonction qui vérifiela taille de la photo à charger
-function isPhotoSizeValid(file) {
-  return file.size <= 4 * 1024 * 1024;
-}
-
-// fonction qui créer la photo au format URL pour placer dans la balise "<img>"
-function createPhotoElement(url) {
-  const img = document.createElement("img");
-  img.classList.add("img-onload");
-  img.src = url;
-  return img;
+  file_upload_input.addEventListener("change", handleFileSelect);
 }
 
 // fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
 export function handleFileSelect(event) {
-  // récupère le fichier à partir de l'évenement
-  const file = event.target.files[0];
+  // variable contenant les fichiers accepter
+  const file_extension_regex = /\.(jpg|png)$/i;
+  const max_file_size = 4 * 1024 * 1024;
 
-  if (file) {
-    // vérifie le format et la taille de la photo à charger
-    if (isPhotoValid(file) && isPhotoSizeValid(file)) {
-      // créer une URL de la photo charger
-      const selectImgURL = URL.createObjectURL(file);
-      console.log("URL de la photo charger :", selectImgURL);
-
-      // récupère la div qui contient la nouvelle image et l'input "file"
-      const imageContentDiv = document.getElementById("image-content");
-
-      // récupère l'ancienne image si elle existe
-      const oldImage = document.querySelector("#image-content img");
-      // Si c'est l'ancienne image
-      if (oldImage) {
-        // supprime l'image de la div
-        imageContentDiv.removeChild(oldImage);
-        console.log("Supprime l'ancienne image charger");
-      }
-
-      // Créer la photo
-      const img = createPhotoElement(selectImgURL);
-      imageContentDiv.appendChild(img);
-      // console.log("image afficher et positionner dans la Div 'image-content'");
-
-      // masque la div "add-photo" et affiche la div "img-content"
-      const addPhotoDiv = document.getElementById("add-photo");
-      addPhotoDiv.style.display = "none";
-      imageContentDiv.style.display = "flex";
-      // console.log(
-      //   " Div 'add-photo' désactiver, Activation de la Div 'image-content'"
-      // );
-    } else if (!isPhotoValid(file)) {
-      alert(
-        "Format de fichier non pris en charge. Veuillez sélectionner une photo au format JPEG ou PNG."
-      );
-    } else {
-      alert("Taille maximale accepter 4Mo.");
-    }
-  } else {
-    alert("Pas d'image sélectionnée.");
+  // vérifie l'extension du fichier
+  if (this.files.lenght === 0 || !file_extension_regex.test(this.files[0].name)) {
+    console.log(`fichier pas accepter en raison de l'extension : "${this.files[0].name}"`);
+    return;
   }
+
+  // vérifier la taille du fichier
+  if (this.files[0].size > max_file_size) {
+    console.log(`fichier pas accepter en raison de la taille : "${this.files[0].size}"`);
+    return;
+  }
+
+  // test de récupération du nom du fichier image selectionner dans l'input
+  // console.log("fichier accepter", this.files);
+
+  // stock le fichier
+  const file = this.files[0];
+  // créer une instance
+  const file_reader = new FileReader();
+  // ajoute à l'instance le fichier convertit en URL
+  file_reader.readAsDataURL(file);
+  // ajout d'un gestionnaire d'évenement au fichier
+  file_reader.addEventListener("load", (event) => {
+    // appel la fonction qui ajoute l'image
+    displayImage(event, file);
+  });
 }
 
-/********* Envoie Formulaire à l'apûie du bouton "VALIDER" à l'API POST WORK************** */
+// fonction qui ajoute l'image dans la div "image-content"
+function displayImage(event, file) {
+  // récupère la div qui contient la nouvelle image et l'input "file"
+  const imageContentDiv = document.getElementById("image-content");
 
-// ajoute un gestionnaire d'écoute au bouton "Valider"
+  // vérifie si la div contient déjà une image et un input
+  const existingImage = imageContentDiv.querySelector("img");
+  const existingInput = imageContentDiv.querySelector("input[type=file]");
+  if (existingImage || existingInput) {
+    existingImage.src = event.target.result;
+    existingImage.alt = file.name;
+    existingInput.remove();
+  } else {
+    const image = document.createElement("img");
+    // console.log(file.name);
+    image.classList.add("img-onload");
+    image.setAttribute("alt", file.name);
+    image.src = event.target.result;
+    // ajoute au DOM du parent "imageContentDiv" l'image
+    imageContentDiv.appendChild(image);
+  }
+
+  // masque la div "add-photo" et affiche la div "img-content"
+  const addPhotoDiv = document.getElementById("add-photo");
+  addPhotoDiv.style.display = "none";
+  imageContentDiv.style.display = "flex";
+  // console.log(" Div 'add-photo' désactiver, Activation de la Div 'image-content'");
+
+  // ajouter un input pour permettre à l'utilisateur de rechoisir une image
+  const input_reload_image = document.createElement("input");
+  input_reload_image.classList.add("hidden-input");
+  input_reload_image.type = "file";
+  input_reload_image.accept = "image/jpeg, image/png";
+  // ajoute au DOM du parent
+  imageContentDiv.appendChild(input_reload_image);
+  input_reload_image.addEventListener("change", handleFileSelect);
+}
+
+/********* Envoie Formulaire à l'appuie du bouton "VALIDER" à l'API POST WORK************** */
+
+// ajoute un gestionnaire d'écoute au formulaire qui est valider par l'input "Valider"
 export function addListenerForm() {
   const form = document.querySelector(".add-photo_form");
-  // console.log("j'écoute le :",form);
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -291,113 +276,85 @@ export function addListenerForm() {
   });
 }
 
-// fonction pour récupérer l'ID de l'utilisateur dans le LocalStorage à partir du "token"
-export async function getUserIdInLocalStorageFromToken() {
+// fonction qui valide le formulaire et envoie une requête à l'API /works
+export async function handleValidationButtonClick() {
+  // récupère la base64 de l'image
+  const base64String = extractBase64String();
+  if (base64String) {
+    console.log(base64String);
+  }
+  // récupère la valeur saisie dans l'input "titre"
+  const titleInput = getTitleInputValue();
+  console.log(titleInput);
+  // récupère la valeur saisie dans l'input "titre"
+  const categoryInput = getCategoryInputValue();
+  const categoryId = getCategoryId(categoryInput);
+  console.log(categoryId);
   // récupère le token
   const token = localStorage.getItem("token");
-  // vérfie si le token est présent
-  if (token) {
-    // Divise le token en parties (en-tête, payload, signature) et récupère le payload (index1) convertit en JSON
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    // console.log(payload);
-    // renvoie l'userId de l'utilisateur du payload du token
-    return payload.userId;
+  console.log(token);
+
+  // vérifie si chaque champs sont rentrer avant de valider le formulaire
+  // récupère le champ de contenant l'image
+  const imageContent = document.querySelector("#image-content img");
+  if (imageContent && titleInput && categoryId) {
+    console.log("Tous les champs du Formulaire sont rempli");
   } else {
-    // Sinon si token existe pas ou expiré
-    console.error("le token existe pas ou expiré");
-    return null;
-  }
-}
-
-export async function handleValidationButtonClick() {
-  // récupère la valeur du champ saisie par l'utilisateur avec l'ID "title"
-  const titleInput = document.getElementById("title").value;
-
-  // récupère la valeur du champ saisie par l'utilisateur avec l'ID "category"
-  const categoryInput = document.getElementById("category").value;
-  // obtient l'ID de la catégories en utilisant la valeur de la catégorie saisie par l'utilisateur
-  const categoryId = getCategoryId(categoryInput);
-
-  // obtient le jeton d'utilisateur depuis le stockage local de manière asynchrone
-  const userIdToken = await getUserIdInLocalStorageFromToken();
-  // obtient un blob d'image à partir de l'URL de l'image sélectionnée par l'utilisateur
-  const imageBlob = await getImageBlobFromUrl();
-
-  // vérifie si tous les champs sont saisie par l'utilisateur
-  if (!titleInput || !categoryId || !imageBlob) {
     console.error("Merci de remplir tout les champs du formulaires");
-  } else {
-    console.log("tout les champs du Formulaire sont rempli");
   }
 
-  // créer un objet FormData en utilisant les données récupérées
-  const formData = createFormData(
-    titleInput,
-    imageBlob,
-    categoryId,
-    userIdToken
-  );
-
+  // appel de la fonction qui créer l'objet FormData
+  const formData = createFormData(base64String, titleInput, categoryId);
+  // tente d'envoyez une requête
   try {
-    // envoie une requête POST avec les données du formulaire à l'API
-    const response = await sendRequest(formData);
-    // gère la réponse de l'API
+    // envoie une requête POST avec les données récupérer dans l'objet FormData
+    const response = await sendRequest(formData, token);
     handleResponse(response);
   } catch (error) {
-    // gère les erreurs rencontrées lors de la requête
     handleError(error);
   }
 }
 
-// fonction asynchrone pour obtenir un blob d'image partir de l'URL de l'image selectionner par l'utilisateur
-async function getImageBlobFromUrl() {
-  // récupère l'URL de l'image à partir de l'élément d'image
+// fonction pour extraire le base64 de l'image
+function extractBase64String() {
   const imageElement = document.querySelector("#image-content img");
-  // vérifie si l'élément d'image à été trouvé
+
   if (imageElement) {
-    // obtient une URL à partir de l'élément d'image
-    const imageURL = imageElement.src;
-    // envoie une requête pour obtenir un blob de l'image à partir de l'URL
-    const response = await fetch(imageURL);
-    // obtient le blob de la réponse de la requête
-    const blob = await response.blob();
-    // crée une nouvelle promesse qui sera résolue avec la valeur retournée
-    return new Promise((resolve) => {
-      // ont crée un nouvel objet qui permet de lire les contenus des fichiers ou des blobs en tant qu'objets de données.
-      const reader = new FileReader();
-      // déclenché quant la lecture de fichier est terminer
-      reader.onloadend = function () {
-        // Crée un nouveau blob à partir des données ArrayBuffer lue par FileReader
-        // les données sont ensuite passées à resolve, ce qui résout la promesse avec le nouveau blob
-        resolve(new Blob([reader.result], { type: blob.type }));
-      };
-      // déclenche la lecture du contenu du blob en tant qu'ArrayBuffer, lorsque la lecture est terminer l'évènement "onloadend" est déclenché
-      reader.readAsArrayBuffer(blob);
-    });
+    const base64String = imageElement.src;
+    console.log(base64String);
+  } else {
+    console.log("aucune image à traiter");
   }
-  // retourne "null" si auncun élément d'image n'a été trouver
-  return null;
 }
 
-// fonction qui crée un objet FormData à partir des données fournies
-function createFormData(title, imageBlob, categoryId, userId) {
-  // créer un objet FormData
+// fonction qui récupère la valeur saisie dans l'input "titre" du formulaire
+function getTitleInputValue() {
+  return document.querySelector("#title").value;
+}
+
+// fonction qui récupère la valeur saisie dans l'input "categories" du formulaire
+function getCategoryInputValue() {
+  return document.querySelector("#category").value;
+}
+
+// fonction qui renvoie à l'objet FormData avec les données récupérer
+function createFormData(base64String, titleInput, categoryId) {
+  // créer l'objet FormData
   const formData = new FormData();
-  // ajoute les champs à l'objet FormData
-  formData.append("title", title);
-  formData.append("imageURL", imageBlob);
-  formData.append("categoryId", categoryId);
-  formData.append("userId", userId);
-  return formData;
+  // ajoute les données récupérer pour chaques points de l'objet
+  formData.append("image=", base64String);
+  formData.append("title=", titleInput);
+  formData.append("category=", categoryId);
 }
 
-// fonction qui envoie une requête POST à l'API avec l'object FormData et retourne la réponse
-async function sendRequest(formData) {
+// fonction asynchrone composé du corp de la requête
+async function sendRequest(formData, token) {
   return fetch("http://localhost:5678/api/works", {
     method: "POST",
     body: formData,
     headers: {
       accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 }
@@ -411,9 +368,8 @@ function handleResponse(response) {
     console.error("requête incorrect. Vérifier données.");
     throw new Error("requête incorrect.");
   } else if (response.status === 401) {
-    console.error("voun'êtes pas autorisé. veuillez nous contacter");
+    console.error("vous n'êtes pas autorisé. veuillez nous contacter");
   } else {
-    console.error("erreur lors de la création du travail");
     throw new Error("erreur lors de la création du travail.");
   }
 }

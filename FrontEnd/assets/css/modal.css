@@ -122,7 +122,12 @@
   flex-direction: column;
   margin-bottom: 1.87rem;
 }
-#add-photo_content #add-photo input {
+
+#add-photo_content #add-photo label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
   width: 10.8125rem;
   height: 2.25rem;
   flex-shrink: 0;
