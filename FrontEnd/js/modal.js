@@ -320,8 +320,9 @@ function extractBase64String() {
   const imageElement = document.querySelector("#image-content img");
 
   if (imageElement) {
-    const base64String = imageElement.src;
+    const base64String = imageElement.src.split(",")[1];
     console.log(base64String);
+    return base64String;
   } else {
     console.log("aucune image à traiter");
   }
@@ -345,11 +346,12 @@ function createFormData(base64String, titleInput, categoryId) {
   formData.append("image=", base64String);
   formData.append("title=", titleInput);
   formData.append("category=", categoryId);
+  return formData;
 }
 
 // fonction asynchrone composé du corp de la requête
 async function sendRequest(formData, token) {
-  return fetch("http://localhost:5678/api/works", {
+  const response = await fetch("http://localhost:5678/api/works", {
     method: "POST",
     body: formData,
     headers: {
@@ -357,6 +359,10 @@ async function sendRequest(formData, token) {
       Authorization: `Bearer ${token}`,
     },
   });
+  if (!response.ok) {
+    throw new Error(`Erreur HTTP! statut: ${response.status}`);
+  }
+  return response.json();
 }
 
 // fonction qui gère la réponse de l'API en fonction du statut de la réponse
