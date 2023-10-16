@@ -465,12 +465,15 @@ async function init() {
   svgBackListener();
 
   //  écoute le bouton "+ Ajout photo"
-  btnAddPhoto();
+  //btnAddPhoto();
 
   // ferme le modal lors du clik sur la partie grisé
   closeModalOnOutsideClik();
   // ferme le modal lors du clik sur le SVG cross
   closeModalOnClickSvgCross();
+
+  // envoie les données du formulaire
+  sendWorks();
 
   // déconnecte lors de la fermeture de la page du navigateur
   // disconnectClosingWindow();
@@ -478,3 +481,22 @@ async function init() {
 
 // appel de la fonction d'initialisation au chargement de la page
 init();
+
+function sendWorks() {
+  const form = document.querySelector(".form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: formData,
+    };
+    fetch("http://localhost:5678/api/works", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  });
+}
