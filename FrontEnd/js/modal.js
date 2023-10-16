@@ -199,7 +199,7 @@ export function handleFileSelect(event) {
   const max_file_size = 4 * 1024 * 1024;
 
   // vérifie l'extension du fichier
-  if (this.files.lenght === 0 || !file_extension_regex.test(this.files[0].name)) {
+  if (this.files.length === 0 || !file_extension_regex.test(this.files[0].name)) {
     console.log(`fichier pas accepter en raison de l'extension : "${this.files[0].name}"`);
     return;
   }
@@ -278,41 +278,27 @@ export function addListenerForm() {
 
 // fonction qui valide le formulaire et envoie une requête à l'API /works
 export async function handleValidationButtonClick() {
-  // récupère la base64 de l'image
-  const base64String = extractBase64String();
-  if (base64String) {
-    console.log(base64String);
-  }
-  // récupère la valeur saisie dans l'input "titre"
-  const titleInput = getTitleInputValue();
-  console.log(titleInput);
-  // récupère la valeur saisie dans l'input "titre"
-  const categoryInput = getCategoryInputValue();
-  const categoryId = getCategoryId(categoryInput);
-  console.log(categoryId);
-  // récupère le token
+  const form = document.querySelector(".add-photo_form");
+  console.log(form);
+
+  // // récupère le token
   const token = localStorage.getItem("token");
-  console.log(token);
+  // console.log(token);
 
-  // vérifie si chaque champs sont rentrer avant de valider le formulaire
-  // récupère le champ de contenant l'image
-  const imageContent = document.querySelector("#image-content img");
-  if (imageContent && titleInput && categoryId) {
-    console.log("Tous les champs du Formulaire sont rempli");
-  } else {
-    console.error("Merci de remplir tout les champs du formulaires");
-  }
+  const formData = new FormData(form);
 
-  // appel de la fonction qui créer l'objet FormData
-  const formData = createFormData(base64String, titleInput, categoryId);
-  // tente d'envoyez une requête
-  try {
-    // envoie une requête POST avec les données récupérer dans l'objet FormData
-    const response = await sendRequest(formData, token);
-    handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: formData,
+  };
+  fetch("http://localhost:5678/api/works", requestOptions)
+  .then((response)=> response.json())
+  .then((data) => console.log(data));
+
 }
 
 // fonction pour extraire le base64 de l'image
@@ -343,9 +329,10 @@ function createFormData(base64String, titleInput, categoryId) {
   // créer l'objet FormData
   const formData = new FormData();
   // ajoute les données récupérer pour chaques points de l'objet
-  formData.append("image=", base64String);
-  formData.append("title=", titleInput);
-  formData.append("category=", categoryId);
+  formData.append("image", base64String);
+  formData.append("title", titleInput);
+  formData.append("category", categoryId);
+  console.log(formData);
   return formData;
 }
 
@@ -369,7 +356,7 @@ async function sendRequest(formData, token) {
 function handleResponse(response) {
   if (response.status === 201) {
     console.log("travail créé avec succès");
-    return response.json();
+    return response;
   } else if (response.status === 400) {
     console.error("requête incorrect. Vérifier données.");
     throw new Error("requête incorrect.");
@@ -383,7 +370,7 @@ function handleResponse(response) {
 // fonction qui gère les erreurs rencontrées lors de la requête et affiche un message
 function handleError(error) {
   console.error("erreur lors de la création du travail");
-  throw new Error("erreur lors de la création du travail.");
+  // throw new Error("erreur lors de la création du travail.");
 }
 
 /********* Fermeture du Modal************** */
