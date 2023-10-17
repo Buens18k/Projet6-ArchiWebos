@@ -1,5 +1,5 @@
 // import { error } from "console";
-import { categoryFilter, getCategoryId } from "./api.js";
+import { categoryFilter } from "./api.js";
 
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
@@ -143,6 +143,7 @@ export function btnAddPhotoListener() {
 
   // ajoute le gestionnaire d'écoute au click sur le bouton
   btnAddPhoto.addEventListener("click", (event) => {
+    event.preventDefault();
     // console.log("j'entend le bouton add photo");
 
     // récupère la div Modal Delete
@@ -165,7 +166,9 @@ export function svgBackListener() {
   const svgBack = document.querySelector(".back-delete");
   // console.log(svgBack);
   svgBack.addEventListener("click", (event) => {
-    console.log("j'écoute le svg Back");
+    event.preventDefault();
+
+    // console.log("j'écoute le svg Back");
     // récupère la div
     // récupère la div Modal Delete
     const modalDelete = document.querySelector(".modal-wrapper");
@@ -186,14 +189,17 @@ export function svgBackListener() {
 // fontion ajout photo lors du clic sur l'input "+ Ajout Photo"
 export function btnAddPhoto() {
   // récupère le l'input "+ Ajout Photo"
-  const file_upload_input = document.getElementById("add-photo_btn");
-  file_upload_input.accept = "image/jpg, image/png";
+  const fileUploadInput = document.getElementById("form_input-file");
+  // console.log(fileUploadInput);
+  fileUploadInput.accept = "image/jpg, image/png";
 
-  file_upload_input.addEventListener("change", handleFileSelect);
+  fileUploadInput.addEventListener("change", handleFileSelect);
 }
 
 // fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
 export function handleFileSelect(event) {
+  event.preventDefault();
+
   // variable contenant les fichiers accepter
   const file_extension_regex = /\.(jpg|png)$/i;
   const max_file_size = 4 * 1024 * 1024;
@@ -211,16 +217,18 @@ export function handleFileSelect(event) {
   }
 
   // test de récupération du nom du fichier image selectionner dans l'input
-  // console.log("fichier accepter", this.files);
+  console.log("fichier accepter", this.files);
 
   // stock le fichier
   const file = this.files[0];
+  console.log(file);
   // créer une instance
   const file_reader = new FileReader();
   // ajoute à l'instance le fichier convertit en URL
   file_reader.readAsDataURL(file);
   // ajout d'un gestionnaire d'évenement au fichier
   file_reader.addEventListener("load", (event) => {
+    event.preventDefault();
     // appel la fonction qui ajoute l'image
     displayImage(event, file);
   });
@@ -228,40 +236,40 @@ export function handleFileSelect(event) {
 
 // fonction qui ajoute l'image dans la div "image-content"
 function displayImage(event, file) {
+  event.preventDefault();
+
+  // récupère la div "add-photo"
+  const addPhotoDiv = document.querySelector(".add-photo");
   // récupère la div qui contient la nouvelle image et l'input "file"
   const imageContentDiv = document.getElementById("image-content");
+  // désactive la div "add-photo"
+  addPhotoDiv.style.display = "none";
+  // active la div "image-content"
+  imageContentDiv.style.display = "flex";
+  // récupère le label "form_label-file" pour le rendre invisble
+  const labelInputFile = document.getElementById("form_label-file");
+  labelInputFile.classList.add("opacity");
+  labelInputFile.style.opacity = "0";
+  // récupère l'input "form_input-file "pour l'agrandir et permettre de reselectionner une nouvelle photo
+  const inputFile = document.getElementById("form_input-file");
+  inputFile.style.top = "127px";
+  inputFile.style.left = "124px";
+  inputFile.style.width = "60%";
+  inputFile.style.height = "28%";
 
-  // vérifie si la div contient déjà une image et un input
+  // vérifie si la div contient déjà une image
   const existingImage = imageContentDiv.querySelector("img");
-  const existingInput = imageContentDiv.querySelector("input[type=file]");
-  if (existingImage || existingInput) {
+  if (existingImage) {
     existingImage.src = event.target.result;
     existingImage.alt = file.name;
-    existingInput.remove();
   } else {
     const image = document.createElement("img");
-    // console.log(file.name);
     image.classList.add("img-onload");
     image.setAttribute("alt", file.name);
     image.src = event.target.result;
     // ajoute au DOM du parent "imageContentDiv" l'image
     imageContentDiv.appendChild(image);
   }
-
-  // masque la div "add-photo" et affiche la div "img-content"
-  const addPhotoDiv = document.getElementById("add-photo");
-  addPhotoDiv.style.display = "none";
-  imageContentDiv.style.display = "flex";
-  // console.log(" Div 'add-photo' désactiver, Activation de la Div 'image-content'");
-
-  // ajouter un input pour permettre à l'utilisateur de rechoisir une image
-  const input_reload_image = document.createElement("input");
-  input_reload_image.classList.add("hidden-input");
-  input_reload_image.type = "file";
-  input_reload_image.accept = "image/jpeg, image/png";
-  // ajoute au DOM du parent
-  imageContentDiv.appendChild(input_reload_image);
-  input_reload_image.addEventListener("change", handleFileSelect);
 }
 
 /********* Envoie Formulaire à l'appuie du bouton "VALIDER" à l'API POST WORK************** */
@@ -272,105 +280,52 @@ export function addListenerForm() {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    handleValidationButtonClick();
+    const form = document.querySelector(".add-photo_form");
+    console.log(form);
+
+    // récupère le token
+    const token = localStorage.getItem("token");
+    // créez une nouvel instance
+    const formData = new FormData(form);
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    };
+    fetch("http://localhost:5678/api/works", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          // si la réponse est ok (statut 200-299), traite la réponse json ici
+          return response.json();
+        } else {
+          // si la réponse est une erreur, lance une nouvelle erreur avec le statut de la réponse
+          throw new Error(response.status);
+        }
+      })
+      .then((data) => {
+        if (data.status === 201) {
+          console.log("création réussie :", data);
+        } else {
+          console.log("réponse inattendue :", data);
+        }
+      })
+      .catch((error) => {
+        if (error.message === 400) {
+          // affiche un message pour l'utilisateur
+          console.error("Erreur : Bad Request");
+        } else if (error.message === 401) {
+          console.error("Erreur : Unauthorised");
+        } else if (error.message === 500) {
+          console.error("Erreur : Unexpected Error");
+        } else {
+          console.error("Erreur inattendue :", error.message);
+        }
+      });
   });
-}
-
-// fonction qui valide le formulaire et envoie une requête à l'API /works
-export async function handleValidationButtonClick() {
-  const form = document.querySelector(".add-photo_form");
-  console.log(form);
-
-  // // récupère le token
-  const token = localStorage.getItem("token");
-  // console.log(token);
-
-  const formData = new FormData(form);
-
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: formData,
-  };
-  fetch("http://localhost:5678/api/works", requestOptions)
-  .then((response)=> response.json())
-  .then((data) => console.log(data));
-
-}
-
-// fonction pour extraire le base64 de l'image
-function extractBase64String() {
-  const imageElement = document.querySelector("#image-content img");
-
-  if (imageElement) {
-    const base64String = imageElement.src.split(",")[1];
-    console.log(base64String);
-    return base64String;
-  } else {
-    console.log("aucune image à traiter");
-  }
-}
-
-// fonction qui récupère la valeur saisie dans l'input "titre" du formulaire
-function getTitleInputValue() {
-  return document.querySelector("#title").value;
-}
-
-// fonction qui récupère la valeur saisie dans l'input "categories" du formulaire
-function getCategoryInputValue() {
-  return document.querySelector("#category").value;
-}
-
-// fonction qui renvoie à l'objet FormData avec les données récupérer
-function createFormData(base64String, titleInput, categoryId) {
-  // créer l'objet FormData
-  const formData = new FormData();
-  // ajoute les données récupérer pour chaques points de l'objet
-  formData.append("image", base64String);
-  formData.append("title", titleInput);
-  formData.append("category", categoryId);
-  console.log(formData);
-  return formData;
-}
-
-// fonction asynchrone composé du corp de la requête
-async function sendRequest(formData, token) {
-  const response = await fetch("http://localhost:5678/api/works", {
-    method: "POST",
-    body: formData,
-    headers: {
-      accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`Erreur HTTP! statut: ${response.status}`);
-  }
-  return response.json();
-}
-
-// fonction qui gère la réponse de l'API en fonction du statut de la réponse
-function handleResponse(response) {
-  if (response.status === 201) {
-    console.log("travail créé avec succès");
-    return response;
-  } else if (response.status === 400) {
-    console.error("requête incorrect. Vérifier données.");
-    throw new Error("requête incorrect.");
-  } else if (response.status === 401) {
-    console.error("vous n'êtes pas autorisé. veuillez nous contacter");
-  } else {
-    throw new Error("erreur lors de la création du travail.");
-  }
-}
-
-// fonction qui gère les erreurs rencontrées lors de la requête et affiche un message
-function handleError(error) {
-  console.error("erreur lors de la création du travail");
-  // throw new Error("erreur lors de la création du travail.");
 }
 
 /********* Fermeture du Modal************** */

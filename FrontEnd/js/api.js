@@ -1,22 +1,49 @@
 // fonction asynchone pour récupérer les données de l'API works
 export async function fetchWorks() {
-  // Requête pour récupérer les données de l'API works
-  const reponse = await fetch("http://localhost:5678/api/works");
-  // Convertit la réponse en JSON
-  return await reponse.json();
-  // Test de fonctionnement
-  //   console.log(works);
+  try {
+    // Requête pour récupérer les données de l'API works
+    const response = await fetch("http://localhost:5678/api/works");
+    
+    // Vérifie si la réponse est ok (statut 200)
+    if (!response.ok) {
+      // Si la réponse n'est pas ok, obtient le message d'erreur de la réponse
+      const errorMessage = await getErrorMessage(response);
+      throw new Error(errorMessage);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur lors de la récupération des travaux:", error);
+    throw error;
+  }
 }
 
 // fonction asynchone pour récupérer les données de l'API catégories
 export async function fetchCategory() {
-  // Requête pour récupérer les données de l'API catégories
-  const reponse = await fetch("http://localhost:5678/api/categories");
-  // Convertit la réponse en JSON
-  return await reponse.json();
+  try {
+    // Requête pour récupérer les données de l'API works
+    const response = await fetch("http://localhost:5678/api/categories");;
+    
+    // Vérifie si la réponse est ok (statut 200)
+    if (!response.ok) {
+      // Si la réponse n'est pas ok, obtient le message d'erreur de la réponse
+      const errorMessage = await getErrorMessage(response);
+      throw new Error(errorMessage);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erreur lors de la récupération des travaux:", error);
+    throw error;
+  }
+}
 
-  // test de fonctionnement
-  // console.log(category);
+// fonction pour gérer les réponses
+async function getErrorMessage(response) {
+  if (response.status === 200) {
+    const responseData = await response.json();
+    return responseData.message;
+  }
+  const errorData = await response.json();
+  return errorData.message;
 }
 
 // fonction pour filtrer les données de l'API works par catégories
@@ -27,15 +54,4 @@ export function categoryFilter(works, categoryId) {
   } else {
     return works.filter((work) => work.categoryId === categoryId);
   }
-}
-
-// fonction pour obtenir le categoryId à partir du nom de la catégorie
-export function getCategoryId(categoryName){
-  const categoryNoms = {
-    "Objets": 1,
-    "Appartements": 2,
-    "Hotels & Restaurants": 3,
-    "Bar & Restaurants": 4,
-  };
-  return categoryNoms[categoryName] || 0;
 }

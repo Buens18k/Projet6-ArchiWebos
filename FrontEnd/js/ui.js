@@ -1,5 +1,4 @@
-import { categoryFilter } from "./api.js";
-
+import { fetchCategory, categoryFilter } from "./api.js";
 
 // fonction qui créer les éléments HTML pour chaque figure et les affiches dans la gallery
 export function createFigure(works) {
@@ -55,6 +54,7 @@ export function createButtonFilter(categoryFetch, worksFetch, addEventListenerBu
 // function pour ajouter un écouteur d'évenement sur les btnFilter
 export function addEventListenerButtonFilter(worksFetch, category, element) {
   element.addEventListener("click", (event) => {
+    event.preventDefault();
     // efface le style à tous les boutons
     removeStyleBtnSelectedFilter();
     // ajoute le style au bouton sélèctionner
@@ -88,7 +88,6 @@ export function addEventListenerButtonFilter(worksFetch, category, element) {
 
 // function qui assigne le style au bouton selectionner
 function addStyleBtnSelectedFilter(element) {
-  // element.addEventListener("click", (event) => {
   element.classList.add("btn-selected");
 }
 
@@ -97,7 +96,30 @@ function removeStyleBtnSelectedFilter() {
   const buttonfilter = document.querySelectorAll(".btn");
   buttonfilter.forEach((element) => {
     element.classList.remove("btn-selected");
-    // console.log(element);
   });
 }
 
+/****************** Modal****************** */
+
+// fonction pour remplir le menu déroulant de l'input catégories
+export async function populateCategoriesDropDown() {
+  // récupère l'input "catégories"
+  const categoryDropDown = document.getElementById("category");
+
+  // récupère les données de l'API trier par catégorie
+  const categorysData = await fetchCategory();
+
+  // créer une option vide
+  const emptyOption = document.createElement("option");
+  emptyOption.value = ""; // valeur vide
+  emptyOption.textContent = ""; // texte Vide
+  categoryDropDown.appendChild(emptyOption);
+
+  // remplissage du menu déroulant avec les catégories
+  categorysData.forEach((category) => {
+    const option = document.createElement("option");
+    option.value = category.id; //id de la catégorie
+    option.textContent = category.name; // nom de la catégorie
+    categoryDropDown.append(option);
+  });
+}
