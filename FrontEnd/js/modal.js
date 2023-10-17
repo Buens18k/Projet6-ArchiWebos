@@ -1,5 +1,10 @@
+// import { error } from "console";
+import { categoryFilter } from "./api.js";
+
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
+
+/********* Affiche le "Modal DELETE" ************** */
 
 // fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
 export function addEventListenerModalDelete() {
@@ -72,6 +77,8 @@ export function displayImageInModal(worksFetch) {
   });
 }
 
+/********* Requête pour supprimer une photo du "Modal DELETE" ************** */
+
 // fonction supprime l'image du Modal DELETE
 export async function handleDeleteImage(event) {
   event.preventDefault();
@@ -83,11 +90,7 @@ export async function handleDeleteImage(event) {
   const response = { status: 200, message: "Image supprimer" };
 
   // Verifie si l'ID de l'image existe bien dans la base de donnée
-  if (
-    imageId !== undefined &&
-    Number.isInteger(parseInt(imageId)) &&
-    parseInt(imageId) > 0
-  ) {
+  if (imageId !== undefined && Number.isInteger(parseInt(imageId)) && parseInt(imageId) > 0) {
     // récupère le token dans le Local Storage
     const token = localStorage.getItem("token");
 
@@ -96,22 +99,19 @@ export async function handleDeleteImage(event) {
       // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
       try {
         // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
-        const response = await fetch(
-          `http://localhost:5678/api/works/${imageId}`,
-          {
-            // utilise la méthode DELETE pour la suppression
-            method: "DELETE",
-            // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
-            headers: {
-              "Content-Type": `application/json`, //type de contenu en JSON
-              /***********
-               * - ajoute le token au header
-               * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
-               ***********  */
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
+          // utilise la méthode DELETE pour la suppression
+          method: "DELETE",
+          // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+          headers: {
+            "Content-Type": `application/json`, //type de contenu en JSON
+            /***********
+             * - ajoute le token au header
+             * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
+             ***********  */
+            Authorization: `Bearer ${token}`,
+          },
+        });
         // gestion de la réponse provenant de l'API
         if (response.ok) {
           // controle
@@ -134,6 +134,8 @@ export async function handleDeleteImage(event) {
   }
 }
 
+/********* Affiche le Modal "Ajoute photo" ou retour sur le "Modal DELETE" ************** */
+
 // fonction qui ajoute un gestionnaire d'évenement au bouton "Ajouter une image"
 export function btnAddPhotoListener() {
   // récupérer le bouton "Ajouter une image"
@@ -141,6 +143,7 @@ export function btnAddPhotoListener() {
 
   // ajoute le gestionnaire d'écoute au click sur le bouton
   btnAddPhoto.addEventListener("click", (event) => {
+    event.preventDefault();
     // console.log("j'entend le bouton add photo");
 
     // récupère la div Modal Delete
@@ -149,7 +152,7 @@ export function btnAddPhotoListener() {
     // ont fait disparaitre la div
     modalDelete.style.display = "none";
 
-    // récupère la div Modal qui va ajouter une phot
+    // récupère la div Modal qui va ajouter une photo
     const modalAddPhoto = document.querySelector(".modal_add-photo");
     // console.log("Ont rend visible la div : ", modalAddPhoto);
     // ont fait apparaître le modal Add photo
@@ -163,7 +166,9 @@ export function svgBackListener() {
   const svgBack = document.querySelector(".back-delete");
   // console.log(svgBack);
   svgBack.addEventListener("click", (event) => {
-    console.log("j'écoute le svg Back");
+    event.preventDefault();
+
+    // console.log("j'écoute le svg Back");
     // récupère la div
     // récupère la div Modal Delete
     const modalDelete = document.querySelector(".modal-wrapper");
@@ -171,7 +176,7 @@ export function svgBackListener() {
     // ont fait disparaitre la div
     modalDelete.style.display = "flex";
 
-    // récupère la div Modal qui va ajouter une phot
+    // récupère la div Modal qui va ajouter une photo
     const modalAddPhoto = document.querySelector(".modal_add-photo");
     console.log("Ont rend visible la div : ", modalAddPhoto);
     // ont fait apparaître le modal Add photo
@@ -179,96 +184,151 @@ export function svgBackListener() {
   });
 }
 
+/********* Ajoute photo dans le Modal avec l'input "+ Ajout photo" ************** */
+
 // fontion ajout photo lors du clic sur l'input "+ Ajout Photo"
 export function btnAddPhoto() {
   // récupère le l'input "+ Ajout Photo"
-  const btnAddPhoto = document.getElementById("add-photo_btn");
+  const fileUploadInput = document.getElementById("form_input-file");
+  // console.log(fileUploadInput);
+  fileUploadInput.accept = "image/jpg, image/png";
 
-  btnAddPhoto.addEventListener("click", (event) => {
-    console.log("j'écoute le bouton :", btnAddPhoto);
-
-    // ouvre une boite de dialogue pour selectionner le fichier photo
-    const input = document.createElement("input");
-    input.type = "file";
-    input.classList.add("hidden-input");
-    input.accept = "image/jpeg, image/png";
-    // ajoute une gestionnaire d'écoute au changement pour verifier le format d'image et la taille
-    input.addEventListener("change", handleFileSelect);
-    const imageContentDiv = document.getElementById("image-content");
-    imageContentDiv.appendChild(input);
-    // ouvre la boite de dialogue pour sélectionner le fichier
-    input.click();
-  });
-}
-
-// fonction qui vérifie le format de la photo à charger
-function isPhotoValid(file) {
-  return file.type.match("image/jpeg") || file.type.match("image/png");
-}
-
-// fonction qui vérifiela taille de la photo à charger
-function isPhotoSizeValid(file) {
-  return file.size <= 4 * 1024 * 1024;
-}
-
-// fonction qui créer la photo au format URL pour placer dans la balise "<img>"
-function createPhotoElement(url) {
-  const img = document.createElement("img");
-  img.classList.add("img-onload");
-  img.src = url;
-  return img;
+  fileUploadInput.addEventListener("change", handleFileSelect);
 }
 
 // fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
 export function handleFileSelect(event) {
-  // récupère le fichier à partir de l'évenement
-  const file = event.target.files[0];
+  event.preventDefault();
 
-  if (file) {
-    // vérifie le format et la taille de la photo à charger
-    if (isPhotoValid(file) && isPhotoSizeValid(file)) {
-      // vérifie la taille 4Mo en octets
-      console.log("photo valider pour format et taille");
+  // variable contenant les fichiers accepter
+  const file_extension_regex = /\.(jpg|png)$/i;
+  const max_file_size = 4 * 1024 * 1024;
 
-      // créer un objet URL à partir du fichier saisie
-      const imgUrl = URL.createObjectURL(file);
-      console.log("imageURL charger avec succès");
+  // vérifie l'extension du fichier
+  if (this.files.length === 0 || !file_extension_regex.test(this.files[0].name)) {
+    console.log(`fichier pas accepter en raison de l'extension : "${this.files[0].name}"`);
+    return;
+  }
 
-      // récupère la div qui contient la nouvelle image et l'input "file"
-      const imageContentDiv = document.getElementById("image-content");
+  // vérifier la taille du fichier
+  if (this.files[0].size > max_file_size) {
+    console.log(`fichier pas accepter en raison de la taille : "${this.files[0].size}"`);
+    return;
+  }
 
-      // récupère l'ancienne image si elle existe
-      const oldImage = document.querySelector("#image-content img");
-      // Si c'est l'ancienne image
-      if (oldImage) {
-        // supprime l'image de la div
-        imageContentDiv.removeChild(oldImage);
-        console.log("Supprime l'ancienne image charger");
-      }
+  // test de récupération du nom du fichier image selectionner dans l'input
+  console.log("fichier accepter", this.files);
 
-      // Créer la photo
-      const img = createPhotoElement(imgUrl);
-      imageContentDiv.appendChild(img);
-      console.log("image afficher et positionner dans la Div 'image-content'");
+  // stock le fichier
+  const file = this.files[0];
+  console.log(file);
+  // créer une instance
+  const file_reader = new FileReader();
+  // ajoute à l'instance le fichier convertit en URL
+  file_reader.readAsDataURL(file);
+  // ajout d'un gestionnaire d'évenement au fichier
+  file_reader.addEventListener("load", (event) => {
+    event.preventDefault();
+    // appel la fonction qui ajoute l'image
+    displayImage(event, file);
+  });
+}
 
-      // masque la div "add-photo" et affiche la div "img-content"
-      const addPhotoDiv = document.getElementById("add-photo");
-      addPhotoDiv.style.display = "none";
-      imageContentDiv.style.display = "flex";
-      console.log(
-        " Div 'add-photo' désactiver, Activation de la Div 'image-content'"
-      );
-    } else if (!isPhotoValid(file)) {
-      alert(
-        "Format de fichier non pris en charge. Veuillez sélectionner une photo au format JPEG ou PNG."
-      );
-    } else {
-      alert("Taille maximale accepter 4Mo.");
-    }
+// fonction qui ajoute l'image dans la div "image-content"
+function displayImage(event, file) {
+  event.preventDefault();
+
+  // récupère la div "add-photo"
+  const addPhotoDiv = document.querySelector(".add-photo");
+  // récupère la div qui contient la nouvelle image et l'input "file"
+  const imageContentDiv = document.getElementById("image-content");
+  // désactive la div "add-photo"
+  addPhotoDiv.style.display = "none";
+  // active la div "image-content"
+  imageContentDiv.style.display = "flex";
+  // récupère le label "form_label-file" pour le rendre invisble
+  const labelInputFile = document.getElementById("form_label-file");
+  labelInputFile.classList.add("opacity");
+  labelInputFile.style.opacity = "0";
+  // récupère l'input "form_input-file "pour l'agrandir et permettre de reselectionner une nouvelle photo
+  const inputFile = document.getElementById("form_input-file");
+  inputFile.style.top = "127px";
+  inputFile.style.left = "124px";
+  inputFile.style.width = "60%";
+  inputFile.style.height = "28%";
+
+  // vérifie si la div contient déjà une image
+  const existingImage = imageContentDiv.querySelector("img");
+  if (existingImage) {
+    existingImage.src = event.target.result;
+    existingImage.alt = file.name;
   } else {
-    alert("Pas d'image sélectionnée.");
+    const image = document.createElement("img");
+    image.classList.add("img-onload");
+    image.setAttribute("alt", file.name);
+    image.src = event.target.result;
+    // ajoute au DOM du parent "imageContentDiv" l'image
+    imageContentDiv.appendChild(image);
   }
 }
+
+/********* Envoie Formulaire à l'appuie du bouton "VALIDER" à l'API POST WORK************** */
+
+// ajoute un gestionnaire d'écoute au formulaire qui est valider par l'input "Valider"
+export function addListenerForm() {
+  const form = document.querySelector(".add-photo_form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const form = document.querySelector(".add-photo_form");
+    console.log(form);
+
+    // récupère le token
+    const token = localStorage.getItem("token");
+    // créez une nouvel instance
+    const formData = new FormData(form);
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    };
+    fetch("http://localhost:5678/api/works", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          // si la réponse est ok (statut 200-299), traite la réponse json ici
+          return response.json();
+        } else {
+          // si la réponse est une erreur, lance une nouvelle erreur avec le statut de la réponse
+          throw new Error(response.status);
+        }
+      })
+      .then((data) => {
+        if (data.status === 201) {
+          console.log("création réussie :", data);
+        } else {
+          console.log("réponse inattendue :", data);
+        }
+      })
+      .catch((error) => {
+        if (error.message === 400) {
+          // affiche un message pour l'utilisateur
+          console.error("Erreur : Bad Request");
+        } else if (error.message === 401) {
+          console.error("Erreur : Unauthorised");
+        } else if (error.message === 500) {
+          console.error("Erreur : Unexpected Error");
+        } else {
+          console.error("Erreur inattendue :", error.message);
+        }
+      });
+  });
+}
+
+/********* Fermeture du Modal************** */
 
 // fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
 export function closeModalOnOutsideClik() {
