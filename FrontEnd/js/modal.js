@@ -2,7 +2,7 @@
 import { fetchWorks, categoryFilter } from "./api.js";
 
 // ui.js
-import { createFigure, createWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
+import { createFigure, createWork,create, existingFigureIds, deleteWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
 
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
@@ -37,12 +37,12 @@ export function addEventListenerModalDelete() {
 export function displayImageInModal(worksFetch) {
   // parcourir les données de l'API works
   worksFetch.forEach((work) => {
-    createWorkDelete(work);
+    // createWorkDelete(work);
   });
 }
 
 // Fonction pour créer une figure et ces éléments qui le composera dans le Modal DELETE
-function createWorkDelete(work) {
+export function createWorkDelete(work) {
   // récupère la div figure-modal1
   const imagesModal1Div = document.querySelector(".cta-img-svg");
   // créer un container pour recevoir l'image et le svg
@@ -86,6 +86,7 @@ function createWorkDelete(work) {
 
 /********* Requête pour supprimer une photo du "Modal DELETE" ************** */
 
+
 // fonction supprime l'image du Modal DELETE
 export async function handleDeleteImage(event) {
   event.preventDefault();
@@ -121,18 +122,23 @@ export async function handleDeleteImage(event) {
         });
         // gestion de la réponse provenant de l'API
         if (response.ok) {
-          // récupère les données API works et stock dans la variable
-          const worksFetch = await fetchWorks();
-          // Mets à jour les figures
-          createFigure(worksFetch);
+          console.log("l'id supprimé :", imageId);
+          // updateUi();
+
           // supprime le figure du DOM
           figureElement.remove();
+
+          deleteWork(parseInt(imageId));
+          // // récupère les données API works et stock dans la variable
+          // const worksFetch = await fetchWorks();
+          // // // // Mets à jour les figures
+          // createFigure(worksFetch)
           // controle
           console.log("image supprimée ok !!!");
 
           // supprime le container et le svg
 
-          containerImgSvg.remove();
+          // containerImgSvg.remove();
         } else {
           console.log("la suppression à echouer");
         }
@@ -294,7 +300,7 @@ export async function addListenerForm() {
     event.preventDefault();
 
     try {
-      const form = document.querySelector(".add-photo_form");
+      // const form = document.querySelector(".add-photo_form");
       // console.log(form);
 
       // récupère le token
@@ -318,10 +324,9 @@ export async function addListenerForm() {
         console.log("Réponse de l'API", data.message);
         if (response.status === 201) {
           console.log("Formulaire enregistrer dans la base de données", data.message);
-          // récupère les données API works et stock dans la variable
-          const worksFetch = await fetchWorks();
           // Mets à jour les figures
-          createFigure(worksFetch);
+          updateUi();
+          
 
           console.log("création réussie :", data);
         } else {
@@ -334,6 +339,17 @@ export async function addListenerForm() {
     } catch (error) {
       console.error("Erreur inattendue :", error.message);
     }
+  });
+}
+
+// Fonction qui parcours les figures dans l'ensemble par rapport au données
+async function updateUi() {
+  // Récupère les nouvelles données depuis l'API
+  const newWorks = await fetchWorks();
+  // Ajoutez la nouvelle figures à la home page edit
+  newWorks.forEach((newWork) => {
+    createWork(newWork);
+    create(newWork);
   });
 }
 
