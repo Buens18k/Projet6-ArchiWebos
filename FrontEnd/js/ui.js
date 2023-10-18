@@ -1,5 +1,9 @@
 import { fetchCategory, categoryFilter } from "./api.js";
 
+import {createWorkDelete} from"./modal.js";
+
+export const existingFigureIds = new Set();
+
 // fonction qui créer les éléments HTML pour chaque figure et les affiches dans la gallery
 export function createFigure(works) {
   // parcours la liste des données de l'API works
@@ -10,20 +14,60 @@ export function createFigure(works) {
 }
 
 // function qui crée un élément "figure" dans la Div "gallery"
-function createWork(work) {
-  // Récupère la div gallery
-  const galleryDiv = document.querySelector(".gallery");
-  // création de l'élément figure
-  const workFigure = document.createElement("figure");
-  // remplit l'élément figure avec les propriétés "imageUrl, title" de l'API
-  workFigure.innerHTML = `
+export function createWork(work) {
+  // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
+  if (!existingFigureIds.has(parseInt(work.id))) {
+    console.log("createWork",work.id, existingFigureIds);
+    createWorkDelete(work);
+
+    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
+    existingFigureIds.add(work.id);
+    // console.log("Elément ajouter ",existingFigureIds);
+
+    // Récupère la div gallery
+    const galleryDiv = document.querySelector(".gallery");
+    // création de l'élément figure
+    const workFigure = document.createElement("figure");
+
+    workFigure.setAttribute(`data-id`, work.id);
+    // remplit l'élément figure avec les propriétés "imageUrl, title" de l'API
+    workFigure.innerHTML = `
           <img src ="${work.imageUrl}" alt="${work.title}">
           <figcaption>${work.title}</figcaption>
         `;
-  // ajoute l'élément "figure" à la div "gallery"
-  galleryDiv.appendChild(workFigure);
-  // test de fonctionnement
-  // console.log(work);
+    // ajoute l'élément "figure" à la div "gallery"
+    galleryDiv.appendChild(workFigure);
+    // test de fonctionnement
+    // console.log(work);
+  }
+}
+
+// function qui crée un élément "figure" dans la Div "gallery"
+export function deleteWork(work) {
+  console.log("fonction delete", existingFigureIds, work);
+  // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
+  if (existingFigureIds.has(work)) {
+    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
+    existingFigureIds.delete(work);
+    console.log("Elément supprimer ", existingFigureIds);
+    // delete le data-id
+    document.querySelector(`[data-id="${work}"]`).remove();
+  }
+}
+
+// function qui crée un élément "figure" dans la Div "gallery"
+export function create(work) {
+  console.log("condition");
+
+  // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
+  if (!existingFigureIds.has(work.id)) {
+    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
+    existingFigureIds.add(work.id);
+    // console.log("Elément ajouter ",existingFigureIds);
+
+    // const imagesModal1Div = document.querySelector(".cta-img-svg");
+    // createWorkDelete(work);
+  }
 }
 
 // function qui crée les boutons filtre par catégories
