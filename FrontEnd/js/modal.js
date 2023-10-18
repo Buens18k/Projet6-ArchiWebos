@@ -2,7 +2,7 @@
 import { fetchWorks, categoryFilter } from "./api.js";
 
 // ui.js
-import { createFigure, createWork,createAddNewFigure, existingFigureIds, deleteWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
+import { createFigure, createWork, createAddNewFigure, existingFigureIds, deleteWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
 
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
@@ -13,7 +13,6 @@ let modal;
 export function addEventListenerModalDelete() {
   // récupère le boutton "modifier"
   const btnModify = document.querySelector(".link-modifier");
-  // console.log(btnModify);
 
   if (btnModify) {
     // ajout un gestionnaire d'écoute à l'évenement au "click"
@@ -27,19 +26,17 @@ export function addEventListenerModalDelete() {
       asideModalDelete.style.display = "flex";
       // sauvegarde la boite modal
       modal = asideModalDelete;
-      // controle
-      // console.log("aside modal Delete est activé et enregistrer", modal);
     });
   }
 }
 
-// fonction pour afficher les images et le svg dans le modal DELETE
-export function displayImageInModal(worksFetch) {
-  // parcourir les données de l'API works
-  worksFetch.forEach((work) => {
-    // createWorkDelete(work);
-  });
-}
+// // fonction pour afficher les images et le svg dans le modal DELETE
+// export function displayImageInModal(worksFetch) {
+//   // parcourir les données de l'API works
+//   worksFetch.forEach((work) => {
+//     // createWorkDelete(work);
+//   });
+// }
 
 // Fonction pour créer une figure et ces éléments qui le composera dans le Modal DELETE
 export function createWorkDelete(work) {
@@ -86,7 +83,6 @@ export function createWorkDelete(work) {
 
 /********* Requête pour supprimer une photo du "Modal DELETE" ************** */
 
-
 // fonction supprime l'image du Modal DELETE
 export async function handleDeleteImage(event) {
   event.preventDefault();
@@ -123,22 +119,13 @@ export async function handleDeleteImage(event) {
         // gestion de la réponse provenant de l'API
         if (response.ok) {
           console.log("l'id supprimé :", imageId);
-          // updateUi();
-
           // supprime le figure du DOM
           figureElement.remove();
-
+          //
           deleteWork(parseInt(imageId));
-          // // récupère les données API works et stock dans la variable
-          // const worksFetch = await fetchWorks();
-          // // // // Mets à jour les figures
-          // createFigure(worksFetch)
+
           // controle
           console.log("image supprimée ok !!!");
-
-          // supprime le container et le svg
-
-          // containerImgSvg.remove();
         } else {
           console.log("la suppression à echouer");
         }
@@ -296,13 +283,13 @@ function displayImage(event, file) {
 // ajoute un gestionnaire d'écoute au formulaire qui est valider par l'input "Valider"
 export async function addListenerForm() {
   const form = document.querySelector(".add-photo_form");
+  // Ajout d'un gestionnaire d'écoute de type "change" au formulaire, si tous les champ sont remplis, l'input "Valider" change de couleur
+  form.addEventListener("change", updateInputForm);
+  // Ajout d'un gestionnaire d'ecoute de type "submit" pour soummettre le formulaire
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     try {
-      // const form = document.querySelector(".add-photo_form");
-      // console.log(form);
-
       // récupère le token
       const token = localStorage.getItem("token");
       // créez une nouvel instance
@@ -326,7 +313,6 @@ export async function addListenerForm() {
           console.log("Formulaire enregistrer dans la base de données", data.message);
           // Mets à jour les figures
           updateUi();
-          
 
           console.log("création réussie :", data);
         } else {
@@ -353,6 +339,25 @@ async function updateUi() {
     // Mets à jour les figures pour le Modal DELETE
     createAddNewFigure(newWork);
   });
+}
+
+// fonction qui change la couleur de l'input "VALIDER"
+function updateInputForm() {
+  // Récupération des valeurs du forulaire
+  const imageInput = document.getElementById("form_input-file");
+  const titleInput = document.getElementById("title");
+  const categoryInput = document.getElementById("category");
+
+  // récupère l'input "Valider"
+  const inputFormValider = document.getElementById("valide");
+
+  // Vérifie si tous les champs sont remplis
+  if (imageInput.value && titleInput.value && categoryInput.selectedIndex !== 0) {
+    // Si tous les champs sont remplis, change la couelur de l'input
+    inputFormValider.style.backgroundColor = "#1D6154";
+  } else {
+    inputFormValider.style.backgroundColor = "#a7a7a7";
+  }
 }
 
 /********* Fermeture du Modal************** */

@@ -1,7 +1,8 @@
+// api.js
 import { fetchCategory, categoryFilter } from "./api.js";
-
+// modal.js
 import { createWorkDelete } from "./modal.js";
-
+// Crée une nouvelle instance d'ensemble
 export const existingFigureIds = new Set();
 
 // fonction qui créer les éléments HTML pour chaque figure et les affiches dans la gallery
@@ -15,14 +16,10 @@ export function createFigure(works) {
 
 // function qui crée un élément "figure" dans la Div "gallery"
 export function createWork(work) {
-  // console.log("rentre dans la fonction createWork",existingFigureIds)
 
   // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
   if (!existingFigureIds.has(parseInt(work.id))) {
-    // console.log("rentre dans la fonction createWork",existingFigureIds)
-    // console.log("rentre de la fonction par les boutons filtres");
-    // console.log("createWork",work.category);
-    // console.log(existingFigureIds)
+
     // Appel de la fonction qui supprime l'ID qui n'existe plus
     createWorkDelete(work);
 
@@ -43,8 +40,6 @@ export function createWork(work) {
         `;
     // ajoute l'élément "figure" à la div "gallery"
     galleryDiv.appendChild(workFigure);
-    // test de fonctionnement
-    // console.log(work);
   }
 }
 
@@ -108,30 +103,17 @@ export function addEventListenerButtonFilter(worksFetch, category, element) {
     addStyleBtnSelectedFilter(element);
     // Récupère la DIV gallery
     const galleryDiv = document.querySelector(".gallery");
-    const filterdWorks = filterWorksByCategory(worksFetch, category.id);
-    // console.log(category.id);
-    // initialise un tableau vide pour les données filtrée par catégories
-    // let filterWorks = [];
-    // Structure de controle pour savoir quelle index à été selectionner
-    // Si le bouton "Tous" est cliqué
-    // if (category.id === 0) {
-    //   // affiche toutes les données
-    //   filterWorks = worksFetch;
-    //   console.log(filterWorks);
-    // } else {
-    //   // sinon filtre les données en fonction de l'ID de la catégories selectionner
-    //   filterWorks = categoryFilter(worksFetch, category.id);
-    //   // controle
-    //   // console.log(filterWorks);
-    // }
     // effacement de la page html
     galleryDiv.innerHTML = "";
-    // console.log(filterdWorks);
+
+    // Filtre les catégories 
+    const filterdWorks = filterWorksByCategory(worksFetch, category.id);
+
+    // clean le 
     existingFigureIds.clear();
     console.log("combien il reste d'id dans existing ", existingFigureIds);
 
     // affiche les données filtrer pour la catégorie selectionner
-    // createFigure(filterWorks);
     filterdWorks.forEach((work) => {
       // existingFigureIds.add(work.id);
       console.log("nombre works après être filtrer dans existing ", existingFigureIds);

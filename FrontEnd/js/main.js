@@ -10,7 +10,7 @@ import { checkAuthentification, barModeEdition, addSvgAncre, logoutUser } from "
 // modal.js
 import {
   addEventListenerModalDelete,
-  displayImageInModal,
+  // displayImageInModal,
   handleDeleteImage,
   btnAddPhotoListener,
   svgBackListener,
@@ -21,8 +21,6 @@ import {
   closeModalOnClickSvgCross,
 } from "./modal.js";
 
-// Variable globale récupérant les travaux de l'API works
-// let worksFetch;
 
 // fonction pour gérer la deconnexion de l'utilisateur lorsque la page ce ferme
 function disconnectClosingWindow() {
@@ -60,7 +58,7 @@ async function init() {
   checkAuthentification();
 
   // ajouter les images dans la div figure-modal1 du modal1
-  displayImageInModal(worksFetch);
+  // displayImageInModal(worksFetch);
 
   // écoute le bouton "Ajouter une photo"
   btnAddPhotoListener();
