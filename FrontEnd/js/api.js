@@ -54,12 +54,3 @@ async function getErrorMessage(response) {
   return errorData.message;
 }
 
-// Fonction pour filtrer les données de l'API works par catégories
-export function categoryFilter(works, categoryId) {
-  // Retourne les éléments ayant le même ID de catégorie que celui spécifié
-  if (categoryId === 0) {
-    return works;
-  } else {
-    return works.filter((work) => work.categoryId === categoryId);
-  }
-}
