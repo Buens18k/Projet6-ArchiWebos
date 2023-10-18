@@ -2,7 +2,7 @@
 import { fetchWorks, categoryFilter } from "./api.js";
 
 // ui.js
-import { createFigure, createWork,create, existingFigureIds, deleteWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
+import { createFigure, createWork,createAddNewFigure, existingFigureIds, deleteWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
 
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
@@ -348,8 +348,10 @@ async function updateUi() {
   const newWorks = await fetchWorks();
   // Ajoutez la nouvelle figures à la home page edit
   newWorks.forEach((newWork) => {
+    // Mets à jour les figures dans la home page
     createWork(newWork);
-    create(newWork);
+    // Mets à jour les figures pour le Modal DELETE
+    createAddNewFigure(newWork);
   });
 }
 

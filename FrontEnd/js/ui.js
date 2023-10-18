@@ -1,6 +1,6 @@
 import { fetchCategory, categoryFilter } from "./api.js";
 
-import {createWorkDelete} from"./modal.js";
+import { createWorkDelete } from "./modal.js";
 
 export const existingFigureIds = new Set();
 
@@ -15,9 +15,15 @@ export function createFigure(works) {
 
 // function qui crée un élément "figure" dans la Div "gallery"
 export function createWork(work) {
+  // console.log("rentre dans la fonction createWork",existingFigureIds)
+
   // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
   if (!existingFigureIds.has(parseInt(work.id))) {
-    console.log("createWork",work.id, existingFigureIds);
+    // console.log("rentre dans la fonction createWork",existingFigureIds)
+    // console.log("rentre de la fonction par les boutons filtres");
+    // console.log("createWork",work.category);
+    // console.log(existingFigureIds)
+    // Appel de la fonction qui supprime l'ID qui n'existe plus
     createWorkDelete(work);
 
     // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
@@ -42,7 +48,7 @@ export function createWork(work) {
   }
 }
 
-// function qui crée un élément "figure" dans la Div "gallery"
+// function qui efface un élément "figure" dans la Div "gallery"
 export function deleteWork(work) {
   console.log("fonction delete", existingFigureIds, work);
   // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
@@ -55,18 +61,15 @@ export function deleteWork(work) {
   }
 }
 
-// function qui crée un élément "figure" dans la Div "gallery"
-export function create(work) {
+// function qui ajoute un élément "figure" dans la Div "gallery"
+export function createAddNewFigure(work) {
   console.log("condition");
 
-  // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
+  // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble "existingFigureIds"
   if (!existingFigureIds.has(work.id)) {
-    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
+    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble "existingFigureIds"
     existingFigureIds.add(work.id);
     // console.log("Elément ajouter ",existingFigureIds);
-
-    // const imagesModal1Div = document.querySelector(".cta-img-svg");
-    // createWorkDelete(work);
   }
 }
 
@@ -105,29 +108,58 @@ export function addEventListenerButtonFilter(worksFetch, category, element) {
     addStyleBtnSelectedFilter(element);
     // Récupère la DIV gallery
     const galleryDiv = document.querySelector(".gallery");
+    const filterdWorks = filterWorksByCategory(worksFetch, category.id);
+    // console.log(category.id);
     // initialise un tableau vide pour les données filtrée par catégories
-    let filterWorks = [];
+    // let filterWorks = [];
     // Structure de controle pour savoir quelle index à été selectionner
     // Si le bouton "Tous" est cliqué
-    if (category.id === 0) {
-      // affiche toutes les données
-      filterWorks = worksFetch;
-      // console.log(filterWorks);
-    } else {
-      // sinon filtre les données en fonction de l'ID de la catégories selectionner
-      filterWorks = categoryFilter(worksFetch, category.id);
-      // controle
-      // console.log(filterWorks);
-    }
+    // if (category.id === 0) {
+    //   // affiche toutes les données
+    //   filterWorks = worksFetch;
+    //   console.log(filterWorks);
+    // } else {
+    //   // sinon filtre les données en fonction de l'ID de la catégories selectionner
+    //   filterWorks = categoryFilter(worksFetch, category.id);
+    //   // controle
+    //   // console.log(filterWorks);
+    // }
     // effacement de la page html
     galleryDiv.innerHTML = "";
+    // console.log(filterdWorks);
+    existingFigureIds.clear();
+    console.log("combien il reste d'id dans existing ", existingFigureIds);
 
     // affiche les données filtrer pour la catégorie selectionner
-    createFigure(filterWorks);
+    // createFigure(filterWorks);
+    filterdWorks.forEach((work) => {
+      // existingFigureIds.add(work.id);
+      console.log("nombre works après être filtrer dans existing ", existingFigureIds);
+      // console.log("combien délément qui existe", existingFigureIds);
+      createWork(work);
+      console.log("combien de work vont être créer ", work);
+    });
+
+    // console.log(category.id);
 
     // test de position
     console.log(`j'écoute le bouton : "${category.name}"`);
   });
+}
+
+function filterWorksByCategory(works, selectedCategory) {
+  // console.log("rentre dans le filtre")
+  if (selectedCategory === 0) {
+    console.log(selectedCategory);
+    // Si la catégorie sélectionnée est "Tous", retourne tous les éléments
+    return works;
+  } else {
+    // console.log("rentre dans le filtre");
+    console.log(selectedCategory);
+
+    // Sinon, filtre les éléments par la catégorie sélectionnée
+    return works.filter((work) => work.categoryId === selectedCategory);
+  }
 }
 
 // function qui assigne le style au bouton selectionner

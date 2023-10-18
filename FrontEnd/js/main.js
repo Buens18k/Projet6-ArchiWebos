@@ -2,7 +2,7 @@
 import { fetchWorks, fetchCategory, categoryFilter } from "./api.js";
 
 // ui.js
-import { createFigure, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
+import { createFigure, createButtonFilter, existingFigureIds, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
 
 // auth.js
 import { checkAuthentification, barModeEdition, addSvgAncre, logoutUser } from "./auth.js";
