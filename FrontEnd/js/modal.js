@@ -1,8 +1,8 @@
 // import { error } from "console";
-import { fetchWorks, categoryFilter } from "./api.js";
+import { fetchWorks} from "./api.js";
 
 // ui.js
-import { createFigure, createWork, createAddNewFigure, existingFigureIds, deleteWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
+import { createWork, createAddNewFigure, deleteWork } from "./ui.js";
 
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
