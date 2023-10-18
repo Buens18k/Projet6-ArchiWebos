@@ -1,3 +1,4 @@
+// import fonction depuis le module "modal.js"
 import { addEventListenerModalDelete } from "./modal.js";
 
 // function check l'authentification si true(grâce au token récupérer dans le localStorage)
@@ -5,10 +6,8 @@ import { addEventListenerModalDelete } from "./modal.js";
 export function checkAuthentification() {
   // récupère le token dans le localStorage
   const token = localStorage.getItem(`token`);
-  // test
-  // console.log("j'ai récupérer le token :", token);
 
-  // Si user authentifier authentifieé
+  // Si user authentifier
   if (token) {
     // appel de la fonction qui ajoute la barre Mode Edition
     barModeEdition();
@@ -66,7 +65,6 @@ export function addSvgAncre() {
   editLinkModify.setAttribute("href", "#modal1");
   editLinkModify.innerText = "modifier";
   editLinkModify.classList.add("link-modifier");
-  // ajout d'un gestionnaire d'écoute évenement lors du click sur l'élément
   // récupère le titre H2 de lasection portfolio
   const h2Title = document.querySelector("#portfolio h2");
   h2Title.classList.add("modify-h2");
@@ -90,9 +88,5 @@ export function logoutUser() {
   linkLogin.addEventListener("click", (event) => {
     // suprime le token
     localStorage.removeItem("token");
-    // controle
-    console.log("Supprime le token");
   });
-  // controle du lien logout
-  // console.log(linkLogin);
 }

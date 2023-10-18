@@ -2,9 +2,8 @@
 function createHeader() {
   // récupère le header
   const headerLogin = document.querySelector("header");
-  // console.log(headerLogin);
 
-  // ajooute les élément au header
+  // ajoute les élément au header
   headerLogin.innerHTML = `
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
       <nav>
@@ -21,7 +20,6 @@ function createHeader() {
 function addFormEventListener() {
   // récupère l'élément formulaire
   const form = document.querySelector("form");
-  console.log(form);
 
   // ajout un écouteur d'évènement au formulaire
   // et fait appel à la fonction qui va gérer la soumission du formulaire
@@ -35,8 +33,6 @@ function manageSubmissionForm(event) {
   // récupère les valeurs saisie par le user pour l'email et le mot de passe
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  // test
-  // console.log(email, password)
 
   // effectue une requête POST vers l'API POST users/login
   fetch("http://localhost:5678/api/users/login", {
@@ -70,19 +66,12 @@ async function manageResponseAPI(response) {
     const data = await response.json();
     // enregistre le token dans le localStorage
     localStorage.setItem(`token`, data.token);
-    /************
-     * controle du token enregistrer voir directement dans la console du navigateur
-     * Appli/ Stockage local
-     * Clé token
-     * Valeur porvenant de l'API: ey .......
-     * **********/
-
-    // redirige vers la page index.html Mode Edition
+    // redirige vers la page index.html "Mode Edition"
     window.location.href = "../index.html";
   } else {
     // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
     const errorData = await response.json();
-    // controle
+    // Message d'erreur
     console.error(errorData);
     // lance une erreur avec le message d'erreur de l'API
     throw new Error(errorData.message);
@@ -138,7 +127,9 @@ function createFooter() {
   loginBody.appendChild(footerLogin);
 }
 
+// fonction d'initialisation
 function init() {
+
   createHeader();
 
   addFormEventListener();

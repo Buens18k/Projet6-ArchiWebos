@@ -10,7 +10,7 @@ export function createFigure(works) {
 }
 
 // function qui crée un élément "figure" dans la Div "gallery"
-function createWork(work) {
+export function createWork(work) {
   // Récupère la div gallery
   const galleryDiv = document.querySelector(".gallery");
   // création de l'élément figure

@@ -2,20 +2,10 @@
 import { fetchWorks, fetchCategory, categoryFilter } from "./api.js";
 
 // ui.js
-import {
-  createFigure,
-  createButtonFilter,
-  addEventListenerButtonFilter,
-  populateCategoriesDropDown,
-} from "./ui.js";
+import { createFigure, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
 
 // auth.js
-import {
-  checkAuthentification,
-  barModeEdition,
-  addSvgAncre,
-  logoutUser,
-} from "./auth.js";
+import { checkAuthentification, barModeEdition, addSvgAncre, logoutUser } from "./auth.js";
 
 // modal.js
 import {
@@ -32,7 +22,7 @@ import {
 } from "./modal.js";
 
 // Variable globale récupérant les travaux de l'API works
-let worksFetch;
+// let worksFetch;
 
 // fonction pour gérer la deconnexion de l'utilisateur lorsque la page ce ferme
 function disconnectClosingWindow() {
@@ -50,9 +40,8 @@ function disconnectClosingWindow() {
 
 // fonction d'initialisation
 async function init() {
-  
   // récupère les données API works et stock dans la variable
-  worksFetch = await fetchWorks();
+  const worksFetch = await fetchWorks();
   // récupère les données API categories
   const categoryFetch = await fetchCategory();
   // Test de fonctionnement
@@ -83,7 +72,7 @@ async function init() {
 
   //  écoute le bouton "+ Ajout photo"
   btnAddPhoto();
-  // valide le 
+  // valide le
   addListenerForm();
 
   // ferme le modal lors du clik sur la partie grisé
@@ -91,31 +80,9 @@ async function init() {
   // ferme le modal lors du clik sur le SVG cross
   closeModalOnClickSvgCross();
 
-  // envoie les données du formulaire
-  sendWorks();
-
   // déconnecte lors de la fermeture de la page du navigateur
   // disconnectClosingWindow();
 }
 
 // appel de la fonction d'initialisation au chargement de la page
 init();
-
-function sendWorks() {
-  const form = document.querySelector(".form");
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: formData,
-    };
-    fetch("http://localhost:5678/api/works", requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  });
-}

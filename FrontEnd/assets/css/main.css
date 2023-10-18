@@ -269,7 +269,6 @@ li:hover {
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  /* padding: 9px; */
   align-items: center;
   justify-content: center;
   border: 1px solid #1d6154;
@@ -343,7 +342,6 @@ footer {
 footer nav ul {
   display: flex;
   justify-content: flex-end;
-  /* margin: 2em; */
   background: #fff;
   height: 3.75rem;
 }

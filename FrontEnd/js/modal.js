@@ -1,5 +1,8 @@
 // import { error } from "console";
-import { categoryFilter } from "./api.js";
+import { fetchWorks, categoryFilter } from "./api.js";
+
+// ui.js
+import { createFigure, createWork, createButtonFilter, addEventListenerButtonFilter, populateCategoriesDropDown } from "./ui.js";
 
 // // variable qui permet de savoir quel modal est ouvert
 let modal;
@@ -32,49 +35,53 @@ export function addEventListenerModalDelete() {
 
 // fonction pour afficher les images et le svg dans le modal DELETE
 export function displayImageInModal(worksFetch) {
+  // parcourir les données de l'API works
+  worksFetch.forEach((work) => {
+    createWorkDelete(work);
+  });
+}
+
+// Fonction pour créer une figure et ces éléments qui le composera dans le Modal DELETE
+function createWorkDelete(work) {
   // récupère la div figure-modal1
   const imagesModal1Div = document.querySelector(".cta-img-svg");
+  // créer un container pour recevoir l'image et le svg
+  const container = document.createElement("figure");
+  container.classList.add("cta-img-svg_content");
+  // Ajout d'un ID unique à chaque containeur
+  container.dataset.id = work.id;
+  // console.log("ajout id sur container",container.dataset.id);
+  // créer un élément img
+  const imgModal1 = document.createElement("img");
+  // ajoute une class pour le style
+  imgModal1.classList.add("image-modal1");
+  // définie la source de l'image en récupèrant l'URL de l'image dans l'API works
+  imgModal1.src = work.imageUrl;
 
-  // console.log(imagesModal1Div);
-  // parcourir les données de l'API works
-  // pour chaque élément de l'API
-  worksFetch.forEach((work) => {
-    // créer un container pour recevoir l'image et le svg
-    const container = document.createElement("div");
-    container.classList.add("cta-img-svg_content");
-    // Ajout d'un ID unique à chaque containeur
-    container.dataset.id = work.id;
-    // console.log("ajout id sur container",container.dataset.id);
-    // créer un élément img
-    const imgModal1 = document.createElement("img");
-    // ajoute une class pour le style
-    imgModal1.classList.add("image-modal1");
-    // définie la source de l'image en récupèrant l'URL de l'image dans l'API works
-    imgModal1.src = work.imageUrl;
+  // créer l'élément SVG
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", "9");
+  svg.setAttribute("height", "11");
+  svg.setAttribute("viewBox", "0 0 9 11");
+  svg.setAttribute("fill", "none");
+  svg.innerHTML = `
+      <path d="M2.71607 0.35558C2.82455 0.136607 3.04754 0 3.29063 0H5.70938C5.95246 0 6.17545 0.136607 6.28393 0.35558L6.42857 0.642857H8.35714C8.71272 0.642857 9 0.930134 9 1.28571C9 1.64129 8.71272 1.92857 8.35714 1.92857H0.642857C0.287277 1.92857 0 1.64129 0 1.28571C0 0.930134 0.287277 0.642857 0.642857 0.642857H2.57143L2.71607 0.35558ZM0.642857 2.57143H8.35714V9C8.35714 9.70915 7.78058 10.2857 7.07143 10.2857H1.92857C1.21942 10.2857 0.642857 9.70915 0.642857 9V2.57143ZM2.57143 3.85714C2.39464 3.85714 2.25 4.00179 2.25 4.17857V8.67857C2.25 8.85536 2.39464 9 2.57143 9C2.74821 9 2.89286 8.85536 2.89286 8.67857V4.17857C2.89286 4.00179 2.74821 3.85714 2.57143 3.85714ZM4.5 3.85714C4.32321 3.85714 4.17857 4.00179 4.17857 4.17857V8.67857C4.17857 8.85536 4.32321 9 4.5 9C4.67679 9 4.82143 8.85536 4.82143 8.67857V4.17857C4.82143 4.00179 4.67679 3.85714 4.5 3.85714ZM6.42857 3.85714C6.25179 3.85714 6.10714 4.00179 6.10714 4.17857V8.67857C6.10714 8.85536 6.25179 9 6.42857 9C6.60536 9 6.75 8.85536 6.75 8.67857V4.17857C6.75 4.00179 6.60536 3.85714 6.42857 3.85714Z" fill="white"/>
+    `;
+  svg.classList.add("svg-modal1");
+  // ajout d'un id a chaque svg
+  svg.dataset.id = work.id;
+  // console.log("ajout id du svg",svg.dataset.id);
 
-    // créer l'élément SVG
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("width", "9");
-    svg.setAttribute("height", "11");
-    svg.setAttribute("viewBox", "0 0 9 11");
-    svg.setAttribute("fill", "none");
-    svg.innerHTML = `
-        <path d="M2.71607 0.35558C2.82455 0.136607 3.04754 0 3.29063 0H5.70938C5.95246 0 6.17545 0.136607 6.28393 0.35558L6.42857 0.642857H8.35714C8.71272 0.642857 9 0.930134 9 1.28571C9 1.64129 8.71272 1.92857 8.35714 1.92857H0.642857C0.287277 1.92857 0 1.64129 0 1.28571C0 0.930134 0.287277 0.642857 0.642857 0.642857H2.57143L2.71607 0.35558ZM0.642857 2.57143H8.35714V9C8.35714 9.70915 7.78058 10.2857 7.07143 10.2857H1.92857C1.21942 10.2857 0.642857 9.70915 0.642857 9V2.57143ZM2.57143 3.85714C2.39464 3.85714 2.25 4.00179 2.25 4.17857V8.67857C2.25 8.85536 2.39464 9 2.57143 9C2.74821 9 2.89286 8.85536 2.89286 8.67857V4.17857C2.89286 4.00179 2.74821 3.85714 2.57143 3.85714ZM4.5 3.85714C4.32321 3.85714 4.17857 4.00179 4.17857 4.17857V8.67857C4.17857 8.85536 4.32321 9 4.5 9C4.67679 9 4.82143 8.85536 4.82143 8.67857V4.17857C4.82143 4.00179 4.67679 3.85714 4.5 3.85714ZM6.42857 3.85714C6.25179 3.85714 6.10714 4.00179 6.10714 4.17857V8.67857C6.10714 8.85536 6.25179 9 6.42857 9C6.60536 9 6.75 8.85536 6.75 8.67857V4.17857C6.75 4.00179 6.60536 3.85714 6.42857 3.85714Z" fill="white"/>
-      `;
-    svg.classList.add("svg-modal1");
-    // ajout d'un id a chaque svg
-    svg.dataset.id = work.id;
-    // console.log("ajout id du svg",svg.dataset.id);
+  // ajout d'un gestionnaire d'évenement au click sur le svg (corbeille)
+  // et appel la fonction qui exécuteras la suppression au click
+  svg.addEventListener("click", handleDeleteImage);
 
-    // ajout d'un gestionnaire d'évenement au click sur le svg (corbeille)
-    // et appel la fonction qui exécuteras la suppression au click
-    svg.addEventListener("click", handleDeleteImage);
+  // image et le svg enfant du container et le container enfant de la div "imagesModal1Div"
+  container.appendChild(imgModal1);
+  container.appendChild(svg);
+  imagesModal1Div.appendChild(container);
 
-    // image et le svg enfant du container et le container enfant de la div "imagesModal1Div"
-    container.appendChild(imgModal1);
-    container.appendChild(svg);
-    imagesModal1Div.appendChild(container);
-  });
+  return container;
 }
 
 /********* Requête pour supprimer une photo du "Modal DELETE" ************** */
@@ -82,12 +89,12 @@ export function displayImageInModal(worksFetch) {
 // fonction supprime l'image du Modal DELETE
 export async function handleDeleteImage(event) {
   event.preventDefault();
+  // rechercher le parent "figure" de l'élément svg cliqué
+  const figureElement = event.currentTarget.closest("figure");
+
   // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
   const imageId = event.currentTarget.dataset.id;
   console.log("je supprime le svg", imageId);
-
-  // simulation de suppression
-  const response = { status: 200, message: "Image supprimer" };
 
   // Verifie si l'ID de l'image existe bien dans la base de donnée
   if (imageId !== undefined && Number.isInteger(parseInt(imageId)) && parseInt(imageId) > 0) {
@@ -114,11 +121,17 @@ export async function handleDeleteImage(event) {
         });
         // gestion de la réponse provenant de l'API
         if (response.ok) {
+          // récupère les données API works et stock dans la variable
+          const worksFetch = await fetchWorks();
+          // Mets à jour les figures
+          createFigure(worksFetch);
+          // supprime le figure du DOM
+          figureElement.remove();
           // controle
           console.log("image supprimée ok !!!");
 
           // supprime le container et le svg
-          const containerImgSvg = event.currentTarget.parentNode;
+
           containerImgSvg.remove();
         } else {
           console.log("la suppression à echouer");
@@ -221,7 +234,7 @@ export function handleFileSelect(event) {
 
   // stock le fichier
   const file = this.files[0];
-  console.log(file);
+  // console.log(file);
   // créer une instance
   const file_reader = new FileReader();
   // ajoute à l'instance le fichier convertit en URL
@@ -275,56 +288,52 @@ function displayImage(event, file) {
 /********* Envoie Formulaire à l'appuie du bouton "VALIDER" à l'API POST WORK************** */
 
 // ajoute un gestionnaire d'écoute au formulaire qui est valider par l'input "Valider"
-export function addListenerForm() {
+export async function addListenerForm() {
   const form = document.querySelector(".add-photo_form");
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const form = document.querySelector(".add-photo_form");
-    console.log(form);
+    try {
+      const form = document.querySelector(".add-photo_form");
+      // console.log(form);
 
-    // récupère le token
-    const token = localStorage.getItem("token");
-    // créez une nouvel instance
-    const formData = new FormData(form);
+      // récupère le token
+      const token = localStorage.getItem("token");
+      // créez une nouvel instance
+      const formData = new FormData(form);
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    };
-    fetch("http://localhost:5678/api/works", requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          // si la réponse est ok (statut 200-299), traite la réponse json ici
-          return response.json();
-        } else {
-          // si la réponse est une erreur, lance une nouvelle erreur avec le statut de la réponse
-          throw new Error(response.status);
-        }
-      })
-      .then((data) => {
-        if (data.status === 201) {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      };
+
+      const response = await fetch("http://localhost:5678/api/works", requestOptions);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Réponse de l'API", data.message);
+        if (response.status === 201) {
+          console.log("Formulaire enregistrer dans la base de données", data.message);
+          // récupère les données API works et stock dans la variable
+          const worksFetch = await fetchWorks();
+          // Mets à jour les figures
+          createFigure(worksFetch);
+
           console.log("création réussie :", data);
         } else {
-          console.log("réponse inattendue :", data);
+          console.error("Erreur API :", data.message);
         }
-      })
-      .catch((error) => {
-        if (error.message === 400) {
-          // affiche un message pour l'utilisateur
-          console.error("Erreur : Bad Request");
-        } else if (error.message === 401) {
-          console.error("Erreur : Unauthorised");
-        } else if (error.message === 500) {
-          console.error("Erreur : Unexpected Error");
-        } else {
-          console.error("Erreur inattendue :", error.message);
-        }
-      });
+      } else {
+        const errorData = await response.json();
+        console.error("Erreur API :", errorData.message);
+      }
+    } catch (error) {
+      console.error("Erreur inattendue :", error.message);
+    }
   });
 }
 

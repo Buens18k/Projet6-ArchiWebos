@@ -137,7 +137,6 @@
   align-items: center;
   flex-direction: column;
   margin-bottom: 1.87rem;
-  /* justify-content: space-around; */
   position: relative;
 }
 .add-photo .add-photo_svg {
@@ -207,10 +206,6 @@
   height: 100%;
 }
 
-/* #add-photo_content #form_input-add {
-  position: absolute;
-} */
-
 #add-photo_content form label {
   margin-bottom: 0.63rem;
 }
@@ -240,8 +235,6 @@
   bottom: 70px;
   width: 100%;
   border-top: 2px solid #b3b3b3;
-  /* margin-top: 1rem;
-  margin-bottom: 1rem; */
 }
 
 #add-photo_content form #valide {
