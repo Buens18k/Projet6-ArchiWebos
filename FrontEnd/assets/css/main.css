@@ -294,6 +294,7 @@ li:hover {
 .gallery img {
   width: 100%;
 }
+
 #contact {
   width: 50%;
   margin: auto;
@@ -335,6 +336,7 @@ input[type="submit"] {
   text-align: center;
   border-radius: 60px;
 }
+
 footer {
   align-self: flex-end;
 }

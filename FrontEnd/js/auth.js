@@ -1,29 +1,28 @@
-// import fonction depuis le module "modal.js"
+// Import fonction depuis le module "modal.js"
 import { addEventListenerModalDelete } from "./modal.js";
 
-// function check l'authentification si true(grâce au token récupérer dans le localStorage)
-// alors actualise la page Mode Edition
+// Function check l'authentification si true(grâce au token récupérer dans le localStorage)
+// Alors affiche la page Mode Edition
 export function checkAuthentification() {
   // récupère le token dans le localStorage
   const token = localStorage.getItem(`token`);
 
   // Si user authentifier
   if (token) {
-    // appel de la fonction qui ajoute la barre Mode Edition
+    // Appel de la fonction qui ajoute la barre Mode Edition
     barModeEdition();
-    // appel de la fonction qui fait disparaitre les boutons
+    // Appel de la fonction qui fait disparaitre les boutons
     disappearBntFilterDisplay();
-    // appel de la fonction qui ajoute une ancre et le bouton modifier
+    // Appel de la fonction qui ajoute une ancre et le bouton modifier
     addSvgAncre();
-    // appel de la fonction qui redirige vers la home page non modifier "home-page"
-    // et qui supprime le token du LocalStorage pour déconnecter
+    // Appel de la fonction qui supprime le token du LocalStorage pour déconnecter et redirige vers la "home-page"
     logoutUser();
   }
 }
 
-// function qui créer la barre Mode Edition
+// Function qui créer la barre Mode Edition
 export function barModeEdition() {
-  // créer la barre Mode édition
+  // Créer la barre Mode édition
   const barModeEdition = document.createElement("div");
   barModeEdition.classList.add("bar-mode-edition");
   barModeEdition.innerHTML = `
@@ -33,21 +32,21 @@ export function barModeEdition() {
         <p class="mode-edition">Mode édition</p>
       `;
 
-  // récupère le header
+  // Récupère le header
   const header = document.querySelector("header");
-  // insert la barModeEdition avant le header
+  // Insert la barModeEdition avant le header dans le HTML
   document.body.insertBefore(barModeEdition, header);
 }
 
-// function check l'autification si oui ont fait disparaitre les btnFilters
+// Function check l'autification si oui ont fait disparaitre les btnFilters
 function disappearBntFilterDisplay() {
-  // récupère la div filter
+  // Récupère la div filter
   const filterDiv = document.querySelector(".filter");
-  // désactive les boutons
+  // Désactive le style des boutons (disparait)
   filterDiv.style.display = "none";
 }
 
-// function ajoute le svg + le boutton modifier si login
+// Function ajoute le svg + le boutton modifier si login
 export function addSvgAncre() {
   // Créer le SVG
   const editSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -65,28 +64,28 @@ export function addSvgAncre() {
   editLinkModify.setAttribute("href", "#modal1");
   editLinkModify.innerText = "modifier";
   editLinkModify.classList.add("link-modifier");
-  // récupère le titre H2 de lasection portfolio
+  // Récupère le titre H2 de la section portfolio
   const h2Title = document.querySelector("#portfolio h2");
   h2Title.classList.add("modify-h2");
-  // ajoute a côté du h2
+  // Ajoute dans le DOM du h2 le SVG et le bouton
   h2Title.appendChild(editSvg);
   h2Title.appendChild(editLinkModify);
 
-  // appel de la fonction qui ajoute un gestionnaire d'évènement au click sur le boutton pour ouvrir le modal1
+  // Appel de la fonction qui ajoute un gestionnaire d'évènement au click sur le boutton pour ouvrir le modal1
   addEventListenerModalDelete();
 }
 
-// function qui déconnecte en cliquant sur logout
+// Function qui déconnecte en cliquant sur logout
 export function logoutUser() {
-  // récupère l'ancre login
-  const linkLogin = document.querySelector(".login-link");
-  // change le texte
-  linkLogin.textContent = "logout";
-  // modifie le href de l'ancre pour
-  linkLogin.href = "./index.html";
-  // ajoute un gestionnaire d'évenement
-  linkLogin.addEventListener("click", (event) => {
-    // suprime le token
+  // Récupère l'ancre login
+  const linkLogOut = document.querySelector(".login-link");
+  // Change le texte "login" en "logout"
+  linkLogOut.textContent = "logout";
+  // Modifie le href de l'ancre pour rediriger vers la home-page
+  linkLogOut.href = "./index.html";
+  // Ajoute un gestionnaire d'évenement à l'ancre "logout"
+  linkLogOut.addEventListener("click", (event) => {
+    // Supprime le token du localStorage
     localStorage.removeItem("token");
   });
 }

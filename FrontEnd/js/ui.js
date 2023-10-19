@@ -19,12 +19,12 @@ export function createFigure(works) {
 export function createWork(work) {
   // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
   if (!existingFigureIds.has(parseInt(work.id))) {
-    // Appel de la fonction qui supprime l'ID qui n'existe plus
+    // Met à jour le Modal Delete en créant la nouvelle figure ajouter à l'API
     createWorkDelete(work);
-
-    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
+    // Met à jour l'objet "existingFigureIds" en ajoutant l'ID à l'ensemble
     existingFigureIds.add(work.id);
-
+    
+    /*Mets à jour la page */
     // Récupère la div gallery
     const galleryDiv = document.querySelector(".gallery");
     // Crée un élément figure
@@ -41,15 +41,14 @@ export function createWork(work) {
   }
 }
 
-// Function qui efface un élément "figure" dans la Div "gallery"
+// Function qui efface le travaux et à l'ensemble 
 export function deleteWork(work) {
   console.log("fonction delete", existingFigureIds, work);
   // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
   if (existingFigureIds.has(work)) {
     // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
     existingFigureIds.delete(work);
-    console.log("Elément supprimer ", existingFigureIds);
-    // delete le data-id
+    // Retire le travaux ayant ce data-id
     document.querySelector(`[data-id="${work}"]`).remove();
   }
 }

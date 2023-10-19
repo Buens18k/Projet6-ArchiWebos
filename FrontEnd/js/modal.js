@@ -1,61 +1,51 @@
-// import { error } from "console";
-import { fetchWorks} from "./api.js";
+// api.js
+import { fetchWorks } from "./api.js";
 
 // ui.js
 import { createWork, createAddNewFigure, deleteWork } from "./ui.js";
 
-// // variable qui permet de savoir quel modal est ouvert
+// Variable global qui permet de savoir quel modal est ouvert
 let modal;
 
 /********* Affiche le "Modal DELETE" ************** */
 
-// fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
+// Fonction ajoute un gestionnaire d'écoute évenement au boutton "Modifier" pour ouvrir le modale1
 export function addEventListenerModalDelete() {
-  // récupère le boutton "modifier"
+  // Récupère le bouton "modifier"
   const btnModify = document.querySelector(".link-modifier");
 
-  if (btnModify) {
-    // ajout un gestionnaire d'écoute à l'évenement au "click"
-    btnModify.addEventListener("click", (event) => {
-      event.preventDefault();
-      // récupérer le modal
-      const asideModalDelete = document.getElementById("modal1");
-      asideModalDelete.setAttribute("aria-modal", "true");
-
-      // ajoute le style pour rendre visible le modal DELETE
-      asideModalDelete.style.display = "flex";
-      // sauvegarde la boite modal
-      modal = asideModalDelete;
-    });
-  }
+  // Ajout d'un gestionnaire d'écoute à l'évenement au "clic" sur le bouton "modifier"
+  btnModify.addEventListener("click", (event) => {
+    event.preventDefault();
+    // Récupérer le modal
+    const asideModalDelete = document.getElementById("modal1");
+    // Ajoute un attribut
+    asideModalDelete.setAttribute("aria-modal", "true");
+    // Ajoute le style pour rendre visible le modal DELETE
+    asideModalDelete.style.display = "flex";
+    // Sauvegarde la boite modal
+    modal = asideModalDelete;
+  });
 }
 
-// // fonction pour afficher les images et le svg dans le modal DELETE
-// export function displayImageInModal(worksFetch) {
-//   // parcourir les données de l'API works
-//   worksFetch.forEach((work) => {
-//     // createWorkDelete(work);
-//   });
-// }
-
-// Fonction pour créer une figure et ces éléments qui le composera dans le Modal DELETE
+// Fonction pour créer une figure et ces éléments dans le Modal DELETE
 export function createWorkDelete(work) {
-  // récupère la div figure-modal1
-  const imagesModal1Div = document.querySelector(".cta-img-svg");
-  // créer un container pour recevoir l'image et le svg
-  const container = document.createElement("figure");
-  container.classList.add("cta-img-svg_content");
+  // Récupère le selecteur "cta-img-svg"
+  const ctaImgSvg = document.querySelector(".cta-img-svg");
+  // Crée l'élément "figure" qui contiendra des éléments
+  const figureCta = document.createElement("figure");
+  // Ajoute un style
+  figureCta.classList.add("cta-img-svg_content");
   // Ajout d'un ID unique à chaque containeur
-  container.dataset.id = work.id;
-  // console.log("ajout id sur container",container.dataset.id);
-  // créer un élément img
+  figureCta.dataset.id = work.id;
+  // Créer un élément img
   const imgModal1 = document.createElement("img");
-  // ajoute une class pour le style
+  // Ajoute une class pour le style
   imgModal1.classList.add("image-modal1");
-  // définie la source de l'image en récupèrant l'URL de l'image dans l'API works
+  // Définie la source de l'image en récupèrant l'URL de l'image dans l'API works
   imgModal1.src = work.imageUrl;
 
-  // créer l'élément SVG
+  // Crée l'élément SVG
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", "9");
   svg.setAttribute("height", "11");
@@ -65,66 +55,64 @@ export function createWorkDelete(work) {
       <path d="M2.71607 0.35558C2.82455 0.136607 3.04754 0 3.29063 0H5.70938C5.95246 0 6.17545 0.136607 6.28393 0.35558L6.42857 0.642857H8.35714C8.71272 0.642857 9 0.930134 9 1.28571C9 1.64129 8.71272 1.92857 8.35714 1.92857H0.642857C0.287277 1.92857 0 1.64129 0 1.28571C0 0.930134 0.287277 0.642857 0.642857 0.642857H2.57143L2.71607 0.35558ZM0.642857 2.57143H8.35714V9C8.35714 9.70915 7.78058 10.2857 7.07143 10.2857H1.92857C1.21942 10.2857 0.642857 9.70915 0.642857 9V2.57143ZM2.57143 3.85714C2.39464 3.85714 2.25 4.00179 2.25 4.17857V8.67857C2.25 8.85536 2.39464 9 2.57143 9C2.74821 9 2.89286 8.85536 2.89286 8.67857V4.17857C2.89286 4.00179 2.74821 3.85714 2.57143 3.85714ZM4.5 3.85714C4.32321 3.85714 4.17857 4.00179 4.17857 4.17857V8.67857C4.17857 8.85536 4.32321 9 4.5 9C4.67679 9 4.82143 8.85536 4.82143 8.67857V4.17857C4.82143 4.00179 4.67679 3.85714 4.5 3.85714ZM6.42857 3.85714C6.25179 3.85714 6.10714 4.00179 6.10714 4.17857V8.67857C6.10714 8.85536 6.25179 9 6.42857 9C6.60536 9 6.75 8.85536 6.75 8.67857V4.17857C6.75 4.00179 6.60536 3.85714 6.42857 3.85714Z" fill="white"/>
     `;
   svg.classList.add("svg-modal1");
-  // ajout d'un id a chaque svg
+  // Ajout d'un id a chaque svg
   svg.dataset.id = work.id;
-  // console.log("ajout id du svg",svg.dataset.id);
 
-  // ajout d'un gestionnaire d'évenement au click sur le svg (corbeille)
-  // et appel la fonction qui exécuteras la suppression au click
+  // Ajout d'un gestionnaire d'évenement au click sur le svg (corbeille)
+  // Et appel la fonction qui exécuteras la suppression au click
   svg.addEventListener("click", handleDeleteImage);
 
-  // image et le svg enfant du container et le container enfant de la div "imagesModal1Div"
-  container.appendChild(imgModal1);
-  container.appendChild(svg);
-  imagesModal1Div.appendChild(container);
-
-  return container;
+  // L'image et le svg enfant du figureCta et figureCta enfant de la div "ctaImgSvg"
+  figureCta.appendChild(imgModal1);
+  figureCta.appendChild(svg);
+  ctaImgSvg.appendChild(figureCta);
+  // Retourne la figure
+  return figureCta;
 }
 
 /********* Requête pour supprimer une photo du "Modal DELETE" ************** */
 
-// fonction supprime l'image du Modal DELETE
+// Fonction qui supprime l'image du Modal DELETE
 export async function handleDeleteImage(event) {
   event.preventDefault();
-  // rechercher le parent "figure" de l'élément svg cliqué
+  // Rechercher le parent "figure" de l'élément svg cliqué
   const figureElement = event.currentTarget.closest("figure");
 
-  // rècupère l'ID de l'image à supprimer à partir du dataset du SVG cliké
+  // Rècupère dans les données l'ID cliqué
   const imageId = event.currentTarget.dataset.id;
-  console.log("je supprime le svg", imageId);
 
-  // Verifie si l'ID de l'image existe bien dans la base de donnée
+  // Verifie si l'ID (undefined, nombre entier, supèrieur à 0)
   if (imageId !== undefined && Number.isInteger(parseInt(imageId)) && parseInt(imageId) > 0) {
-    // récupère le token dans le Local Storage
+    // Récupère le token dans le Local Storage
     const token = localStorage.getItem("token");
 
-    // si le token est dans le local storage
+    // Si le token est dans le localStorage ou avec du texte
     if (token && token.trim() !== "") {
-      // tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
+      // Tente d'envoyez une requête DELETE auprès de l'API pour supprimer l'image
       try {
-        // envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
+        // Envoie la requête DELETE vers l'API pour supprimer l'image avec l'ID spécifié
         const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
-          // utilise la méthode DELETE pour la suppression
+          // Utilise la méthode DELETE pour la suppression
           method: "DELETE",
-          // ajoute les en-têtes, y compris le type de contenu et le token d'authentification
+          // Ajoute les en-têtes, y compris le type de contenu et le token d'authentification
           headers: {
             "Content-Type": `application/json`, //type de contenu en JSON
             /***********
-             * - ajoute le token au header
+             * - Ajoute le token au header
              * - Authorization pour inclure le jeton("Bearer") et le token (authentifier)
              ***********  */
             Authorization: `Bearer ${token}`,
           },
         });
-        // gestion de la réponse provenant de l'API
+        // Gestion de la réponse provenant de l'API
         if (response.ok) {
           console.log("l'id supprimé :", imageId);
-          // supprime le figure du DOM
+          // Supprime le figure du DOM
           figureElement.remove();
-          //
+          // Mise à jour de la gallery en convertissant la valeur de "imageId"
           deleteWork(parseInt(imageId));
 
-          // controle
+          // Message
           console.log("image supprimée ok !!!");
         } else {
           console.log("la suppression à echouer");
@@ -142,181 +130,173 @@ export async function handleDeleteImage(event) {
 
 /********* Affiche le Modal "Ajoute photo" ou retour sur le "Modal DELETE" ************** */
 
-// fonction qui ajoute un gestionnaire d'évenement au bouton "Ajouter une image"
+// Fonction qui ajoute un gestionnaire d'évenement au bouton "Ajouter une image"
 export function btnAddPhotoListener() {
-  // récupérer le bouton "Ajouter une image"
+  // Récupère le bouton "Ajouter une image"
   const btnAddPhoto = document.querySelector(".add-photo-modal1");
 
-  // ajoute le gestionnaire d'écoute au click sur le bouton
+  // Ajoute le gestionnaire d'écoute au click sur le bouton
   btnAddPhoto.addEventListener("click", (event) => {
     event.preventDefault();
-    // console.log("j'entend le bouton add photo");
 
-    // récupère la div Modal Delete
+    // Récupère la div Modal Delete
     const modalDelete = document.querySelector(".modal-wrapper");
-    // console.log("ont rend invisible la div : ", modalDelete);
-    // ont fait disparaitre la div
+    // Fait disparaitre le Modal Delete
     modalDelete.style.display = "none";
 
     // récupère la div Modal qui va ajouter une photo
     const modalAddPhoto = document.querySelector(".modal_add-photo");
-    // console.log("Ont rend visible la div : ", modalAddPhoto);
-    // ont fait apparaître le modal Add photo
+    // Fait apparaître le modal Add photo
     modalAddPhoto.style.display = "flex";
   });
 }
 
-// fonction qui ajoute un gestionnaire d'évenement au SVG back
+// Fonction qui ajoute un gestionnaire d'évenement au SVG back
 export function svgBackListener() {
-  // récupère le svg back
+  // Récupère le svg back
   const svgBack = document.querySelector(".back-delete");
-  // console.log(svgBack);
+  // Ajout d'un gestionnaire d'écoute au clic sur le SVG (flèche)
   svgBack.addEventListener("click", (event) => {
     event.preventDefault();
 
-    // console.log("j'écoute le svg Back");
-    // récupère la div
-    // récupère la div Modal Delete
+    // Récupère la div Modal Delete
     const modalDelete = document.querySelector(".modal-wrapper");
-    console.log("ont rend invisible la div : ", modalDelete);
-    // ont fait disparaitre la div
+    // Fait aparaitre le Modal Delete
     modalDelete.style.display = "flex";
 
-    // récupère la div Modal qui va ajouter une photo
+    // Récupère la div Modal qui va ajouter une photo
     const modalAddPhoto = document.querySelector(".modal_add-photo");
     console.log("Ont rend visible la div : ", modalAddPhoto);
-    // ont fait apparaître le modal Add photo
+    // Fait disparaître le modal Add photo
     modalAddPhoto.style.display = "none";
   });
 }
 
 /********* Ajoute photo dans le Modal avec l'input "+ Ajout photo" ************** */
 
-// fontion ajout photo lors du clic sur l'input "+ Ajout Photo"
+// Fontion qui ajoute une photo lors du clic sur l'input "+ Ajout Photo"
 export function btnAddPhoto() {
-  // récupère le l'input "+ Ajout Photo"
-  const fileUploadInput = document.getElementById("form_input-file");
-  // console.log(fileUploadInput);
-  fileUploadInput.accept = "image/jpg, image/png";
-
+  // Récupère l'input "+ Ajout Photo"
+  const fileUploadInput = document.getElementById("input-file");
+  // Ajout d'un gestionnaire d'évènement pour l'événement "change" de l'élément input de fichier
   fileUploadInput.addEventListener("change", handleFileSelect);
 }
 
-// fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
+// Fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
 export function handleFileSelect(event) {
   event.preventDefault();
 
-  // variable contenant les fichiers accepter
+  // Variable contenant les fichiers accepter
   const file_extension_regex = /\.(jpg|png)$/i;
   const max_file_size = 4 * 1024 * 1024;
 
-  // vérifie l'extension du fichier
+  // Vérifie si un fichier existe et vérifie le format et l'extension
   if (this.files.length === 0 || !file_extension_regex.test(this.files[0].name)) {
     console.log(`fichier pas accepter en raison de l'extension : "${this.files[0].name}"`);
     return;
   }
 
-  // vérifier la taille du fichier
+  // Vérifier la taille du fichier
   if (this.files[0].size > max_file_size) {
     console.log(`fichier pas accepter en raison de la taille : "${this.files[0].size}"`);
     return;
   }
 
-  // test de récupération du nom du fichier image selectionner dans l'input
-  console.log("fichier accepter", this.files);
-
-  // stock le fichier
+  // Stock le fichier dans une variable
   const file = this.files[0];
-  // console.log(file);
-  // créer une instance
+  // Créer une instance
   const file_reader = new FileReader();
-  // ajoute à l'instance le fichier convertit en URL
+  //  Convertit le fichier en URL
   file_reader.readAsDataURL(file);
-  // ajout d'un gestionnaire d'évenement au fichier
+  // Ajout d'un gestionnaire d'évenement au fichier
   file_reader.addEventListener("load", (event) => {
     event.preventDefault();
-    // appel la fonction qui ajoute l'image
+    // Appel la fonction qui ajoute l'image
     displayImage(event, file);
   });
 }
 
-// fonction qui ajoute l'image dans la div "image-content"
+// Fonction qui ajoute l'image dans la div "image-content"
 function displayImage(event, file) {
   event.preventDefault();
 
-  // récupère la div "add-photo"
+  // Récupère la div "add-photo"
   const addPhotoDiv = document.querySelector(".add-photo");
-  // récupère la div qui contient la nouvelle image et l'input "file"
+  // Récupère la div qui contient la nouvelle image et l'input "file"
   const imageContentDiv = document.getElementById("image-content");
-  // désactive la div "add-photo"
+  // Désactive la div "add-photo"
   addPhotoDiv.style.display = "none";
-  // active la div "image-content"
+  // Active la div "image-content"
   imageContentDiv.style.display = "flex";
-  // récupère le label "form_label-file" pour le rendre invisble
-  const labelInputFile = document.getElementById("form_label-file");
+  // Récupère le label "label-file" pour le rendre invisble
+  const labelInputFile = document.getElementById("label-file");
   labelInputFile.classList.add("opacity");
   labelInputFile.style.opacity = "0";
-  // récupère l'input "form_input-file "pour l'agrandir et permettre de reselectionner une nouvelle photo
-  const inputFile = document.getElementById("form_input-file");
+  // Récupère l'input "input-file "pour l'agrandir et permettre de reselectionner une nouvelle photo
+  const inputFile = document.getElementById("input-file");
   inputFile.style.top = "127px";
   inputFile.style.left = "124px";
   inputFile.style.width = "60%";
   inputFile.style.height = "28%";
-
-  // vérifie si la div contient déjà une image
+  // Récupère l'image existante
   const existingImage = imageContentDiv.querySelector("img");
   if (existingImage) {
+    // Si une image existe met à jour la source et l'attribut "alt"
     existingImage.src = event.target.result;
     existingImage.alt = file.name;
   } else {
+    // Sinon crée l'élément <img>
     const image = document.createElement("img");
     image.classList.add("img-onload");
     image.setAttribute("alt", file.name);
     image.src = event.target.result;
-    // ajoute au DOM du parent "imageContentDiv" l'image
+    // Ajoute au DOM du parent "imageContentDiv" l'image
     imageContentDiv.appendChild(image);
   }
 }
 
 /********* Envoie Formulaire à l'appuie du bouton "VALIDER" à l'API POST WORK************** */
 
-// ajoute un gestionnaire d'écoute au formulaire qui est valider par l'input "Valider"
+// Ajoute un gestionnaire d'écoute au formulaire qui est valider par l'input "Valider"
 export async function addListenerForm() {
+  // Récupère le formulaire
   const form = document.querySelector(".add-photo_form");
-  // Ajout d'un gestionnaire d'écoute de type "change" au formulaire, si tous les champ sont remplis, l'input "Valider" change de couleur
+  // Ajout d'un gestionnaire d'écoute de type "change" au formulaire, si tous les champs sont remplis, l'input "Valider" change de couleur
   form.addEventListener("change", updateInputForm);
   // Ajout d'un gestionnaire d'ecoute de type "submit" pour soummettre le formulaire
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-
+    // Effectue ce bloc
     try {
-      // récupère le token
+      // Récupère le token
       const token = localStorage.getItem("token");
-      // créez une nouvel instance
+      // Crée une nouvel instance pour rassembler toutes les valeurs des champs du formulaire passer en paramètre
       const formData = new FormData(form);
-
+      // Variable qui contient les options de  configuration pour la requête HTTP
       const requestOptions = {
+        // Méthode
         method: "POST",
+        // En-tête
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
+        // Corps de la requête
         body: formData,
       };
-
+      // Effectue une requête HTTP vers l'URL et en récupérant les options de configuration
       const response = await fetch("http://localhost:5678/api/works", requestOptions);
 
+      // Gestion de la réponse en fonction du status
       if (response.ok) {
         const data = await response.json();
-        console.log("Réponse de l'API", data.message);
         if (response.status === 201) {
-          console.log("Formulaire enregistrer dans la base de données", data.message);
           // Mets à jour les figures
           updateUi();
-
-          console.log("création réussie :", data);
+          // Message de confirmation de création, avec l'intitulé de ce qui à été ajouter à l'API
+          console.log("Formulaire enregistrer dans la base de données :", data);
         } else {
-          console.error("Erreur API :", data.message);
+          console.error("Erreur API");
         }
       } else {
         const errorData = await response.json();
@@ -341,14 +321,14 @@ async function updateUi() {
   });
 }
 
-// fonction qui change la couleur de l'input "VALIDER"
+// Fonction qui change la couleur de l'input "VALIDER"
 function updateInputForm() {
   // Récupération des valeurs du forulaire
-  const imageInput = document.getElementById("form_input-file");
+  const imageInput = document.getElementById("input-file");
   const titleInput = document.getElementById("title");
   const categoryInput = document.getElementById("category");
 
-  // récupère l'input "Valider"
+  // Récupère l'input "Valider"
   const inputFormValider = document.getElementById("valide");
 
   // Vérifie si tous les champs sont remplis
@@ -356,43 +336,44 @@ function updateInputForm() {
     // Si tous les champs sont remplis, change la couelur de l'input
     inputFormValider.style.backgroundColor = "#1D6154";
   } else {
+    // Sinon garde la couleur initiale
     inputFormValider.style.backgroundColor = "#a7a7a7";
   }
 }
 
 /********* Fermeture du Modal************** */
 
-// fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
+// Fonction pour fermer le modal au click sur l'extèrieur du modal (partie grisé)
 export function closeModalOnOutsideClik() {
-  // ferme le modal lorsque l'utilisateur click à l'extèrieur du contenu du modal
+  // Récupère le modal "aside"
   const aside = document.querySelector(".modal");
+  // Ajoute un gestionnaire d'évenement au clic
   aside.addEventListener("click", (event) => {
     // Si le click de la souris est entendu sur le parent (et non les enfants) donc la partie grisé alors
     if (event.target === aside) {
-      // masque le modal en changeant le style de display à "none"
+      // Masque le modal en changeant le style de display à "none"
       aside.style.display = "none";
+      // Mets à jour le modal selectionner
       modal = "null";
-      console.log("entendu clic sur la partie grisé fermeture du modal");
     }
   });
 }
 
-// fonction qui ferme le modal en cliquant sur le svg croix
+// Fonction qui ferme le modal en cliquant sur le svg croix
 export function closeModalOnClickSvgCross() {
-  // récupère le svg en question
+  // Récupère le svg en question
   const aside = document.querySelector(".modal");
 
-  // récupère le svg en question
+  // Récupère le svg en question
   const closeBtns = document.querySelectorAll(".close-modal");
-  // console.log(closeBtns);
-
+  // Parcours les éléments ayant le selecteur "close-modal"
   closeBtns.forEach((closeBtn) => {
-    // ajoute un gestionnaire d'évenement au svg
+    // Ajoute un gestionnaire d'évenement au svg
     closeBtn.addEventListener("click", () => {
-      // puis ont ferme le modale
+      // Modifie le style du Modal afin de le désactiver
       aside.style.display = "none";
+      // Mets à jour le modal selectionner
       modal = "null";
-      console.log("écoute clik sur le SVG cross fermeture du modal");
     });
   });
 }

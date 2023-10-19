@@ -21,13 +21,13 @@ async function init() {
 
 /******************* Appel la fonction qui  ***************************** */
 
-  // créer l'élément figure
+  // Crée l'élément figure
   createFigure(worksFetch);
 
-  // crée les boutons filtre
+  // Crée les boutons filtre
   createButtonFilter(categoryFetch, worksFetch, addEventListenerButtonFilter);
 
-  // test après être authentifier
+  // Check si authentifier si oui affiche le Mode Edition
   checkAuthentification();
 
   // écoute le bouton "Ajouter une photo"
