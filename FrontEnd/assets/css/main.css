@@ -140,6 +140,7 @@ body {
   background: #fffef8;
   align-items: flex-start;
 }
+
 /* Code ajouter pour la barre Mode Edition */
 .bar-mode-edition {
   display: flex;
@@ -164,6 +165,16 @@ header {
   display: flex;
   justify-content: space-between;
   margin: 50px 0;
+}
+.header_mode-edition{
+  display: flex;
+  justify-content: space-between;
+  margin: 50px auto;
+  min-width: 1140px;
+}
+.main_mode-edition{
+  max-width: 1140px;
+  margin: auto;
 }
 section {
   margin: 50px 0;

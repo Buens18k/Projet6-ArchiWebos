@@ -9,6 +9,8 @@ export function checkAuthentification() {
 
   // Si user authentifier
   if (token) {
+    // Appel de la fonction qui ajoute des styles au body, header et main
+    bodyHeaderMainClass();
     // Appel de la fonction qui ajoute la barre Mode Edition
     barModeEdition();
     // Appel de la fonction qui fait disparaitre les boutons
@@ -18,6 +20,19 @@ export function checkAuthentification() {
     // Appel de la fonction qui supprime le token du LocalStorage pour déconnecter et redirige vers la "home-page"
     logoutUser();
   }
+}
+
+// Fonction qui ajoute des class
+function bodyHeaderMainClass() {
+  // Récupère le body et ont ajoute un style
+  const body = document.body;
+  body.style.maxWidth = "1440px";
+  // Récupère le header et ajoute une class
+  const header = document.querySelector("header");
+  header.classList.add("header_mode-edition");
+  // Récupère le main et ajoute une class
+  const main = document.querySelector("main");
+  main.classList.add("main_mode-edition");
 }
 
 // Function qui créer la barre Mode Edition
