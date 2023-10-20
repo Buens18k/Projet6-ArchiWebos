@@ -254,6 +254,7 @@ li:hover {
   margin-left: 1.94rem;
 }
 .link-modifier {
+  cursor: pointer;
   color: #000;
   text-align: center;
   font-family: Work Sans;
