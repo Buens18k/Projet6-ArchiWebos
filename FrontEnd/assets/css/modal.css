@@ -1,0 +1,244 @@
+.modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Modale Delete */
+.modal-wrapper {
+  display: flex;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  width: 39.375rem;
+  height: auto;
+  border-radius: 0.625rem;
+  background: #fff;
+
+  padding: 2rem 2rem 1.81rem 2rem;
+  overflow: auto;
+}
+.modal h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.875rem;
+  color: #000;
+  text-align: center;
+  font-family: Work Sans;
+  font-size: 1.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 1.75rem;
+}
+
+.close-modal {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+}
+
+.cta-img-svg {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(5, 18.5%);
+  grid-column-gap: 0.5rem;
+  grid-row-gap: 2rem;
+  padding: 46px 0px 67.3px 0px;
+  border-bottom: 1px solid;
+  width: 75%;
+}
+.cta-img-svg_content {
+  position: relative;
+}
+
+.image-modal1 {
+  min-width: 4.91419rem;
+  max-height: 8.74156rem;
+  width: 100%;
+}
+.modal-wrapper .svg-modal1 {
+  position: absolute;
+  background: #000;
+  top: 7px;
+  right: 7px;
+  box-sizing: content-box;
+  padding: 3px 4px;
+  border-radius: 1px;
+}
+.modal-wrapper .add-photo-modal1 {
+  width: 14.8125rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  background: #1d6154;
+  color: #fff;
+  margin-top: 40px;
+}
+.modal-wrapper .btn-gray {
+  background: #a7a7a7;
+}
+
+/* *****************Modal Add photo********** */
+
+.modal_add-photo {
+  display: none;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  width: 39.375rem;
+  height: auto;
+  border-radius: 0.625rem;
+  background: #fff;
+
+  padding: 2rem 2rem 0rem 2rem;
+  overflow: auto;
+}
+
+.back-delete {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+}
+
+#add-photo_content {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  padding: 2.25rem 0rem 3rem 0rem;
+}
+
+.add-photo {
+  display: flex;
+  width: 26.25rem;
+  min-height: 10.5625rem;
+  flex-shrink: 0;
+  border-radius: 0.1875rem;
+  background: #e8f1f6;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1.87rem;
+  position: relative;
+}
+
+.add-photo .add-photo_svg {
+  margin-top: 13px;
+}
+
+.add-photo p {
+  position: absolute;
+  bottom: 22px;
+  color: #444;
+  text-align: center;
+  font-family: Work Sans;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+#image-content {
+  display: none;
+  min-width: 26.25rem;
+  width: 100%;
+  min-height: 10.5625rem;
+  height: 100%;
+  flex-shrink: 0;
+  border-radius: 0.1875rem;
+  background: #e8f1f6;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1.87rem;
+}
+
+#image-content .img-onload {
+  width: 8.0625rem;
+  height: 12.0625rem;
+  object-fit: cover;
+  object-position: center;
+}
+
+/*  Formulaire  */
+#add-photo_content form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+#add-photo_content #label-file {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3.125rem;
+  background: #cbd6dc;
+  width: 10.8125rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border: none;
+  position: absolute;
+  top: 220px;
+  left: 255px;
+  color: #306685;
+  text-align: center;
+  font-family: Work Sans;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+#add-photo_content #input-file {
+  opacity: 0;
+  position: absolute;
+  top: 210px;
+  left: 205px;
+  cursor: pointer;
+}
+
+#add-photo_content form label {
+  margin-bottom: 0.63rem;
+}
+
+#add-photo_content form input {
+  padding: 0px 15px;
+  height: 3.1875rem;
+  flex-shrink: 0;
+  background: #fff;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+  border: none;
+  margin-bottom: 1.31rem;
+}
+
+#add-photo_content form select {
+  padding: 0px 15px;
+  height: 3.1875rem;
+  flex-shrink: 0;
+  background: #fff;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+  border: none;
+  margin-bottom: 1.31rem;
+}
+
+#add-photo_content form #valide {
+  width: 14.8125rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 3.75rem;
+  background: #a7a7a7;
+  border: none;
+  margin: 3rem 5.8rem 0rem;
+}
+
+.separator {
+  position: relative;
+  bottom: 70px;
+  width: 100%;
+  border-top: 2px solid #b3b3b3;
+}
