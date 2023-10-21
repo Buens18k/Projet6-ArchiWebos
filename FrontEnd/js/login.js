@@ -92,7 +92,7 @@ function handleError(error) {
     errorMessage.textContent = error.message;
   } else {
     // Sinon affiche ce message
-    errorMessage.textContent = "Invalid password. Please try again";
+    errorMessage.textContent = "Invalid Email or Password. Please try again";
   }
 
   // Récupère l'élément "form"
