@@ -5,13 +5,16 @@ function createHeader() {
 
   // Ajoute les élément au header
   headerLogin.innerHTML = `
-      <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+      <a href="../index.html">
+        <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+      </a>
       <nav>
           <ul>
            <li><a href="../index.html">projets</a></li>
            <li><a href="../index.html">contact</a></li>
            <li><a href="login.html">login</a></li>
-           <li><img src="../assets/icons/instagram.png" alt="Instagram" /></li>          </ul>
+           <li><img src="../assets/icons/instagram.png" alt="Instagram" /></li>          
+          </ul>
       </nav>
   `;
 }
@@ -72,7 +75,7 @@ async function manageResponseAPI(response) {
   }
 }
 
-// Fonction pour traiter les messages erreurs de l'API 
+// Fonction pour traiter les messages erreurs de l'API
 function handleError(error) {
   // Récupère le message d'erreur si il existe
   const existingErrorMessage = document.querySelector("p");
