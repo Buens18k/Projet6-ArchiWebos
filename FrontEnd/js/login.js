@@ -22,13 +22,13 @@ function addFormEventListener() {
   const form = document.querySelector("form");
 
   // Ajout un écouteur d'évènement au formulaire
-  // Et fait appel à la fonction qui va gérer la soumission du formulaire
+  // Et fait appel à la fonction "manageSubmissionForm" qui va gérer la soumission du formulaire
   form.addEventListener("submit", manageSubmissionForm);
 }
 
 // Fonction qui va gérer la soumission du formulaire en lui passant en paramètre l'évènement
 function manageSubmissionForm(event) {
-  // Désactivation du comportement par défaut du navigateur
+  // Empêche le comportement par défaut du navigateur
   event.preventDefault();
   // Récupère les valeurs saisie par le user pour l'email et le mot de passe
   const email = document.getElementById("email").value;
@@ -55,10 +55,10 @@ function manageSubmissionForm(event) {
     .catch(handleError);
 }
 
-// Fonction asynchrone qui traite la réponse de l'API avec en parametre la réponse qui doit être traiter
+// Fonction asynchrone qui traite la réponse de l'API
 async function manageResponseAPI(response) {
   if (response.ok) {
-    // Si la réponse est ok crée une variable pour stoker les données convertit en JSON
+    // Si la réponse est ok, les données convertit en JSON seront stocké dans une variable "data"
     const data = await response.json();
     // Enregistre le token dans le localStorage
     localStorage.setItem(`token`, data.token);
@@ -74,7 +74,7 @@ async function manageResponseAPI(response) {
   }
 }
 
-// Fonction pour traiter les erreurs de l'API et prend en paramètre l'erreur qui sera traiter et afficher
+// Fonction pour traiter les messages erreurs de l'API 
 function handleError(error) {
   // Récupère le message d'erreur si il existe
   const existingErrorMessage = document.querySelector("p");
@@ -92,19 +92,19 @@ function handleError(error) {
     errorMessage.textContent = error.message;
   } else {
     // Sinon affiche ce message
-    errorMessage.textContent = "Email ou Mot de passe Incorrect. Veuillez réessayez";
+    errorMessage.textContent = "Invalid password. Please try again";
   }
 
   // Récupère l'élément "form"
   const loginSection = document.getElementById("login");
-  // Rattache le message au DOM du formulaire
+  // Insert le message d'erreur avant l'élément "formulaire"
   loginSection.insertBefore(errorMessage, loginSection.querySelector("form"));
   // Affiche le message d'erreur rencontrer
   console.log("Erreur message API", errorMessage);
 
   // Si il y a un message d'erreur
   if (errorMessage) {
-    // Affiche le au dessus du formulaire
+    // Modifie la marge "Top" du formulaire
     const form = document.querySelector("form");
     form.style.marginTop = "0";
   }
