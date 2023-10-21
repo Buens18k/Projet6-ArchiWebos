@@ -67,8 +67,6 @@ async function manageResponseAPI(response) {
   } else {
     // Sinon si c'est pas ok, récupération du message d'erreur de l'API au format JSON
     const errorData = await response.json();
-    // Message d'erreur
-    console.error(errorData);
     // Lance une erreur avec le message d'erreur de l'API
     throw new Error(errorData.message);
   }
@@ -99,8 +97,6 @@ function handleError(error) {
   const loginSection = document.getElementById("login");
   // Insert le message d'erreur avant l'élément "formulaire"
   loginSection.insertBefore(errorMessage, loginSection.querySelector("form"));
-  // Affiche le message d'erreur rencontrer
-  console.log("Erreur message API", errorMessage);
 
   // Si il y a un message d'erreur
   if (errorMessage) {
