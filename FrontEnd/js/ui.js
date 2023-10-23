@@ -91,7 +91,7 @@ export function createButtonFilter(categoryFetch, worksFetch, addEventListenerBu
 // Function qui ajoute un gestionnaire d'écoute au clic sur les btnFilter
 export function addEventListenerButtonFilter(worksFetch, category, element) {
   element.addEventListener("click", (event) => {
-    // Empêche le comportement par défaut du clic
+    // Empêche le comportement par défaut du navigateur
     event.preventDefault();
     // Efface le style à tous les boutons
     removeStyleBtnSelectedFilter();
