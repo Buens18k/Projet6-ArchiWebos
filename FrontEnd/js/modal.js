@@ -182,7 +182,7 @@ export function btnAddPhoto() {
   fileUploadInput.addEventListener("change", handleFileSelect);
 }
 
-// Fonction qui charge la photo et vérifie le format et la taille puis l'affiche dans le modal
+// Fonction qui vérifie le format et la taille de la photo charger puis l'affiche dans le modal ou non 
 export function handleFileSelect(event) {
   event.preventDefault();
 

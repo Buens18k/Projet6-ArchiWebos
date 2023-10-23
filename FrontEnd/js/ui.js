@@ -46,9 +46,9 @@ export function deleteWork(work) {
   console.log("fonction delete", existingFigureIds, work);
   // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble
   if (existingFigureIds.has(work)) {
-    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble
+    // Si l'ID existe, supprime l'ID à l'ensemble
     existingFigureIds.delete(work);
-    // Retire le travaux ayant ce data-id
+    // Selectionne dans le HTML, l'élément ayant ce data-id et supprime le.
     document.querySelector(`[data-id="${work}"]`).remove();
   }
 }
@@ -59,7 +59,7 @@ export function createAddNewFigure(work) {
 
   // Vérifiez si l'ID de la figure n'est pas déjà présente dans l'ensemble "existingFigureIds"
   if (!existingFigureIds.has(work.id)) {
-    // Si l'ID existe pas, créez la figure et ajoute l'ID à l'ensemble "existingFigureIds"
+    // Si l'ID existe pas, ajoute l'ID à l'ensemble "existingFigureIds"
     existingFigureIds.add(work.id);
     // console.log("Elément ajouter ",existingFigureIds);
   }
@@ -102,7 +102,7 @@ export function addEventListenerButtonFilter(worksFetch, category, element) {
     // Effacement de la page html
     galleryDiv.innerHTML = "";
 
-    // Filtre les catégories par rapport aux données reçu de l'API/works
+    // Stock la catégorie qui à été filtrer par la fonction "filterWorksByCategory" et ceux par rapport à l'id de la catégories selectionner
     const filterdWorks = filterWorksByCategory(worksFetch, category.id);
 
     // Clean l'instance d'objet
