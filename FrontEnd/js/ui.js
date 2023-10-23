@@ -108,9 +108,9 @@ export function addEventListenerButtonFilter(worksFetch, category, element) {
     // Clean l'instance d'objet
     existingFigureIds.clear();
 
-    // Affiche les données filtrer pour la catégorie selectionner
+    // Parcours les données filtrer pour la catégorie selectionner
     filterdWorks.forEach((work) => {
-      // Appel la fonction qui va créer les works en lui donnant en paramètre les travaux filtrer
+      // Appel la fonction "createWork" qui va créer et afficher dans la galerie, le travail filtrer par catégorie
       createWork(work);
     });
 
